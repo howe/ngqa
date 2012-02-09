@@ -13,9 +13,9 @@ import com.mongodb.DBObject;
 @SuppressWarnings("rawtypes")
 public class MongodbBean implements DBObject {
 	
-	protected Mirror mirror = Mirror.me(this);
+	protected transient Mirror mirror = Mirror.me(this);
 	
-	protected Map<String, Field> fields = new HashMap<String, Field>();
+	protected transient Map<String, Field> fields = new HashMap<String, Field>();
 	
 	private Object _id;
 
