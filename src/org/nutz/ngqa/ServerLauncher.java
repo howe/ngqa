@@ -6,7 +6,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class ServerLauncher {
 
 	public static void main(String[] args) throws Throwable {
-		String warUrlString = "WebContent";
+		String warUrlString = "ROOT";
 		WebAppContext appContext = new WebAppContext(warUrlString, "/");
 		Server server = new Server(8080);
 		server.setHandler(appContext);
