@@ -43,7 +43,7 @@ public class UserModule {
 	private DBCollection userColl;
 	
 	public void init() {
-		userColl.setObjectClass(UserBean.class);
+//		userColl.setObjectClass(UserBean.class);
 	}
 	
 	@At("/login")
@@ -79,7 +79,6 @@ public class UserModule {
         BasicDBObject update = new BasicDBObject();
         update.append("$set", new BasicDBObject("lastLoginDate", new Date()));
         DBObject dbObject = userColl.findAndModify(query, null, null, false, update, true, true);
-        System.out.println(dbObject.getClass());
         UserBean user = new UserBean();
         user.putAll(dbObject);
         request.getSession().setAttribute("me", user);
