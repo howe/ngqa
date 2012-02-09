@@ -1,8 +1,18 @@
 var ioc = {
-	mongos : {
-		type : 'org.nutz.ngqa.mvc.Mongos',
-		fields : {
-			'dbName' : 'ngqa'
-		}
+	/*
+	 * 数据库连接器
+	 */
+	connector : {
+		type : 'org.nutz.mongo.MongoConnector',
+		events : { depose : 'close' },
+		args : [ "127.0.0.1", 27017 ]
+	// ~ End bean
+	},
+	/*
+	 * 抽象的服务
+	 */
+	mongoService : { // 仅仅提供构造函数
+	args : [ { refer : 'connector' }, "ngqa" ]
+	// ~ End bean
 	}
 };
