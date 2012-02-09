@@ -1,12 +1,15 @@
 package org.nutz.ngqa.module;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
+import org.nutz.lang.util.Callback;
+import org.nutz.mongo.MongoDao;
+import org.nutz.mongo.util.MCur;
+import org.nutz.mongo.util.Moo;
 import org.nutz.mvc.adaptor.JsonAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
@@ -15,85 +18,124 @@ import org.nutz.mvc.annotation.By;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.filter.CheckSession;
-import org.nutz.ngqa.bean.AnswerBean;
-import org.nutz.ngqa.bean.QuestionBean;
-import org.nutz.ngqa.bean.UserBean;
-import org.nutz.ngqa.mvc.Ajax;
-import org.nutz.ngqa.mvc.AjaxReturn;
-import org.nutz.ngqa.mvc.Mongos;
+import org.nutz.ngqa.bean.Answer;
+import org.nutz.ngqa.bean.Question;
+import org.nutz.ngqa.bean.User;
+import org.nutz.ngqa.service.CommonMongoService;
+import org.nutz.web.ajax.Ajax;
+import org.nutz.web.ajax.AjaxReturn;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.DBRef;
 
 @IocBean(create="init")
 @InjectName
 @Filters({@By(type=CheckSession.class,args={"me", "/index.jsp"})})
 public class CoreModule {
 	
-	@Inject("java:$mongos.coll('question')")
+	@Inject("java:$commons.coll('question')")
 	private DBCollection questionColl;
 	
-	@Inject("java:$mongos.coll('answer')")
-	private DBCollection answerColl;
+	@Inject("java:$commons.dao()")
+	private MongoDao dao;
 	
 	@Inject
-	private Mongos mongos;
+	private CommonMongoService commons;
+	
+	public void init() {
+		dao.create(Question.class, false);
+		dao.create(Answer.class, false);
+	}
 
-	@At("/question/create")
+	/*question的title是必须的,其他都是可选*/
+	@At("/ask")
 	@AdaptBy(type=JsonAdaptor.class)
-	public AjaxReturn createQuestion(@Param("..")QuestionBean question, @Attr("me") UserBean user) {
-		if (question == null)
-			return Ajax.fail().setMsg("NULL");
-		question.set_id(mongos.autoInc("question"));
+	public AjaxReturn createQuestion(final @Param("..")Question question, @Attr("me") User user) {
+		if (question == null || Lang.length(question.getTitle()) < 5)
+			return Ajax.fail().setMsg("Not OK");
+		question.setId(commons.seq("question"));
 		question.setUser(user);
 		question.setCreatedAt(new Date());
 		question.setUpdatedAt(new Date());
-		questionColl.insert(question);
+		question.setTags(new String[0]);
+		dao.runNoError(new Callback<DB>() {
+			public void invoke(DB arg0) {
+				dao.save(question);
+			}
+		});
 		return Ajax.ok().setData(question);
 	}
 	
+	/*暂时只支持简单分页,每页10条记录*/
 	@At({"/question/list/?","/question/list"})
 	public AjaxReturn query(int page) {
-		BasicDBObject ref = new BasicDBObject();
 		if (page < 1)
 			page = 1;
 		int skip = (page - 1) * 10;
-		DBCursor cursor = questionColl.find(ref);
-		cursor.limit(10);
-		cursor.sort(new BasicDBObject("updatedAt", -1));
-		if (skip > 0)
-			cursor.skip(skip);
-		List<QuestionBean> questions = new ArrayList<QuestionBean>();
-		for (DBObject dbObject : cursor)
-			questions.add(mongos.map2(dbObject, QuestionBean.class));
-		return Ajax.ok().setData(questions);
+		MCur cur = MCur.DESC("updatedAt").limit(10).skip(skip);
+		return Ajax.ok().setData(dao.find(Question.class, null, cur));
 	}
 	
-	@At("/question/fetch/?")
+	/*获取具体的question*/
+	@At("/question/?")
 	public AjaxReturn fetch(int questionId) {
-		DBObject dbo = questionColl.findOne(new BasicDBObject("_id", questionId));
-		if (dbo != null)
-			return Ajax.ok().setData(mongos.map2(dbo, QuestionBean.class));
+		Question question = dao.findOne(Question.class, new BasicDBObject("_id", questionId));
+		if (question != null)
+			return Ajax.ok().setData(question);
 		return Ajax.fail().setMsg("Not Found");
 	}
 	
-	@At("/answer/add/?")
-	public AjaxReturn addAnswer(int questionId, @Param("..")AnswerBean answer, @Attr("me")UserBean user) {
+	@At("/question/?/answer/add")
+	@AdaptBy(type=JsonAdaptor.class)
+	public AjaxReturn addAnswer(final int questionId, final @Param("..")Answer answer, @Attr("me")User user) {
+		if (answer == null || Lang.length(answer.getContent()) < 5)
+			return Ajax.fail().setMsg("Not OK");
 		DBObject dbo = questionColl.findOne(new BasicDBObject("_id", questionId));
 		if (dbo != null) {
-			answer.set_id(mongos.autoInc("answer"));
+			answer.setId(commons.seq("answer"));
 			answer.setUser(user);
 			answer.setCreatedAt(new Date());
 			answer.setUpdatedAt(new Date());
-			answerColl.insert(answer);
-			BasicDBObject update = new BasicDBObject();
-			update.append("$push", new BasicDBObject("answers",answer));
-			update.append("$set", new BasicDBObject("updatedAt",new Date()));
-			questionColl.update(new BasicDBObject("_id", dbo.get("_id")), update);
+			dao.runNoError(new Callback<DB>() {
+				public void invoke(DB db) {
+					dao.save(answer);
+					Moo moo = Moo.NEW();
+					moo.push("answers", new DBRef(db, "answer", answer.getId()));
+					moo.set("updatedAt", new Date());
+					dao.update(Question.class, new BasicDBObject("_id",questionId), moo);
+				}
+			});
 			return Ajax.ok();
 		}
 		return Ajax.fail().setMsg("Not Found");
+	}
+	
+	@At("/question/?/tag/add/?")
+	public AjaxReturn addTag(int questionId,String tag, @Attr("me")User user) {
+		//DBObject dbo = questionColl.findOne(new BasicDBObject("_id", questionId));
+		//if (dbo != null) {
+			BasicDBObject update = new BasicDBObject();
+			update.append("$addToSet", new BasicDBObject("tags",tag));
+			update.append("$set", new BasicDBObject("updatedAt",new Date()));
+			questionColl.update(new BasicDBObject("_id", questionId), update);
+			return Ajax.ok();
+		//}
+		//return Ajax.fail().setMsg("Not Found");
+	}
+	
+	@At("/question/?/tag/remove/?")
+	public AjaxReturn removeTag(int questionId,String tag, @Attr("me")User user) {
+		//DBObject dbo = questionColl.findOne(new BasicDBObject("_id", questionId));
+		//if (dbo != null) {
+			BasicDBObject update = new BasicDBObject();
+			update.append("$pull", new BasicDBObject("tags",tag));
+			update.append("$set", new BasicDBObject("updatedAt",new Date()));
+			questionColl.update(new BasicDBObject("_id", questionId), update);
+			return Ajax.ok();
+		//}
+		//return Ajax.fail().setMsg("Not Found");
 	}
 }

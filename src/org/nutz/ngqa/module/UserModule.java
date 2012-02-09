@@ -15,16 +15,19 @@ import org.expressme.openid.OpenIdManager;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.util.Callback;
+import org.nutz.mongo.MongoDao;
 import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.View;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
-import org.nutz.mvc.view.HttpStatusView;
-import org.nutz.ngqa.bean.UserBean;
+import org.nutz.mvc.view.ServerRedirectView;
+import org.nutz.ngqa.bean.User;
+import org.nutz.ngqa.service.CommonMongoService;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 
 @IocBean(create="init")
 @InjectName
@@ -39,13 +42,20 @@ public class UserModule {
 	
 	private OpenIdManager manager = new OpenIdManager();
 	
-	@Inject("java:$mongos.coll('user')")
+	@Inject("java:$commons.coll('user')")
 	private DBCollection userColl;
 	
+	@Inject("java:$commons.dao()")
+	private MongoDao dao;
+	
+	@Inject
+	private CommonMongoService commons;
+	
 	public void init() {
-//		userColl.setObjectClass(UserBean.class);
+		dao.create(User.class, false);
 	}
 	
+	/*暂时只提供google登录*/
 	@At("/login")
 	@Ok(">>:${obj}")
 	public String login(HttpSession session) {
@@ -59,30 +69,39 @@ public class UserModule {
         return manager.getAuthenticationUrl(endpoint, association);
 	}
 	
+	/*登出*/
 	@At("/logout")
 	@Ok("void")
 	public void logout(HttpSession session) {
 		session.invalidate();
 	}
 	
+	/*无需做链接,这是OpenID的回调地址*/
 	@At("/login/callback")
-	public String returnPoint(HttpServletRequest request) {
+	public View returnPoint(HttpServletRequest request) {
 		checkNonce(request.getParameter("openid.response_nonce"));
         // get authentication:
         byte[] mac_key = (byte[]) request.getSession().getAttribute(ATTR_MAC);
         String alias = (String) request.getSession().getAttribute(ATTR_ALIAS);
         Authentication authentication = manager.getAuthentication(request, mac_key, alias);
-        authentication.getEmail();
-        BasicDBObject query = new BasicDBObject();
-        query.append("email", authentication.getEmail());
-        query.append("openid", "Google");
-        BasicDBObject update = new BasicDBObject();
-        update.append("$set", new BasicDBObject("lastLoginDate", new Date()));
-        DBObject dbObject = userColl.findAndModify(query, null, null, false, update, true, true);
-        UserBean user = new UserBean();
-        user.putAll(dbObject);
+        BasicDBObject query = new BasicDBObject().append("email", authentication.getEmail()).append("openid", "Google");
+        User user = dao.findOne(User.class, query);
+        if (user == null) {
+        	user = new User();
+        	user.setEmail(authentication.getEmail());
+        	user.setOpenid("Google");
+        	user.setLastLoginDate(new Date());
+        	user.setId(commons.seq("user"));
+        	final User _u = user;
+        	dao.runNoError(new Callback<DB>() {
+    			public void invoke(DB arg0) {
+    				dao.save(_u);
+    			}
+    		});
+        } else
+        	userColl.update(new BasicDBObject("_id", user.getId()), new BasicDBObject("$set", new BasicDBObject("lastLoginDate", new Date())));
         request.getSession().setAttribute("me", user);
-        return "Login success!";
+        return new ServerRedirectView("/index.jsp");
 	}
 	
 	protected void checkNonce(String nonce) {
@@ -107,10 +126,5 @@ public class UserModule {
         catch(ParseException e) {
             throw new OpenIdException("Bad nonce time.");
         }
-    }
-
-    @At("/code/?")
-    public View just(int code) {
-    	return new HttpStatusView(code);
     }
 }

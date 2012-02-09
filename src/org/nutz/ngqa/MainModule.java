@@ -6,7 +6,7 @@ import org.nutz.mvc.annotation.Modules;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Views;
 import org.nutz.mvc.ioc.provider.ComboIocProvider;
-import org.nutz.ngqa.mvc.AjaxViewMaker;
+import org.nutz.web.ajax.AjaxViewMaker;
 
 @Modules(scanPackage=true)
 @IocBy(args = {	"*org.nutz.ioc.loader.json.JsonLoader",
