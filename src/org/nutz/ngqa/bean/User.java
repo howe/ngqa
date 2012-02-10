@@ -14,11 +14,13 @@ import org.nutz.mongo.annotation.CoIndexes;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Co("user")
-@CoIndexes("!ids:+email,+openid")
+@CoIndexes("!ids:+openid,+validatedId")
 public class User {
 
 	@CoId(CoIdType.AUTO_INC)
 	private int id;
+	@CoField
+	private String validatedId;
 	@CoField
 	private String email;
 	@CoField
