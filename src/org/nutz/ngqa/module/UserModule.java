@@ -10,6 +10,7 @@ import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
+import org.brickred.socialauth.util.OAuthConfig;
 import org.brickred.socialauth.util.SocialAuthUtil;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -23,6 +24,7 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.view.ServerRedirectView;
 import org.nutz.ngqa.bean.User;
+import org.nutz.ngqa.module.openid.QQAuthProvider;
 import org.nutz.ngqa.service.CommonMongoService;
 
 import com.mongodb.BasicDBObject;
@@ -43,8 +45,11 @@ public class UserModule {
 	
 	public void init() throws Exception {
 		dao.create(User.class, false);
-		SocialAuthConfig config = SocialAuthConfig.getDefault();
+		SocialAuthConfig config = new SocialAuthConfig();
 		config.load();
+		OAuthConfig c = new OAuthConfig(null,null);
+		c.setProviderImplClass(QQAuthProvider.class);
+		config.addProviderConfig("qq", c);
 		manager = new SocialAuthManager();
 		manager.setSocialAuthConfig(config);
 	}
