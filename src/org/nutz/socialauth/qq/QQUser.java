@@ -1,4 +1,4 @@
-package org.nutz.ngqa.module.openid;
+package org.nutz.socialauth.qq;
 
 import lombok.Data;
 
