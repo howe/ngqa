@@ -1,0 +1,61 @@
+.log-width {
+    padding: 10px 10px 11px;
+}
+
+.log-width a{
+    float: left;
+	display: block;
+	width: 24px;
+	height: 24px;
+	overflow: hidden;
+	background: url(../img/ioc.png) left top no-repeat;
+	margin-right: 7px;
+}
+.log-width a.openid{
+	background-position: -25px -24px;
+}
+.log-width a.twitter{
+	background-position: -25px -0px;
+}
+.log-width a.facebook{
+	background-position: -25px -72px;
+}
+.log-width a.google{
+	background-position: -25px -144px;
+}
+.log-width a.msn{
+	background-position: -25px -48px;
+}
+.log-width a.yahoo{
+	background-position: -25px -168px;
+}
+.log-width a.weibo{
+	background-position: -25px -120px;
+}
+.log-width a.qq{
+	background-position: -25px -96px;
+}
+.log-width a.openid:hover{
+	background-position: left -24px;
+}
+.log-width a.google:hover{
+	background-position: left -144px;
+}
+.log-width a.facebook:hover{
+	background-position: left -72px;
+}
+.log-width a.twitter:hover{
+	background-position: left -0px;
+}
+.log-width a.msn:hover{
+	background-position: left -48px;
+}
+.log-width a.yahoo:hover{
+	background-position: left -168px;
+}
+.log-width a.weibo:hover{
+	background-position: left -120px;
+}
+.log-width a.qq:hover{
+	background-position: left -96px;
+}
