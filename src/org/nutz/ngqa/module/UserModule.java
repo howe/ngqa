@@ -10,7 +10,6 @@ import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
-import org.brickred.socialauth.util.OAuthConfig;
 import org.brickred.socialauth.util.SocialAuthUtil;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -24,7 +23,6 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.view.ServerRedirectView;
 import org.nutz.ngqa.bean.User;
-import org.nutz.ngqa.module.openid.QQAuthProvider;
 import org.nutz.ngqa.service.CommonMongoService;
 
 import com.mongodb.BasicDBObject;
@@ -47,21 +45,19 @@ public class UserModule {
 		dao.create(User.class, false);
 		SocialAuthConfig config = new SocialAuthConfig();
 		config.load();
-		OAuthConfig c = new OAuthConfig(null,null);
-		c.setProviderImplClass(QQAuthProvider.class);
-		config.addProviderConfig("qq", c);
 		manager = new SocialAuthManager();
 		manager.setSocialAuthConfig(config);
 	}
 	
 	/*暂时只提供google登录*/
 	@At("/login/?")
-	@Ok(">>:${obj}")
-	public String login(String provider, HttpSession session) throws Exception {
+	@Ok("void")
+	public void login(String provider, HttpSession session) throws Exception {
 		String returnTo = Mvcs.getReq().getRequestURL().toString() + "/callback";
 		String url = manager.getAuthenticationUrl(provider, returnTo);
 		session.setAttribute("authManager", manager);
-        return url;
+		Mvcs.getResp().setHeader("Location", url);
+		Mvcs.getResp().setStatus(302);
 	}
 	
 	/*登出*/
