@@ -30,8 +30,8 @@
                     </table>
                 </div>
             </div>
-            <jsp:include page="_include_footer.jsp" />
         </div>
+        <jsp:include page="_include_footer.jsp" />
     </div>
 </body>
 </html>
