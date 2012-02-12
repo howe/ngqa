@@ -1,5 +1,7 @@
 package org.nutz.ngqa.module;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Date;
 import java.util.Map;
 
@@ -14,6 +16,8 @@ import org.brickred.socialauth.util.SocialAuthUtil;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Files;
+import org.nutz.lang.stream.NullInputStream;
 import org.nutz.lang.util.Callback;
 import org.nutz.mongo.MongoDao;
 import org.nutz.mongo.util.Moo;
@@ -42,14 +46,28 @@ public class UserModule {
 	private CommonMongoService commons;
 	
 	public void init() throws Exception {
-		dao.create(User.class, false);
 		SocialAuthConfig config = new SocialAuthConfig();
-		config.load();
+		File devConfig = Files.findFile("oauth_consumer.properties_dev");
+		if (devConfig == null)
+			devConfig = Files.findFile("oauth_consumer.properties");
+		if (devConfig == null)
+			config.load(new NullInputStream());
+		else
+			config.load(new FileInputStream(devConfig));
 		manager = new SocialAuthManager();
 		manager.setSocialAuthConfig(config);
 	}
 	
-	/*暂时只提供google登录*/
+	/*提供匿名登录*/
+	@At("/login/anonymous")
+	@Ok("void")
+	public View anonymousLogin(HttpSession session) throws Exception {
+		User user = dao.findOne(User.class, new BasicDBObject("openid", "anonymous"));
+		session.setAttribute("me", user);
+		return new ServerRedirectView("/index.jsp");
+	}
+	
+	/*提供google登录*/
 	@At("/login/?")
 	@Ok("void")
 	public void login(String provider, HttpSession session) throws Exception {

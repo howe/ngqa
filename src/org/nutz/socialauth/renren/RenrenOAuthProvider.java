@@ -1,11 +1,11 @@
-package org.nutz.socialauth.qqweibo;
+package org.nutz.socialauth.renren;
 
 import java.util.Map;
 
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.exception.ServerDataException;
 import org.brickred.socialauth.exception.SocialAuthException;
-import org.brickred.socialauth.oauthstrategy.OAuth1;
+import org.brickred.socialauth.oauthstrategy.OAuth2;
 import org.brickred.socialauth.util.Constants;
 import org.brickred.socialauth.util.OAuthConfig;
 import org.brickred.socialauth.util.Response;
@@ -18,19 +18,19 @@ import org.nutz.socialauth.AbstractOAuthProvider;
  * @author wendal
  */
 @SuppressWarnings("serial")
-public class QQWeiboAuthProvider extends AbstractOAuthProvider {
+public class RenrenOAuthProvider extends AbstractOAuthProvider {
 
-	public QQWeiboAuthProvider(final OAuthConfig providerConfig) {
+	public RenrenOAuthProvider(final OAuthConfig providerConfig) {
 		super(providerConfig);
-		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://open.t.qq.com/cgi-bin/authorize");
-		ENDPOINTS.put(Constants.OAUTH_REQUEST_TOKEN_URL,"https://open.t.qq.com/cgi-bin/request_token");
+		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://api.weibo.com/oauth2/authorize");
+		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL,"https://api.weibo.com/oauth2/access_token");
 		AllPerms = new String[] {};
 		AuthPerms = new String[] {};
-		authenticationStrategy = new OAuth1(config, ENDPOINTS);
+		authenticationStrategy = new OAuth2(config, ENDPOINTS);
 		authenticationStrategy.setPermission(scope);
 		authenticationStrategy.setScope(getScope());
 
-		PROFILE_URL = "http://open.t.qq.com/api/user/info";
+		PROFILE_URL = "https://api.weibo.com/2/account/get_uid.json"; //只是取uid,其他啥都拿不到
 	}
 
 	@SuppressWarnings("unchecked")
@@ -45,19 +45,22 @@ public class QQWeiboAuthProvider extends AbstractOAuthProvider {
 					+ PROFILE_URL, e);
 		}
 		try {
-			//System.out.println("User Profile : " + presp);
 			Map<String, Object> data = Json.fromJson(Map.class, presp);
-			if ("msg".equals(data.get("msg")))
+			if (!data.containsKey("uid"))
 				throw new SocialAuthException("Error: " + presp);
 			if (userProfile == null)
 				userProfile = new Profile();
-			data = (Map<String, Object>) data.get("data");
-			userProfile.setValidatedId(data.get("openid").toString());
+			userProfile.setValidatedId(data.get("uid").toString());
 			return userProfile;
 
 		} catch (Exception ex) {
 			throw new ServerDataException(
 					"Failed to parse the user profile json : " + presp, ex);
 		}
+	}
+	
+	@Override
+	protected String verifyResponseMethod() {
+		return "POST";
 	}
 }
