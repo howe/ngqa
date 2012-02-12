@@ -4,6 +4,7 @@ import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.IocBy;
 import org.nutz.mvc.annotation.Modules;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.SetupBy;
 import org.nutz.mvc.annotation.Views;
 import org.nutz.mvc.ioc.provider.ComboIocProvider;
 import org.nutz.web.ajax.AjaxViewMaker;
@@ -16,4 +17,5 @@ import org.nutz.web.ajax.AjaxViewMaker;
 @Ok("ajax")
 @Fail("ajax")
 @Views(AjaxViewMaker.class)
+@SetupBy(NgqaSetup.class)
 public class MainModule {}

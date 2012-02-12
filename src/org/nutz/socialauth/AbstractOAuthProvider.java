@@ -1,4 +1,4 @@
-package org.nutz.ngqa.module.openid;
+package org.nutz.socialauth;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,56 +11,46 @@ import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Contact;
 import org.brickred.socialauth.Permission;
 import org.brickred.socialauth.Profile;
-import org.brickred.socialauth.exception.ServerDataException;
 import org.brickred.socialauth.exception.SocialAuthException;
 import org.brickred.socialauth.exception.UserDeniedPermissionException;
-import org.brickred.socialauth.oauthstrategy.OAuth2;
 import org.brickred.socialauth.oauthstrategy.OAuthStrategyBase;
 import org.brickred.socialauth.util.AccessGrant;
-import org.brickred.socialauth.util.Constants;
 import org.brickred.socialauth.util.OAuthConfig;
 import org.brickred.socialauth.util.Response;
 import org.brickred.socialauth.util.SocialAuthUtil;
-import org.nutz.json.Json;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-/**
- * 实现QQ帐号登录
- * 
- * @author wendal
- */
-public class QQAuthProvider extends AbstractProvider implements AuthProvider {
-
-	private static final long serialVersionUID = 3132881816210239230L;
-
+@SuppressWarnings("serial")
+public abstract class AbstractOAuthProvider extends AbstractProvider implements AuthProvider  {
+	
 	private static final Log log = Logs.get();
 
-	private Permission scope;
-	private OAuthConfig config;
-	private Profile userProfile;
-	private AccessGrant accessGrant;
-	private OAuthStrategyBase authenticationStrategy;
+	protected Permission scope;
+	protected OAuthConfig config;
+	protected Profile userProfile;
+	protected AccessGrant accessGrant;
+	protected OAuthStrategyBase authenticationStrategy;
 
-	private static final String[] AllPerms = new String[] { "get_user_info","get_info" };
-	private static final String[] AuthPerms = new String[] { "get_user_info", "get_info" };
-	private static final String PROFILE_URL = "https://graph.qq.com/user/get_info";
+	protected String[] AllPerms;
+	protected String[] AuthPerms;
+	protected String PROFILE_URL;
 
-	private static final Map<String, String> ENDPOINTS;
+	protected Map<String, String> ENDPOINTS = new HashMap<String, String>();
 
-	static {
-		ENDPOINTS = new HashMap<String, String>();
-		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,
-				"https://graph.qq.com/oauth2.0/authorize");
-		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL,
-				"https://graph.qq.com/oauth2.0/token");
-	}
-
-	public QQAuthProvider(final OAuthConfig providerConfig) {
+	public AbstractOAuthProvider(final OAuthConfig providerConfig) {
 		this.config = providerConfig;
-		authenticationStrategy = new OAuth2(config, ENDPOINTS);
-		authenticationStrategy.setPermission(scope);
-		authenticationStrategy.setScope(getScope());
+		//下面几个参数都是必须初始化的
+		//ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://graph.qq.com/oauth2.0/authorize");
+		//ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL,"https://graph.qq.com/oauth2.0/token");
+		//authenticationStrategy = new OAuth2(config, ENDPOINTS);
+		//authenticationStrategy.setPermission(scope);
+		//authenticationStrategy.setScope(getScope());
+		//AllPerms = new String[] { "get_user_info","get_info" };
+		//AuthPerms = new String[] { "get_user_info", "get_info" };
+		
+		//这个可选
+		//PROFILE_URL = "https://graph.qq.com/user/get_info";
 	}
 
 	public String getLoginRedirectURL(final String successUrl) throws Exception {
@@ -84,55 +74,27 @@ public class QQAuthProvider extends AbstractProvider implements AuthProvider {
                         && "user_denied".equals(requestParams.get("error_reason"))) {
                 throw new UserDeniedPermissionException();
         }
-        accessGrant = authenticationStrategy.verifyResponse(requestParams);
+        accessGrant = authenticationStrategy.verifyResponse(requestParams, verifyResponseMethod());
 
         if (accessGrant != null) {
                 log.debug("Obtaining user profile");
-                return authQQLogin();
+                return authLogin();
         } else {
                 throw new SocialAuthException("Access token not found");
         }
 	}
 
-    private Profile authQQLogin() throws Exception {
-        String presp;
-
-        try {
-                Response response = authenticationStrategy.executeFeed(PROFILE_URL);
-                presp = response.getResponseBodyAsString(Constants.ENCODING);
-        } catch (Exception e) {
-                throw new SocialAuthException("Error while getting profile from "
-                                + PROFILE_URL, e);
-        }
-        try {
-                System.out.println("User Profile : " + presp);
-                QQUser qqUser = Json.fromJson(QQUser.class, presp);
-                if (qqUser.getRet() != 0)
-                	throw new SocialAuthException("QQ Error: " + qqUser.getMsg());
-                Profile p = new Profile();
-                p.setValidatedId(qqUser.getOpenid()); //QQ定义的
-                p.setEmail(qqUser.getEmail());
-                p.setProviderId(getProviderId());
-                userProfile = p;
-                return p;
-
-        } catch (Exception ex) {
-                throw new ServerDataException(
-                                "Failed to parse the user profile json : " + presp, ex);
-        }
-}
+    protected abstract Profile authLogin() throws Exception ;
 	
 	public Response api(String arg0, String arg1, Map<String, String> arg2,
 			Map<String, String> arg3, String arg4) throws Exception {
 		return null;
 	}
 
-	@Override
 	public List<Contact> getContactList() throws Exception {
 		return null;
 	}
 
-	@Override
 	public void logout() {
 	}
 
@@ -148,26 +110,22 @@ public class QQAuthProvider extends AbstractProvider implements AuthProvider {
 		authenticationStrategy.setScope(getScope());
 	}
 
-	@Override
-	public void updateStatus(String arg0) throws Exception {
+	public void updateStatus(String status) throws Exception {
 	}
 
-	@Override
 	public Profile getUserProfile() throws Exception {
 		return userProfile;
 	}
 
-	@Override
 	public AccessGrant getAccessGrant() {
 		return accessGrant;
 	}
 
-	@Override
 	public String getProviderId() {
 		return config.getId();
 	}
 
-	private String getScope() {
+	protected String getScope() {
 		StringBuffer result = new StringBuffer();
 		String arr[] = null;
 		if (Permission.AUTHENTICATE_ONLY.equals(scope)) {
@@ -178,10 +136,15 @@ public class QQAuthProvider extends AbstractProvider implements AuthProvider {
 		} else {
 			arr = AllPerms;
 		}
-		result.append(arr[0]);
+		if (arr.length > 0)
+			result.append(arr[0]);
 		for (int i = 1; i < arr.length; i++) {
 			result.append(",").append(arr[i]);
 		}
 		return result.toString();
+	}
+	
+	protected String verifyResponseMethod() {
+		return "GET";
 	}
 }
