@@ -13,7 +13,7 @@ import org.nutz.json.Json;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
 /**
- * 实现QQ帐号登录
+ * 实现人人网帐号登录, OAuth2,但获取用户信息需要额外算法!!未完成!!
  * 
  * @author wendal
  */
@@ -22,15 +22,15 @@ public class RenrenOAuthProvider extends AbstractOAuthProvider {
 
 	public RenrenOAuthProvider(final OAuthConfig providerConfig) {
 		super(providerConfig);
-		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://api.weibo.com/oauth2/authorize");
-		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL,"https://api.weibo.com/oauth2/access_token");
+		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://graph.renren.com/oauth/authorize");
+		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL,"https://graph.renren.com/oauth/token");
 		AllPerms = new String[] {};
 		AuthPerms = new String[] {};
 		authenticationStrategy = new OAuth2(config, ENDPOINTS);
 		authenticationStrategy.setPermission(scope);
 		authenticationStrategy.setScope(getScope());
 
-		PROFILE_URL = "https://api.weibo.com/2/account/get_uid.json"; //只是取uid,其他啥都拿不到
+		PROFILE_URL = "https://api.weibo.com/2/account/get_uid.json";
 	}
 
 	@SuppressWarnings("unchecked")

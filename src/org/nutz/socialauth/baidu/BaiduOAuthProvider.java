@@ -1,4 +1,6 @@
-package org.nutz.socialauth.qq;
+package org.nutz.socialauth.baidu;
+
+import java.util.Map;
 
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.exception.ServerDataException;
@@ -11,26 +13,27 @@ import org.nutz.json.Json;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
 /**
- * 实现QQ帐号登录,OAuth2
+ * 实现百度帐号登录,OAuth2
  * 
  * @author wendal
  */
 @SuppressWarnings("serial")
-public class QQAuthProvider extends AbstractOAuthProvider {
+public class BaiduOAuthProvider extends AbstractOAuthProvider {
 
-	public QQAuthProvider(final OAuthConfig providerConfig) {
+	public BaiduOAuthProvider(final OAuthConfig providerConfig) {
 		super(providerConfig);
-		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://graph.qq.com/oauth2.0/authorize");
-		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL,"https://graph.qq.com/oauth2.0/token");
-		AllPerms = new String[] { "get_user_info", "get_info" };
-		AuthPerms = new String[] { "get_user_info", "get_info" };
+		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://openapi.baidu.com/oauth/2.0/authorize");
+		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL,"https://openapi.baidu.com/oauth/2.0/token");
+		AllPerms = new String[] {};
+		AuthPerms = new String[] {};
 		authenticationStrategy = new OAuth2(config, ENDPOINTS);
 		authenticationStrategy.setPermission(scope);
 		authenticationStrategy.setScope(getScope());
 
-		PROFILE_URL = "https://graph.qq.com/user/get_info";
+		PROFILE_URL = "https://openapi.baidu.com/rest/2.0/passport/users/getLoggedInUser?format=json";
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Profile authLogin() throws Exception {
 		String presp;
 
@@ -43,13 +46,11 @@ public class QQAuthProvider extends AbstractOAuthProvider {
 		}
 		try {
 			//System.out.println("User Profile : " + presp);
-			QQUser qqUser = Json.fromJson(QQUser.class, presp);
-			if (qqUser.getRet() != 0)
-				throw new SocialAuthException("QQ Error: " + qqUser.getMsg());
+			Map<String, Object> data = Json.fromJson(Map.class, presp);
+			if (!data.containsKey("uid"))
+				throw new SocialAuthException("Error: " + presp);
 			Profile p = new Profile();
-			p.setValidatedId(qqUser.getOpenid()); // QQ定义的
-			p.setEmail(qqUser.getEmail());
-			p.setProviderId(getProviderId());
+			p.setValidatedId(data.get("uid").toString());
 			userProfile = p;
 			return p;
 

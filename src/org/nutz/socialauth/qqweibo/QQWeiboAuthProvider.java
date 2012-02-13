@@ -13,7 +13,7 @@ import org.nutz.json.Json;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
 /**
- * 实现QQ帐号登录
+ * 实现腾讯微博帐号登录,OAuth1
  * 
  * @author wendal
  */
@@ -22,15 +22,16 @@ public class QQWeiboAuthProvider extends AbstractOAuthProvider {
 
 	public QQWeiboAuthProvider(final OAuthConfig providerConfig) {
 		super(providerConfig);
-		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://open.t.qq.com/cgi-bin/authorize");
 		ENDPOINTS.put(Constants.OAUTH_REQUEST_TOKEN_URL,"https://open.t.qq.com/cgi-bin/request_token");
+		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"https://open.t.qq.com/cgi-bin/authorize");
+		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL, "https://open.t.qq.com/cgi-bin/access_token");
 		AllPerms = new String[] {};
 		AuthPerms = new String[] {};
 		authenticationStrategy = new OAuth1(config, ENDPOINTS);
 		authenticationStrategy.setPermission(scope);
 		authenticationStrategy.setScope(getScope());
 
-		PROFILE_URL = "http://open.t.qq.com/api/user/info";
+		PROFILE_URL = "http://open.t.qq.com/api/user/info?format=json";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -47,12 +48,12 @@ public class QQWeiboAuthProvider extends AbstractOAuthProvider {
 		try {
 			//System.out.println("User Profile : " + presp);
 			Map<String, Object> data = Json.fromJson(Map.class, presp);
-			if ("msg".equals(data.get("msg")))
+			if (!"ok".equals(data.get("msg")))
 				throw new SocialAuthException("Error: " + presp);
 			if (userProfile == null)
 				userProfile = new Profile();
 			data = (Map<String, Object>) data.get("data");
-			userProfile.setValidatedId(data.get("openid").toString());
+			userProfile.setValidatedId(data.get("uid").toString());
 			return userProfile;
 
 		} catch (Exception ex) {

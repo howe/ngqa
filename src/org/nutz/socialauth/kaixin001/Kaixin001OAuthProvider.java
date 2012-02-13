@@ -12,11 +12,14 @@ import org.brickred.socialauth.util.Response;
 import org.nutz.json.Json;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
+/**
+ * 实现开心001帐号登录,OAuth2
+ * 
+ * @author wendal
+ */
 @SuppressWarnings("serial")
 public class Kaixin001OAuthProvider extends AbstractOAuthProvider {
 
-
-	
 	public Kaixin001OAuthProvider(OAuthConfig providerConfig) {
 		super(providerConfig);
 		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"http://api.kaixin001.com/oauth2/authorize");

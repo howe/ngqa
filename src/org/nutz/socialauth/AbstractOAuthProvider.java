@@ -67,7 +67,7 @@ public abstract class AbstractOAuthProvider extends AbstractProvider implements 
 		return doVerifyResponse(params);
 	}
 
-	private Profile doVerifyResponse(final Map<String, String> requestParams)
+	protected Profile doVerifyResponse(final Map<String, String> requestParams)
 			throws Exception {
         log.info("Retrieving Access Token in verify response function");
         if (requestParams.get("error_reason") != null

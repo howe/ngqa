@@ -13,7 +13,7 @@ import org.nutz.json.Json;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
 /**
- * 实现QQ帐号登录
+ * 实现Sina微博帐号登录,OAuth2
  * 
  * @author wendal
  */
