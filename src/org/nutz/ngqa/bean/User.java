@@ -5,6 +5,7 @@ import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import org.nutz.json.JsonField;
 import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
@@ -14,7 +15,7 @@ import org.nutz.mongo.annotation.CoIndexes;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Co("user")
-@CoIndexes("!ids:+openid,+validatedId")
+@CoIndexes("!ids:+provider,+validatedId")
 public class User {
 
 	@CoId(CoIdType.AUTO_INC)
@@ -24,8 +25,11 @@ public class User {
 	@CoField
 	private String email;
 	@CoField
-	private String openid;
+	private String provider;
 	@CoField
 	private Date lastLoginDate;
+	@CoField(ref=true, lazy=true)
+	@JsonField(ignore=true)
+	private Role[] roles;
 	
 }

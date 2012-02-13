@@ -62,7 +62,7 @@ public class UserModule {
 	@At("/login/anonymous")
 	@Ok("void")
 	public View anonymousLogin(HttpSession session) throws Exception {
-		User user = dao.findOne(User.class, new BasicDBObject("openid", "anonymous"));
+		User user = dao.findOne(User.class, new BasicDBObject("provider", "anonymous"));
 		session.setAttribute("me", user);
 		return new ServerRedirectView("/index.jsp");
 	}
@@ -87,16 +87,16 @@ public class UserModule {
 	
 	/*无需做链接,这是OpenID的回调地址*/
 	@At("/login/?/callback")
-	public View returnPoint(String openid, HttpServletRequest request) throws Exception {
+	public View returnPoint(String providerId, HttpServletRequest request) throws Exception {
 		Map<String, String> paramsMap = SocialAuthUtil.getRequestParametersMap(request); 
 		AuthProvider provider = manager.connect(paramsMap);
 		Profile p = provider.getUserProfile();
-        BasicDBObject query = new BasicDBObject().append("validatedId", p.getValidatedId()).append("openid", openid);
+        BasicDBObject query = new BasicDBObject().append("validatedId", p.getValidatedId()).append("provider", providerId);
         User user = dao.findOne(User.class, query);
         if (user == null) {
         	user = new User();
         	user.setEmail(p.getEmail());
-        	user.setOpenid(openid);
+        	user.setProvider(providerId);
         	user.setValidatedId(p.getValidatedId());
         	user.setId(commons.seq("user"));
         	final User _u = user;
