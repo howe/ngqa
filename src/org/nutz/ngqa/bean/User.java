@@ -32,4 +32,7 @@ public class User {
 	@JsonField(ignore=true)
 	private Role[] roles;
 	
+	@CoField(ref=true, lazy=true)
+	@JsonField(ignore=true)
+	private App[] authedApps;
 }

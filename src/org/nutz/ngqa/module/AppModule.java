@@ -10,6 +10,7 @@ import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.nutz.lang.random.R;
 import org.nutz.lang.util.Callback;
 import org.nutz.mongo.MongoDao;
 import org.nutz.mvc.ActionFilter;
@@ -44,11 +45,11 @@ public class AppModule {
 	private MongoDao dao;
 
 	@At("/user/login/root")
-	@Ok("jsp:/index.jsp")
+	@Ok(">>:/index.jsp")
 	public Object loginAsRoot(@Param("key") String key, HttpSession session) {
 		if (!Strings.isBlank(key)
 				&& 1 == systemconfigColl.count(new BasicDBObject(
-						"root.password", key))) {
+						"root_password", key))) {
 			User root = dao.findOne(User.class, new BasicDBObject("provider",
 					"root"));
 			session.setAttribute("me", root);
@@ -106,11 +107,13 @@ public class AppModule {
 			return Ajax.fail().setMsg("Name exist!!");
 		app = new App();
 		app.setName(name);
+		app.setKey(R.sg(48).next());
+		final App _app = app;
 		dao.runNoError(new Callback<DB>() {
 			
 			@Override
 			public void invoke(DB arg0) {
-				dao.save(name);
+				dao.save(_app);
 			}
 		});
 		return Ajax.ok().setData(dao.findOne(App.class, new BasicDBObject("name", name)));
