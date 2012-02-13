@@ -6,6 +6,7 @@ import org.brickred.socialauth.util.Constants;
 import org.brickred.socialauth.util.OAuthConfig;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
+@SuppressWarnings("serial")
 public class DoubanOAuthProvider extends AbstractOAuthProvider {
 
 	public DoubanOAuthProvider(OAuthConfig providerConfig) {
