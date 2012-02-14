@@ -17,7 +17,7 @@
                     <tr>
                         <td>
                             <p><a href="javascript:void(0);">@</a>user_name&nbsp;(2012-02-13 16:18:10)</p>
-                            <p>这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站</p>
+                            <p><a href="/question/1">这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站</a></p>
                             <p>Question at <a href="javascript:void(0);">question</a>, &nbsp;<a href="javascript:void(0);">answer</a></p>
                         </td>
                     </tr>
@@ -51,7 +51,19 @@
                     </tr>
                 </table>
             </div>
-            <div class="span3 box" id="infos">
+            <div class="span3" id="infos">
+                <div class="box">
+<h3>广告位招租</h3>
+
+<p>详情见<a href="http://howe.im">http://howe.im</a></p>
+
+<p>PS: <br />
+此项目用到了 nutz-web nutz-mongo nutz-web <br />
+还将会用到 nutz-social ╮(╯▽╰)╭ <br />
+本项目主要 贡献者 @wendal (兽) @ywjno (温泉) <br />
+本人只是个监工而已</p>
+                </div>
+                <div class="box sep21">
 <h3>广告位招租</h3>
 
 <p>详情见<a href="http://howe.im">http://howe.im</a></p>
@@ -94,6 +106,8 @@
 <ol><li>实现RSS输出</li></ol></li>
 <li><p>其他SDK</p></li>
 </ul>
+                </div>
+
             </div>
         </div>
         <jsp:include page="_include_footer.jsp" />
