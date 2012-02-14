@@ -9,7 +9,6 @@ import org.nutz.json.JsonField;
 import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
-import org.nutz.mongo.annotation.CoIdType;
 import org.nutz.mongo.annotation.CoIndexes;
 
 @Data
@@ -18,8 +17,8 @@ import org.nutz.mongo.annotation.CoIndexes;
 @CoIndexes("!ids:+provider,+validatedId")
 public class User {
 
-	@CoId(CoIdType.AUTO_INC)
-	private int id;
+	@CoId
+	private String id;
 	@CoField
 	private String validatedId;
 	@CoField
@@ -28,6 +27,7 @@ public class User {
 	private String provider;
 	@CoField
 	private Date lastLoginDate;
+	
 	@CoField(ref=true, lazy=true)
 	@JsonField(ignore=true)
 	private Role[] roles;

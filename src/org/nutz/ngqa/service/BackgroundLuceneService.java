@@ -1,30 +1,19 @@
 package org.nutz.ngqa.service;
 
-import org.agilewiki.jactor.JAMailboxFactory;
-import org.agilewiki.jactor.Mailbox;
-import org.agilewiki.jactor.MailboxFactory;
-import org.nutz.ioc.loader.annotation.Inject;
-import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import org.nutz.ioc.loader.annotation.IocBean;
+
+/**跑一些定时/不定期的后台任务*/
 @IocBean(create="init", depose="depose")
 public class BackgroundLuceneService {
-
-	@Inject
-	private CommonMongoService commons;
-	protected MailboxFactory mailboxFactory = JAMailboxFactory.newMailboxFactory(10);
 	
-	private static final Log log = Logs.get();
-	
-	protected Mailbox questionLunceneIndexMailbox;
+	private ScheduledThreadPoolExecutor es = new ScheduledThreadPoolExecutor(16);
 	
 	public void init() {
-		questionLunceneIndexMailbox = mailboxFactory.createMailbox();
-		
+		//定期统计tag的信息
 	}
 	
 	public void depose() {
-		mailboxFactory.close();
 	}
 }

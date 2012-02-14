@@ -15,10 +15,10 @@ import org.nutz.mongo.annotation.CoIndexes;
 @EqualsAndHashCode(callSuper = false)
 @Co("question")
 @CoIndexes("!:+title")
-public class Question {
+public class Question implements Freshable {
 
 	@CoId(CoIdType.AUTO_INC)
-	private int id;
+	private Integer id;
 	@CoField(ref=true)
 	private User user;
 	@CoField

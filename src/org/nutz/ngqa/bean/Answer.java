@@ -8,15 +8,14 @@ import lombok.EqualsAndHashCode;
 import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
-import org.nutz.mongo.annotation.CoIdType;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Co("answer")
-public class Answer {
+public class Answer implements Freshable{
 
-	@CoId(CoIdType.AUTO_INC)
-	private int id;
+	@CoId
+	private String id;
 	@CoField(ref=true)
 	private User user;
 	@CoField

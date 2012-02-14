@@ -1,9 +1,12 @@
 package org.nutz.ngqa.service;
 
+import java.util.Date;
+
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.util.Callback;
 import org.nutz.mongo.MongoConnector;
 import org.nutz.mongo.Mongos;
+import org.nutz.ngqa.bean.Freshable;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -43,5 +46,14 @@ public class CommonMongoService extends AbstractMongoService {
 		return (DBCollection) objs[0];
 	}
 	
+	public void fresh(Class<? extends Freshable> klass, Object id) {
+		String collName = Mongos.entity(klass).getCollectionName(null);
+		coll(collName).update(new BasicDBObject("_id", id), new BasicDBObject("$set", new BasicDBObject("updatedAt", new Date())));
+	}
 	
+	public void fresh(Freshable obj) {
+		String collName = Mongos.entity(obj).getCollectionName(null);
+		obj.setUpdatedAt(new Date());
+		coll(collName).update(new BasicDBObject("_id", obj.getId()), new BasicDBObject("$set", new BasicDBObject("updatedAt", obj.getUpdatedAt())));
+	}
 }

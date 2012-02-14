@@ -35,7 +35,6 @@ public class NgqaSetup implements Setup {
 		User anonymous = dao.findOne(User.class, new BasicDBObject("provider", "anonymous"));
 		if (anonymous == null) {
 			anonymous = new User();
-			anonymous.setId(commons.seq("user"));
 			anonymous.setProvider("anonymous");
 			dao.save(anonymous);
 		}
@@ -44,7 +43,6 @@ public class NgqaSetup implements Setup {
 		User root = dao.findOne(User.class, new BasicDBObject("provider", "root"));
 		if (root == null) {
 			root = new User();
-			root.setId(commons.seq("user"));
 			root.setProvider("root");
 			dao.save(root);
 		}

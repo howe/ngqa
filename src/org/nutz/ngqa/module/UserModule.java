@@ -2,6 +2,7 @@ package org.nutz.ngqa.module;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.brickred.socialauth.util.SocialAuthUtil;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Encoding;
 import org.nutz.lang.Files;
 import org.nutz.lang.stream.NullInputStream;
 import org.nutz.lang.util.Callback;
@@ -27,7 +29,6 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.view.ServerRedirectView;
 import org.nutz.ngqa.bean.User;
-import org.nutz.ngqa.service.CommonMongoService;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -41,9 +42,6 @@ public class UserModule {
 	
 	@Inject("java:$commons.dao()")
 	private MongoDao dao;
-	
-	@Inject
-	private CommonMongoService commons;
 	
 	public void init() throws Exception {
 		SocialAuthConfig config = new SocialAuthConfig();
@@ -67,11 +65,18 @@ public class UserModule {
 		return new ServerRedirectView("/index.jsp");
 	}
 	
-	/*提供google登录*/
+	/*提供社会化登录*/
 	@At("/login/?")
 	@Ok("void")
-	public void login(String provider, HttpSession session) throws Exception {
-		String returnTo = Mvcs.getReq().getRequestURL().toString() + "/callback";
+	public void login(String provider, HttpSession session, HttpServletRequest req) throws Exception {
+		String returnTo = req.getRequestURL().toString() + "/callback";
+		if (req.getParameterMap().size() > 0) {
+			StringBuilder sb = new StringBuilder().append(returnTo).append("?");
+			for (Object name : req.getParameterMap().keySet()) {
+				sb.append(name).append('=').append(URLEncoder.encode(req.getParameter(name.toString()), Encoding.UTF8)).append("&");
+			}
+			returnTo = sb.toString();
+		}
 		String url = manager.getAuthenticationUrl(provider, returnTo);
 		session.setAttribute("authManager", manager);
 		Mvcs.getResp().setHeader("Location", url);
@@ -98,7 +103,6 @@ public class UserModule {
         	user.setEmail(p.getEmail());
         	user.setProvider(providerId);
         	user.setValidatedId(p.getValidatedId());
-        	user.setId(commons.seq("user"));
         	final User _u = user;
         	dao.runNoError(new Callback<DB>() {
     			public void invoke(DB arg0) {
@@ -108,6 +112,7 @@ public class UserModule {
         }
         Moo moo = Moo.SET("lastLoginDate", new Date()).set("email", p.getEmail());
         dao.update(User.class, new BasicDBObject("_id", user.getId()), moo);
+        
         request.getSession().setAttribute("me", user);
         return new ServerRedirectView("/index.jsp");
 	}
