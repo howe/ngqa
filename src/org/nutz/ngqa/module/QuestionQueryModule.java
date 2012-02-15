@@ -3,11 +3,13 @@ package org.nutz.ngqa.module;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.ngqa.api.QuestionManageService;
 import org.nutz.ngqa.api.meta.QuestionQuery;
+import org.nutz.web.ajax.Ajax;
 
 import com.mongodb.BasicDBObject;
 
@@ -28,12 +30,18 @@ public class QuestionQueryModule {
 
 	@At({"/hasTag/?","/hasTag"})
 	public Object hasTag(@Param("tag")String tag, @Param("page")int page, @Param("pageSize") int pageSize) {
+		if (Strings.isBlank(tag)) {
+			return noTag(page, pageSize); //无tag的Question
+		} 
 		QuestionQuery query = QuestionQuery.Page(page, pageSize);
-		if (tag == null) {
-			query.q.append("tags", new BasicDBObject("$size", 0)); //无tag的Question
-		} else {
-			query.q.append("tags", tag); //tags是数组,支持直接查值
-		}
+		query.q.append("tags", tag); //tags是数组,支持直接查值
+		return questionMS.query(query);
+	}
+	
+	@At({"/noTag/?","/noTag"})
+	public Object noTag(@Param("page")int page, @Param("pageSize") int pageSize) {
+		QuestionQuery query = QuestionQuery.Page(page, pageSize);
+		query.q.append("tags", new BasicDBObject("$size", 0)); //无tag的Question
 		return questionMS.query(query);
 	}
 	
@@ -42,6 +50,11 @@ public class QuestionQueryModule {
 		QuestionQuery query = QuestionQuery.Page(page, pageSize);
 		query.q.append("answers", new BasicDBObject("$size", 0));
 		return questionMS.query(query);
+	}
+	
+	@At({"/random"}) //未实现
+	public Object random() {
+		return Ajax.fail();
 	}
 	
 	
