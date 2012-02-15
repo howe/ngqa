@@ -7,6 +7,10 @@ body {
     padding-bottom: 40px;
 }
 
+pre {
+    border: none;
+}
+
 .box {
     background-color: #FFF;
     -webkit-border-radius: 6px;
@@ -18,6 +22,33 @@ body {
 
 .sep21 {
     margin-top: 21px;
+}
+
+.questioner-img {
+    border-top: none;
+}
+
+.questioner-img img {
+    width:64px;
+    height:64px;
+}
+
+.answer-info {
+    height: 20px;
+    padding-bottom: 7px;
+}
+
+.answerer-img {
+    width:48px;
+    height:48px;
+}
+
+.answerer-name {
+    float: left;
+}
+
+.answer-time {
+    float: right;
 }
 
 .footer {
