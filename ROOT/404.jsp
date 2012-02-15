@@ -10,7 +10,7 @@
 <body>
 <div align="center" style="vertical-align:middle;"><img src="${base}/img/404.png" alt="404错误: 找不到页面" width="500" height="450" border="0" usemap="#Map">
   <map name="Map">
-    <area shape="rect" coords="300,365,350,400" href="${base}" target="_self">
+    <area shape="rect" coords="300,365,350,400" href="${base}/" target="_self">
   </map>
 </div>1
 </body>
