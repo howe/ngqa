@@ -32,6 +32,9 @@ public class SdoAuthProvider extends AbstractOAuthProvider {
 	@Override
 	protected Profile doVerifyResponse(Map<String, String> requestParams)
 			throws Exception {
+		if (!requestParams.containsKey("ticket")) {
+			throw new SocialAuthException("Not ticket found!! Auth fail!! ->" + Json.toJson(requestParams));
+		}
 		String url = String.format("https://cas.sdo.com/cas/Validate.Ex?service=%s&ticket=%s", URLEncoder.encode(Mvcs.getReq().getRequestURL().toString(), Encoding.UTF8), requestParams.get("ticket"));
 		System.out.println(url);
 		Response resp = Http.get(url);

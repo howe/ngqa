@@ -1,7 +1,6 @@
 package org.nutz.ngqa.api;
 
-import java.util.List;
-
+import org.nutz.ngqa.api.meta.Pager;
 import org.nutz.ngqa.api.meta.QuestionQuery;
 import org.nutz.ngqa.bean.Answer;
 import org.nutz.ngqa.bean.Question;
@@ -13,7 +12,7 @@ public interface QuestionManageService {
 	
 	void markDeleted(Question question);
 	
-	List<Question> query(QuestionQuery query);
+	Pager<Question> query(QuestionQuery query);
 	
 	Question addAnswer(Question question, Answer answer);
 	

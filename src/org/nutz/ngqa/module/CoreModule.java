@@ -17,7 +17,6 @@ import org.nutz.mvc.annotation.Attr;
 import org.nutz.mvc.annotation.By;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Param;
-import org.nutz.mvc.filter.CheckSession;
 import org.nutz.ngqa.api.QuestionManageService;
 import org.nutz.ngqa.api.meta.QuestionQuery;
 import org.nutz.ngqa.bean.Answer;
@@ -25,6 +24,7 @@ import org.nutz.ngqa.bean.Question;
 import org.nutz.ngqa.bean.User;
 import org.nutz.ngqa.service.CommonMongoService;
 import org.nutz.web.ajax.Ajax;
+import org.nutz.web.ajax.AjaxCheckSession;
 import org.nutz.web.ajax.AjaxReturn;
 
 import com.mongodb.BasicDBObject;
@@ -35,7 +35,7 @@ import com.mongodb.DBRef;
 
 @IocBean(create="init")
 @InjectName
-@Filters({@By(type=CheckSession.class,args={"me", "/index.jsp"})})
+@Filters({@By(type=AjaxCheckSession.class,args={"me"})})
 public class CoreModule {
 	
 	/*question的title是必须的,其他都是可选*/

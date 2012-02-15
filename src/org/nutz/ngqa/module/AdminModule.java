@@ -9,6 +9,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mongo.MongoDao;
 import org.nutz.mvc.ActionFilter;
 import org.nutz.mvc.Mvcs;
+import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.By;
 import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.Filters;
@@ -27,6 +28,7 @@ public class AdminModule {
 	@Inject("java:$commons.dao()")
 	private MongoDao dao;
 
+	@At("/admin/role/refresh")
 	@Filters({@By(type=ActionFilter.class, args={"ioc:authFilter"})})
 	@Auth("role.refresh")
 	public void refreshRoleCache(){

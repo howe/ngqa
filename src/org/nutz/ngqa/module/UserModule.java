@@ -78,6 +78,7 @@ public class UserModule {
 			returnTo = sb.toString();
 		}
 		String url = manager.getAuthenticationUrl(provider, returnTo);
+		System.out.println(url);
 		session.setAttribute("authManager", manager);
 		Mvcs.getResp().setHeader("Location", url);
 		Mvcs.getResp().setStatus(302);
