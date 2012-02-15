@@ -3,16 +3,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" media="screen" href="<%= request.getContextPath() %>/css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="<%= request.getContextPath() %>/css/application.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="./css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="./css/application.css" />
+<script type="text/javascript" src="./js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="./js/jquery.json-2.3.min.js"></script>
+<script type="text/javascript">
+$(function() {
+    $("#ask").click(function() {
+        $.post('./ask', $.toJSON($("#ask-form").serialize()));
+    });
+});
+</script>
 <title>Ask</title>
 </head>
 <body>
     <jsp:include page="_include_navbar.jsp" />
     <div class="container-fluid">
-    <div class="row-fluid answer-form">
+    <div class="row-fluid">
         <div class="span8 box">
-            <form class="form-horizontal">
+            <form class="form-horizontal" id="ask-form">
                 <fieldset>
                   <legend>Ask your ask</legend>
                   <div class="control-group">
@@ -45,7 +54,7 @@
                     </div>
                   </div>
                   <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Ask</button>
+                    <button type="button" class="btn btn-primary" id="ask">Ask</button>
                     <button type="reset" class="btn">Cancel</button>
                   </div>
                 </fieldset>

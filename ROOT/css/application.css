@@ -7,18 +7,48 @@ body {
     padding-bottom: 40px;
 }
 
+pre {
+    border: none;
+}
+
 .box {
     background-color: #FFF;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    margin: 0 -20px;
     padding: 20px;
 }
 
 .sep21 {
     margin-top: 21px;
+}
+
+.questioner-img {
+    border-top: none;
+}
+
+.questioner-img img {
+    width:64px;
+    height:64px;
+}
+
+.answer-info {
+    height: 20px;
+    padding-bottom: 7px;
+}
+
+.answerer-img {
+    width:48px;
+    height:48px;
+}
+
+.answerer-name {
+    float: left;
+}
+
+.answer-time {
+    float: right;
 }
 
 .footer {
