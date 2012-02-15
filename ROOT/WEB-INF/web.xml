@@ -21,6 +21,11 @@
 	<listener>
 		<listener-class>org.nutz.mvc.NutSessionListener</listener-class>
 	</listener>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404.jsp</location>
+	</error-page>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
