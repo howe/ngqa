@@ -37,24 +37,6 @@ import com.mongodb.DB;
 @InjectName
 @At("/user")
 public class UserModule {
-
-	private SocialAuthManager manager;
-	
-	@Inject("java:$commons.dao()")
-	private MongoDao dao;
-	
-	public void init() throws Exception {
-		SocialAuthConfig config = new SocialAuthConfig();
-		File devConfig = Files.findFile("oauth_consumer.properties_dev");
-		if (devConfig == null)
-			devConfig = Files.findFile("oauth_consumer.properties");
-		if (devConfig == null)
-			config.load(new NullInputStream());
-		else
-			config.load(new FileInputStream(devConfig));
-		manager = new SocialAuthManager();
-		manager.setSocialAuthConfig(config);
-	}
 	
 	/*提供匿名登录*/
 	@At("/login/anonymous")
@@ -116,5 +98,25 @@ public class UserModule {
         
         request.getSession().setAttribute("me", user);
         return new ServerRedirectView("/index.jsp");
+	}
+	
+
+
+	private SocialAuthManager manager;
+	
+	@Inject("java:$commons.dao()")
+	private MongoDao dao;
+	
+	public void init() throws Exception {
+		SocialAuthConfig config = new SocialAuthConfig();
+		File devConfig = Files.findFile("oauth_consumer.properties_dev");
+		if (devConfig == null)
+			devConfig = Files.findFile("oauth_consumer.properties");
+		if (devConfig == null)
+			config.load(new NullInputStream());
+		else
+			config.load(new FileInputStream(devConfig));
+		manager = new SocialAuthManager();
+		manager.setSocialAuthConfig(config);
 	}
 }
