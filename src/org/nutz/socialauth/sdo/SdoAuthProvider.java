@@ -1,6 +1,5 @@
 package org.nutz.socialauth.sdo;
 
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -15,6 +14,7 @@ import org.nutz.lang.Encoding;
 import org.nutz.mvc.Mvcs;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
+@SuppressWarnings("serial")
 public class SdoAuthProvider extends AbstractOAuthProvider {
 
 	public SdoAuthProvider(OAuthConfig providerConfig) {

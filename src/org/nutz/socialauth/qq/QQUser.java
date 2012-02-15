@@ -1,8 +1,5 @@
 package org.nutz.socialauth.qq;
 
-import lombok.Data;
-
-@Data
 public class QQUser {
 
 	private int ret;
@@ -38,4 +35,204 @@ public class QQUser {
 	private String departmentid	    ;//               院系id。
 	private String level	            ;//       学历级别。
 	private String email	            ;//       用户注册的邮箱。
+	public int getRet() {
+		return ret;
+	}
+	public void setRet(int ret) {
+		this.ret = ret;
+	}
+	public int getErrcode() {
+		return errcode;
+	}
+	public void setErrcode(int errcode) {
+		this.errcode = errcode;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	public String getData() {
+		return data;
+	}
+	public void setData(String data) {
+		this.data = data;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getOpenid() {
+		return openid;
+	}
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+	public String getNick() {
+		return nick;
+	}
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+	public String getHead() {
+		return head;
+	}
+	public void setHead(String head) {
+		this.head = head;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public String getIsvip() {
+		return isvip;
+	}
+	public void setIsvip(String isvip) {
+		this.isvip = isvip;
+	}
+	public String getIsent() {
+		return isent;
+	}
+	public void setIsent(String isent) {
+		this.isent = isent;
+	}
+	public String getIntroduction() {
+		return introduction;
+	}
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+	public String getVerifyinfo() {
+		return verifyinfo;
+	}
+	public void setVerifyinfo(String verifyinfo) {
+		this.verifyinfo = verifyinfo;
+	}
+	public int getBirth_year() {
+		return birth_year;
+	}
+	public void setBirth_year(int birth_year) {
+		this.birth_year = birth_year;
+	}
+	public int getBirth_month() {
+		return birth_month;
+	}
+	public void setBirth_month(int birth_month) {
+		this.birth_month = birth_month;
+	}
+	public int getBirth_day() {
+		return birth_day;
+	}
+	public void setBirth_day(int birth_day) {
+		this.birth_day = birth_day;
+	}
+	public String getCountry_code() {
+		return country_code;
+	}
+	public void setCountry_code(String country_code) {
+		this.country_code = country_code;
+	}
+	public String getProvince_code() {
+		return province_code;
+	}
+	public void setProvince_code(String province_code) {
+		this.province_code = province_code;
+	}
+	public String getCity_code() {
+		return city_code;
+	}
+	public void setCity_code(String city_code) {
+		this.city_code = city_code;
+	}
+	public int getSex() {
+		return sex;
+	}
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+	public String getFansnum() {
+		return fansnum;
+	}
+	public void setFansnum(String fansnum) {
+		this.fansnum = fansnum;
+	}
+	public String getIdolnum() {
+		return idolnum;
+	}
+	public void setIdolnum(String idolnum) {
+		this.idolnum = idolnum;
+	}
+	public String getTweetnum() {
+		return tweetnum;
+	}
+	public void setTweetnum(String tweetnum) {
+		this.tweetnum = tweetnum;
+	}
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getTagname() {
+		return tagname;
+	}
+	public void setTagname(String tagname) {
+		this.tagname = tagname;
+	}
+	public String getEdu() {
+		return edu;
+	}
+	public void setEdu(String edu) {
+		this.edu = edu;
+	}
+	public String getEduid() {
+		return eduid;
+	}
+	public void setEduid(String eduid) {
+		this.eduid = eduid;
+	}
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
+	}
+	public String getSchoolid() {
+		return schoolid;
+	}
+	public void setSchoolid(String schoolid) {
+		this.schoolid = schoolid;
+	}
+	public String getDepartmentid() {
+		return departmentid;
+	}
+	public void setDepartmentid(String departmentid) {
+		this.departmentid = departmentid;
+	}
+	public String getLevel() {
+		return level;
+	}
+	public void setLevel(String level) {
+		this.level = level;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
 }
