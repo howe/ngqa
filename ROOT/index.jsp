@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" media="screen" href="./css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="./css/include/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="./css/application.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="./css/login.css" />
-<script type="text/javascript" src="./js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="./js/include/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="./js/application.js"></script>
 <script type="text/javascript" src="./js/index.js"></script>
 <title>Question&amp;Answer</title>
