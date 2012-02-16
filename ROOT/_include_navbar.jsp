@@ -25,6 +25,13 @@
                         <a href="#" class="taobao" title="用淘宝帐号登录"></a>
                         <a href="#" class="twitter" title="与twitter链接"></a>
                         <a href="#" class="tencent" title="与腾讯微博链接"></a>
+                        <a href="#" class="aol" title="用AOL帐号登录"></a>
+                        <a href="#" class="browserid" title="用Mozilla BrowserID登录"></a>
+                        <a href="#" class="foursquare" title="用Foursquare帐号登录"></a>
+                        <a href="#" class="linkedin" title="用Linkedin帐号登录"></a>
+                        <a href="#" class="myspace" title="用Myspace帐号登录"></a>
+                        <a href="#" class="yammer" title="用Yammer帐号登录"></a>
+                        <a href="${base}/user/login/qq" class="qq" title="用QQ帐号登录"></a>
                         <a href="${base}/user/login/yahoo" class="yahoo" title="与Yahoo!连接"></a>
                         <a href="${base}/user/login/alipay" class="alipay" title="支付宝快捷登录"></a>
                         <a href="${base}/user/login/baidu" class="baidu" title="用baidu帐号登录"></a>
@@ -32,14 +39,7 @@
                         <a href="${base}/user/login/google" class="google" title="与Google连接"></a>
                         <a href="${base}/user/login/facebook" class="facebook" title="用FaceBook帐号登录"></a>
                         <a href="${base}/user/login/sina" class="weibo" title="与新浪微博链接"></a>
-                        <a href="${base}/user/login/qq" class="qq" title="用QQ帐号登录"></a>
-                        <a href="#" class="aol" title="用AOL帐号登录"></a>
-                        <a href="#" class="browserid" title="用Mozilla BrowserID登录"></a>
-                        <a href="#" class="foursquare" title="用Foursquare帐号登录"></a>
                         <a href="${base}/user/login/github" class="github" title="专业程序员用Github帐号登录"></a>
-                        <a href="#" class="linkedin" title="用Linkedin帐号登录"></a>
-                        <a href="#" class="myspace" title="用Myspace帐号登录"></a>
-                        <a href="#" class="yammer" title="用Yammer帐号登录"></a>
                     </div>
                 </div>
             </div>
