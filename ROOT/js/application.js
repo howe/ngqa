@@ -11,9 +11,23 @@ String.format = function() {
 };
 
 function getTagsHTML(tags) {
-    var questionTags = '';
+    var questionTags = [];
     $.each(tags, function(index, value) {
-        questionTags += String.format(',&nbsp;<a href="/tags/{0}">{1}</a>', value, value);
+        questionTags.push(String.format('<a href="/tags/{0}">{1}</a>', value, value));
     });
-    return questionTags.substring(1, questionTags.length - 1);
+    return questionTags.join(',&nbsp;');
 }
+
+$(function() {
+    $(".log-width").hide();
+    $(".signin").click(function(e) {
+        e.preventDefault();
+        $(".log-width").toggle();
+        $(document.body).css("padding-top", "105px");
+    });
+
+    $(document).mouseup(function() {
+        $(document.body).css("padding-top","60px");
+        $(".log-width").hide();
+    });
+});
