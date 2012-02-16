@@ -27,7 +27,7 @@
 这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站
                                 </h3>
                                 <div class="question-mate sep21">
-                                    <p><span id="questionse-name">user_name</span>&nbsp;||&nbsp;Question it in <span id="question-time">2012-02-13 16:18:10</span>. &nbsp;||&nbsp; Question at <span id="question-tags"></span></p>
+                                    <p><span id="questionse-name">user_name</span>&nbsp;||&nbsp;Question it in <span id="question-time">2012-02-13 16:18:10</span>. &nbsp;||&nbsp;Question at <span id="question-tags"></span></p>
                                 </div>
                             </td>
                             <td class="questioner-img">
