@@ -1,7 +1,7 @@
 $(function() {
     var questionInfoStr = '<p>{0}&nbsp;({1})</p>';
     var questionTitleStr = '<p><a href="./question/{0}">{1}</a></p>';
-    var questionTagsStr = "Question at {0}";
+    var questionTagsStr = "<p>Question at {0}</p>";
     var tags = ['question', 'answer'];
     var html = '';
     $.each([1, 2, 3, 4], function (index, value) {
