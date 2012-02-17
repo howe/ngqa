@@ -3,6 +3,7 @@ package org.nutz.ngqa.mvc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.nutz.lang.Strings;
 import org.nutz.mvc.View;
 import org.nutz.ngqa.api.meta.Pager;
 import org.nutz.ngqa.bean.Question;
@@ -15,7 +16,8 @@ public class RssView implements View {
 	public void render(HttpServletRequest req, HttpServletResponse resp,
 			Object obj) throws Throwable {
 		String reqURL = req.getRequestURL().toString();
-		String hostRoot = reqURL.substring(0, reqURL.indexOf("/", 8));
+		String contextPath = req.getSession().getServletContext().getContextPath() + "/";
+		String hostRoot = reqURL.substring(0, reqURL.indexOf("/", 8)) + contextPath;
 		Channel channel = new Channel();
 		channel.setCopyright("Ngqa copy right");
         channel.setLink(reqURL);
@@ -24,11 +26,11 @@ public class RssView implements View {
         if (obj instanceof Pager) {
         	Pager<Question> pager = (Pager<Question>) obj;
         	for (Question question : pager.getData()) {
-				channel.addItem(hostRoot + "/question/"+question.getId()+".shtml", question.getTitle(), question.getContent());
+				channel.addItem(hostRoot + "question/"+question.getId()+".shtml", question.getTitle(), question.getContent());
 			}
         } else if (obj instanceof Question) {
         	Question question = (Question) obj;
-        	channel.addItem(hostRoot + "/question/"+question.getId()+".shtml", question.getTitle(), question.getContent());
+        	channel.addItem(hostRoot + "question/"+question.getId()+".shtml", question.getTitle(), question.getContent());
         }
         resp.getWriter().write(channel.getFeed("rss"));
 	}
