@@ -19,7 +19,7 @@ public class SmartView implements View {
 	public void render(HttpServletRequest req, HttpServletResponse resp,
 			Object obj) throws Throwable {
 		String uri = req.getRequestURI();
-		if (uri.endsWith(".jspx"))
+		if (uri.endsWith(".shtml"))
 			new JspView(viewValue).render(req, resp, obj);
 		else
 			new AjaxView().render(req, resp, obj);
