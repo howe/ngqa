@@ -11,11 +11,15 @@ String.format = function() {
 };
 
 function getTagsHTML(tags) {
+    if (tags.length == 0) {
+        return "";
+    }
     var questionTags = [];
     $.each(tags, function(index, value) {
+        value = $.trim(value);
         questionTags.push(String.format('<a href="/tags/{0}">{1}</a>', value, value));
     });
-    return questionTags.join(',&nbsp;');
+    return String.format("Question at {0}", questionTags.join(',&nbsp;'));
 }
 
 $(function() {

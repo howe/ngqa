@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="./css/application.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="./css/login.css" />
 <script type="text/javascript" src="./js/include/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="./js/include/jquery.json-2.3.min.js"></script>
 <script type="text/javascript" src="./js/include/showdown.js"></script>
 <script type="text/javascript" src="./js/include/highlight.pack.js"></script>
 <script type="text/javascript" src="./js/application.js"></script>
@@ -27,7 +28,7 @@
 这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站这是一个神奇的网站
                                 </h3>
                                 <div class="question-mate sep21">
-                                    <p><span id="questionse-name">user_name</span>&nbsp;||&nbsp;Question it in <span id="question-time">2012-02-13 16:18:10</span>. &nbsp;||&nbsp;Question at <span id="question-tags"></span></p>
+                                    <p><span id="questionse-name">user_name</span>&nbsp;||&nbsp;Question it in <span id="question-time">2012-02-13 16:18:10</span>. &nbsp;||&nbsp;<span id="question-tags"></span></p>
                                 </div>
                             </td>
                             <td class="questioner-img">
