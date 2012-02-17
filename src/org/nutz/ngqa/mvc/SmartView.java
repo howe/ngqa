@@ -21,6 +21,8 @@ public class SmartView implements View {
 		String uri = req.getRequestURI();
 		if (uri.endsWith(".shtml"))
 			new JspView(viewValue).render(req, resp, obj);
+		else if (uri.endsWith(".rss"))
+			new RssView().render(req, resp, obj);
 		else
 			new AjaxView().render(req, resp, obj);
 	}

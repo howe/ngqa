@@ -12,6 +12,6 @@
   <map name="Map">
     <area shape="rect" coords="300,365,350,400" href="${base}/" target="_self">
   </map>
-</div>1
+</div>
 </body>
 </html>
