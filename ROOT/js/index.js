@@ -1,6 +1,6 @@
 $(function() {
     var questionInfoStr = '<p>{0}&nbsp;({1})</p>';
-    var questionTitleStr = '<p><a href="./question/{0}">{1}</a></p>';
+    var questionTitleStr = '<p><a href="./question/{0}.shtml">{1}</a></p>';
     var questionTagsStr = '<p></p>';
     var html = '';
 

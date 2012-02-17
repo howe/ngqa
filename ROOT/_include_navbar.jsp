@@ -1,7 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld"%>
-<%@ taglib prefix="fn" uri="/WEB-INF/tld/fn.tld"%>
-<%@ taglib prefix="fmt" uri="/WEB-INF/tld/fmt.tld"%>
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container-fluid">
