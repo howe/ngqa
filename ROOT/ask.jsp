@@ -8,10 +8,27 @@
 <script type="text/javascript" src="./js/include/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="./js/include/jquery.json-2.3.min.js"></script>
 <script type="text/javascript" src="./js/include/form2js.js"></script>
+<script type="text/javascript" src="./js/include/jquery.pjax.js"></script>
 <script type="text/javascript">
 $(function() {
     $("#ask").click(function() {
-        $.post('./ask', $.toJSON(form2js("ask-form")));
+        $.ajax({
+        		type : 'POST',
+        		url  : './ask',
+        		data :  $.toJSON(form2js("ask-form")), 
+        		dataType : 'json',
+        		success: function( data ) {
+    						if (console && console.log){
+      							console.log( 'Sample of data:', $.toJSON(data) );
+    						}
+    						if (data['ok']) { //添加成功
+    							var nextURL = "./question/" + data['data']['id'];
+    							window.location = nextURL;
+    						} else {
+    							alert('Fail ' + data['msg']);
+    						}
+  						}
+        	});
     });
 });
 </script>
