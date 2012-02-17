@@ -30,7 +30,6 @@ import org.nutz.web.ajax.AjaxReturn;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.DBRef;
 
 @IocBean(create="init")
@@ -59,8 +58,9 @@ public class CoreModule {
 	
 	/*获取具体的question*/
 	@At("/question/?")
-	public AjaxReturn fetch(String questionId) {
-		Question question = dao.findOne(Question.class, new BasicDBObject("_id", questionId));
+	@Filters()
+	public Object fetch(String questionId) {
+		Question question = dao.findById(Question.class, questionId);
 		if (question != null)
 			return Ajax.ok().setData(question);
 		return Ajax.fail().setMsg("Not Found");
@@ -76,23 +76,23 @@ public class CoreModule {
 	public AjaxReturn addAnswer(final String questionId, final @Param("..")Answer answer, @Attr("me")User user) {
 		if (answer == null || Lang.length(answer.getContent()) < 5)
 			return Ajax.fail().setMsg("Not OK");
-		DBObject dbo = questionColl.findOne(new BasicDBObject("_id", questionId));
-		if (dbo != null) {
-			answer.setUser(user);
-			answer.setCreatedAt(new Date());
-			answer.setUpdatedAt(new Date());
-			dao.runNoError(new Callback<DB>() {
-				public void invoke(DB db) {
-					dao.save(answer);
-					Moo moo = Moo.NEW();
-					moo.push("answers", new DBRef(db, "answer", answer.getId()));
-					dao.update(Question.class, new BasicDBObject("_id",questionId), moo);
-				}
-			});
-			commons.fresh(Question.class, questionId);
-			return Ajax.ok();
-		}
-		return Ajax.fail().setMsg("Not Found");
+		Question question = dao.findById(Question.class, questionId);
+		if (question == null)
+			Ajax.fail().setMsg("Not Found");
+		
+		answer.setUser(user);
+		answer.setCreatedAt(new Date());
+		answer.setUpdatedAt(new Date());
+		dao.runNoError(new Callback<DB>() {
+			public void invoke(DB db) {
+				dao.save(answer);
+				Moo moo = Moo.NEW();
+				moo.push("answers", new DBRef(db, "answer", answer.getId()));
+				dao.update(Question.class, Moo.NEW("id", questionId), moo);
+			}
+		});
+		commons.fresh(Question.class, questionId);
+		return Ajax.ok();
 	}
 	
 	@At("/question/?/tag/add/?")
