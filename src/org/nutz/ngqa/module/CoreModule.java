@@ -61,7 +61,7 @@ public class CoreModule {
 	/*获取具体的question*/
 	@At("/question/?")
 	@Filters()
-	@Ok("smart:/question/one.jsp")
+	@Ok("smart:/question/one")
 	public Object fetch(String questionId) {
 		Question question = dao.findById(Question.class, questionId);
 		if (question != null)
