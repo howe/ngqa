@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld"%>
+<%@ taglib prefix="fn" uri="/WEB-INF/tld/fn.tld"%>
+<%@ taglib prefix="fmt" uri="/WEB-INF/tld/fmt.tld"%>
 <div class="footer">
     <p>Coded and designed by <b>Nutz Production Committee</b>.</p>
     <p>Powered by <a href="https://github.com/nutzam/nutz">Nutz</a>.</p>
