@@ -13,6 +13,7 @@ import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.SocialAuthConfig;
 import org.brickred.socialauth.SocialAuthManager;
+import org.brickred.socialauth.exception.SocialAuthException;
 import org.brickred.socialauth.util.SocialAuthUtil;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -59,9 +60,10 @@ public class UserModule {
 			}
 			returnTo = sb.toString();
 		}
+		SocialAuthManager manager = new SocialAuthManager();
+		manager.setSocialAuthConfig(config);
+		session.setAttribute("openid.manager", manager);
 		String url = manager.getAuthenticationUrl(provider, returnTo);
-		System.out.println(url);
-		session.setAttribute("authManager", manager);
 		Mvcs.getResp().setHeader("Location", url);
 		Mvcs.getResp().setStatus(302);
 	}
@@ -75,7 +77,11 @@ public class UserModule {
 	
 	/*无需做链接,这是OpenID的回调地址*/
 	@At("/login/?/callback")
-	public View returnPoint(String providerId, HttpServletRequest request) throws Exception {
+	public View returnPoint(String providerId, HttpServletRequest request, HttpSession session) throws Exception {
+		SocialAuthManager manager = (SocialAuthManager) session.getAttribute("openid.manager");
+		if (manager == null)
+			throw new SocialAuthException("Not manager found!");
+		session.removeAttribute("openid.manager"); //防止重复登录的可能性
 		Map<String, String> paramsMap = SocialAuthUtil.getRequestParametersMap(request); 
 		AuthProvider provider = manager.connect(paramsMap);
 		Profile p = provider.getUserProfile();
@@ -101,8 +107,7 @@ public class UserModule {
 	}
 	
 
-
-	private SocialAuthManager manager;
+	private SocialAuthConfig config;
 	
 	@Inject("java:$commons.dao()")
 	private MongoDao dao;
@@ -116,7 +121,6 @@ public class UserModule {
 			config.load(new NullInputStream());
 		else
 			config.load(new FileInputStream(devConfig));
-		manager = new SocialAuthManager();
-		manager.setSocialAuthConfig(config);
+		this.config = config;
 	}
 }

@@ -10,7 +10,6 @@ import org.nutz.web.ajax.AjaxView;
 public class SmartView implements View {
 
 	public SmartView(String viewValue) {
-		super();
 		this.viewValue = viewValue;
 	}
 
@@ -19,12 +18,12 @@ public class SmartView implements View {
 	public void render(HttpServletRequest req, HttpServletResponse resp,
 			Object obj) throws Throwable {
 		String uri = req.getRequestURI();
-		if (uri.endsWith(".shtml"))
-			new JspView(viewValue).render(req, resp, obj);
+		if (uri.endsWith(".json"))
+			new AjaxView().render(req, resp, obj);
 		else if (uri.endsWith(".rss"))
 			new RssView().render(req, resp, obj);
 		else
-			new AjaxView().render(req, resp, obj);
+			new JspView(viewValue).render(req, resp, obj);
 	}
 
 }

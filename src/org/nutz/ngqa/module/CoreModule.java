@@ -2,6 +2,7 @@ package org.nutz.ngqa.module;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -64,9 +65,9 @@ public class CoreModule {
 	@Ok("smart:/question/one")
 	public Object fetch(String questionId) {
 		Question question = dao.findById(Question.class, questionId);
-		if (question != null)
-			return question;
-		return new HttpStatusView(404);
+		if (question == null)
+			return new HttpStatusView(404);
+		return question;
 	}
 	
 	@At("/question/query")
@@ -90,7 +91,7 @@ public class CoreModule {
 			public void invoke(DB db) {
 				dao.save(answer);
 				Moo moo = Moo.NEW();
-				moo.push("answers", new DBRef(db, "answer", answer.getId()));
+				moo.push("answers", new DBRef(db, "answer", new ObjectId(answer.getId())));
 				dao.update(Question.class, Moo.NEW("id", questionId), moo);
 			}
 		});
@@ -114,19 +115,19 @@ public class CoreModule {
 	public AjaxReturn removeTag(String questionId,String tag, @Attr("me")User user) {
 		BasicDBObject update = new BasicDBObject();
 		update.append("$pull", new BasicDBObject("tags",tag));
-		questionColl.update(new BasicDBObject("_id", questionId), update);
+		questionColl.update(new BasicDBObject("_id", new ObjectId(questionId)), update);
 		commons.fresh(Question.class, questionId);
 		return Ajax.ok();
 	}
 	
 	@At("/question/?/watch")
 	public void watch(String questionId, @Attr("me") User me) {
-		dao.update(Question.class, new BasicDBObject("_id", questionId), new BasicDBObject("$addToSet", new BasicDBObject("watchers", new DBRef(null, "user", me.getId()))));
+		dao.update(Question.class, new BasicDBObject("_id", new ObjectId(questionId)), new BasicDBObject("$addToSet", new BasicDBObject("watchers", new DBRef(null, "user", new ObjectId(me.getId())))));
 	}
 	
 	@At("/question/?/unwatch")
 	public void unwatch(String questionId, @Attr("me") User me) {
-		dao.update(Question.class, new BasicDBObject("_id", questionId), new BasicDBObject("$pop", new BasicDBObject("watchers", new DBRef(null, "user", me.getId()))));
+		dao.update(Question.class, new BasicDBObject("_id", new ObjectId(questionId)), new BasicDBObject("$pop", new BasicDBObject("watchers", new DBRef(null, "user", new ObjectId(me.getId())))));
 	}
 	
 	@At("/question/?/update")
@@ -139,9 +140,9 @@ public class CoreModule {
 		if (question == null)
 			return Ajax.fail().setMsg("No data");
 		if (Lang.length(question.getTitle()) >= 5 || Lang.length(question.getTitle()) <= 100)
-			dao.update(Question.class, new BasicDBObject("_id", questionId), Moo.SET("title", question.getTitle()));
+			dao.update(Question.class, new BasicDBObject("_id", new ObjectId(questionId)), Moo.SET("title", question.getTitle()));
 		if (Lang.length(question.getContent()) >= 5 || Lang.length(question.getContent()) <= 100)
-			dao.update(Question.class, new BasicDBObject("_id", questionId), Moo.SET("content", question.getContent()));
+			dao.update(Question.class, new BasicDBObject("_id", new ObjectId(questionId)), Moo.SET("content", question.getContent()));
 		return Ajax.ok();
 	}
 	

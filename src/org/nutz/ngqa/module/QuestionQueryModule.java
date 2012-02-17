@@ -28,7 +28,7 @@ public class QuestionQueryModule {
 	
 	/*只支持简单分页*/
 	@At({"/question/query/list/?","/question/query/list"})
-	@Ok("smart")
+	@Ok("ajax")
 	public Object query(@Param("page")int page, @Param("pageSize") int pageSize) {
 		return questionMS.query(QuestionQuery.Page(page, pageSize));
 	}

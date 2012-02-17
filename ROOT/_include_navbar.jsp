@@ -2,12 +2,13 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a class="brand" href="${base}">ngqa</a>
+            <a class="brand" href="${base}/">ngqa</a>
             <div class="nav-collapse">
                 <ul class="nav">
                     <li class="active"><a href="${base}">questions</a></li>
-                    <li><a href="/unanswered">unanswered</a></li>
+                    <li><a href="#">unanswered</a></li>
                     <li><a href="#">tags</a></li>
+                    <li><a href="${base}/ask.jsp">Ask!</a></li>
                 </ul>
                 <ul class="nav pull-right">
                     <li><a href="#signin" class="signin">signin</a></li>
