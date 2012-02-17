@@ -9,6 +9,7 @@ import org.nutz.mvc.annotation.UrlMappingBy;
 import org.nutz.mvc.annotation.Views;
 import org.nutz.mvc.ioc.provider.ComboIocProvider;
 import org.nutz.ngqa.mvc.EnhanceUrlMapping;
+import org.nutz.ngqa.mvc.SmartViewMaker;
 import org.nutz.web.ajax.AjaxViewMaker;
 
 @Modules(scanPackage=true)
@@ -18,7 +19,7 @@ import org.nutz.web.ajax.AjaxViewMaker;
 		"org.nutz.ngqa"}, type = ComboIocProvider.class)
 @Ok("ajax")
 @Fail("ajax")
-@Views(AjaxViewMaker.class)
+@Views({AjaxViewMaker.class,SmartViewMaker.class})
 @SetupBy(NgqaSetup.class)
 @UrlMappingBy(value=EnhanceUrlMapping.class)
 public class MainModule {}
