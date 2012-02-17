@@ -1,5 +1,16 @@
 ﻿.log-width {
+    border: 1px none transparent;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    color: #778899;
+    display: none;
     padding: 10px 10px 11px;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    top: 40px;
+    z-index: 1030;
 }
 
 .log-width a {
