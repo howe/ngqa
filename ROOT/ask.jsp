@@ -6,11 +6,12 @@
 <link rel="stylesheet" type="text/css" media="screen" href="./css/include/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="./css/application.css" />
 <script type="text/javascript" src="./js/include/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="./js/nclude/jquery.json-2.3.min.js"></script>
+<script type="text/javascript" src="./js/include/jquery.json-2.3.min.js"></script>
+<script type="text/javascript" src="./js/include/form2js.js"></script>
 <script type="text/javascript">
 $(function() {
     $("#ask").click(function() {
-        $.post('./ask', $.toJSON($("#ask-form").serialize()));
+        $.post('./ask', $.toJSON(form2js("ask-form")));
     });
 });
 </script>
