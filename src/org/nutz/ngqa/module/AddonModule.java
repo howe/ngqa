@@ -46,6 +46,11 @@ public class AddonModule {
 		writer.write(urlset.toString());
 	}
 	
+	@At("/rss")
+	@Ok("->:/question/query/list.rss?pageSize=100")
+	public void rss() {
+	}
+	
 	@Inject("java:$commons.coll('question')")
 	private DBCollection questionColl;
 }

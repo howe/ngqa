@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld"%>
+<%@ taglib prefix="fn" uri="/WEB-INF/tld/fn.tld"%>
+<%@ taglib prefix="fmt" uri="/WEB-INF/tld/fmt.tld"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,6 +15,6 @@
   <map name="Map">
     <area shape="rect" coords="300,365,350,400" href="${base}/" target="_self">
   </map>
-</div>1
+</div>
 </body>
 </html>
