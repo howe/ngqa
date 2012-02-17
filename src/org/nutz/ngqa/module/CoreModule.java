@@ -16,7 +16,9 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Attr;
 import org.nutz.mvc.annotation.By;
 import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.view.HttpStatusView;
 import org.nutz.ngqa.api.QuestionManageService;
 import org.nutz.ngqa.api.meta.QuestionQuery;
 import org.nutz.ngqa.bean.Answer;
@@ -59,11 +61,12 @@ public class CoreModule {
 	/*获取具体的question*/
 	@At("/question/?")
 	@Filters()
+	@Ok("smart:/question/one.jsp")
 	public Object fetch(String questionId) {
 		Question question = dao.findById(Question.class, questionId);
 		if (question != null)
-			return Ajax.ok().setData(question);
-		return Ajax.fail().setMsg("Not Found");
+			return question;
+		return new HttpStatusView(404);
 	}
 	
 	@At("/question/query")
