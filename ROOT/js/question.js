@@ -1,3 +1,7 @@
+function getContentHTML(converter, content, format) {
+    return format == 'markdown' ? converter.makeHtml(content) : content;
+}
+
 $(function() {
     hljs.tabReplace = '    ';
     hljs.initHighlightingOnLoad();
@@ -9,21 +13,29 @@ $(function() {
 #### Issue links\nissue #1\ntekkub#1\nmojombo/god#1";
     var codeStr = 'HTML:\n\n    <h1>HTML code</h1>\n    <p class="some">This is an example</p>\n\nPython:\n\n    def func():\n      for i in [1, 2, 3]:\n        print "%s" % i';
 
-    // $("#question-title").html("这是一个神奇的网站");
-    $("#questionse-name").html("这是一个神奇的网站");
-    $("#question-time").html("2012-02-15 14:54:41");
-    var tags = ['question', 'answer'];
-    $("#question-tags").html(getTagsHTML(tags));
-    $("#question-content").html(converter.makeHtml(sample + '\n\n' + codeStr));
+    $.get('./question/', function(json) {
+        if (json['ok']) {
+            var data = json['data'];
+            $("#question-title").html(data['title']);
+            $("#questionse-name").html(data['user']["id"]);
+            $("#question-time").html(data["createdAt"]);
+            $("#question-tags").html(getTagsHTML(data['tags']));
+            // $("#question-content").html(getContentHTML(converter, data['content'], data['format']));
+            $("#question-content").html(getContentHTML(converter, sample + '\n\n' + codeStr, 'markdown'));
 
-    var answererImgStr = '<td><img class="answerer-img" src="{0}" alt="{1}"></td>';
-    var answererInfoStr = '<td><div class="answer-info"><span class="answerer-name">{0}</span><span class="answer-time">Answer at&nbsp;{1}</span></div>';
-    var answerContentStr = '<div class="answer-content">{0}</div></td>';
-    var html = '';
-    $.each([1, 2, 3, 4], function (index, value) {
-        html = String.format(answererImgStr, './img/img.jpeg', 'userName');
-        html += String.format(answererInfoStr, 'UserName', '2012-02-15 16:58:19');
-        html += String.format(answerContentStr, converter.makeHtml(sample+'\n\n'+ codeStr));
-        $("#answers").append($('<tr>' + html +'</tr>'));
-      });
+            $.each(data['answers'], function (index, value) {
+                var answererImgStr = '<td><img class="answerer-img" src="{0}" alt="{1}"></td>';
+                var answererInfoStr = '<td><div class="answer-info"><span class="answerer-name">{0}</span><span class="answer-time">Answer at&nbsp;{1}</span></div>';
+                var answerContentStr = '<div class="answer-content">{0}</div></td>';
+                var html = '';
+                $.each(value, function(key, value) {
+                    html = String.format(answererImgStr, './img/img.jpeg', value['user']['id']);
+                    html += String.format(answererInfoStr, value['user']['id'], value['createdAt']);
+                    // html += String.format(answerContentStr, getContentHTML(converter, value['content'], value['format']));
+                    html += String.format(answerContentStr, getContentHTML(converter, sample + '\n\n' + codeStr, 'markdown'));
+                    $("#answers").append($('<tr>' + html +'</tr>'));
+                });
+            });
+        }
+    }, 'json');
 });
