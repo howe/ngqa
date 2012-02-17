@@ -14,6 +14,8 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.ngqa.Helpers;
+import org.nutz.ngqa.bean.Question;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -30,7 +32,6 @@ public class AddonModule {
 	@Ok("void")
 	public void sitemap(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		DBCursor cur = questionColl.find(new BasicDBObject(), new BasicDBObject("updateAt", 1)).sort(new BasicDBObject("createAt", -1));
-		String urlRoot = "http://" + req.getHeader("Host") + req.getSession().getServletContext().getContextPath() + "/question";
 		Tag urlset = Tag.tag("urlset");
 		urlset.attr("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
 		   .attr("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
@@ -38,8 +39,11 @@ public class AddonModule {
 		
 		urlset.add("url").add("loc").setText("http://" + req.getHeader("Host"));
 		
-		while(cur.hasNext())
-			urlset.add("url").add("loc").setText(urlRoot + cur.next().get("_id") + ".shtml");
+		while(cur.hasNext()) {
+			Question question = new Question();
+			question.setId(cur.next().get("_id").toString());
+			urlset.add("url").add("loc").setText(Helpers.makeQuestionURL(question));
+		}
 		
 		Writer writer = resp.getWriter();
 		writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");

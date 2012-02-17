@@ -12,6 +12,6 @@ public class Helpers {
 		String reqURL = req.getRequestURL().toString();
 		String contextPath = req.getSession().getServletContext().getContextPath() + "/";
 		String hostRoot = reqURL.substring(0, reqURL.indexOf("/", 8)) + contextPath;
-		return hostRoot + "question/"+question.getId()+".shtml";
+		return hostRoot + "question/"+question.getId();
 	}
 }
