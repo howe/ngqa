@@ -44,7 +44,6 @@ public class CoreModule {
 	public AjaxReturn createQuestion(final @Param("..")Question question, @Attr("me") User user) {
 		if (question == null || Lang.length(question.getTitle()) < 5 || Lang.length(question.getTitle()) > 100)
 			return Ajax.fail().setMsg("Not OK");
-		question.setId(commons.seq("question"));
 		question.setUser(user);
 		question.setCreatedAt(new Date());
 		question.setUpdatedAt(new Date());
@@ -60,7 +59,7 @@ public class CoreModule {
 	
 	/*获取具体的question*/
 	@At("/question/?")
-	public AjaxReturn fetch(int questionId) {
+	public AjaxReturn fetch(String questionId) {
 		Question question = dao.findOne(Question.class, new BasicDBObject("_id", questionId));
 		if (question != null)
 			return Ajax.ok().setData(question);
@@ -74,7 +73,7 @@ public class CoreModule {
 	
 	@At("/question/?/answer/add")
 	@AdaptBy(type=JsonAdaptor.class)
-	public AjaxReturn addAnswer(final int questionId, final @Param("..")Answer answer, @Attr("me")User user) {
+	public AjaxReturn addAnswer(final String questionId, final @Param("..")Answer answer, @Attr("me")User user) {
 		if (answer == null || Lang.length(answer.getContent()) < 5)
 			return Ajax.fail().setMsg("Not OK");
 		DBObject dbo = questionColl.findOne(new BasicDBObject("_id", questionId));
@@ -97,7 +96,7 @@ public class CoreModule {
 	}
 	
 	@At("/question/?/tag/add/?")
-	public AjaxReturn addTag(int questionId,String tag, @Attr("me")User user) {
+	public AjaxReturn addTag(String questionId,String tag, @Attr("me")User user) {
 		if (tag == null || Strings.isBlank(tag) || tag.trim().length() < 3 || tag.trim().length() > 12)
 			return Ajax.fail().setMsg("Not OK");
 		tag = tag.trim().intern();
@@ -109,7 +108,7 @@ public class CoreModule {
 	}
 	
 	@At("/question/?/tag/remove/?")
-	public AjaxReturn removeTag(int questionId,String tag, @Attr("me")User user) {
+	public AjaxReturn removeTag(String questionId,String tag, @Attr("me")User user) {
 		BasicDBObject update = new BasicDBObject();
 		update.append("$pull", new BasicDBObject("tags",tag));
 		questionColl.update(new BasicDBObject("_id", questionId), update);
@@ -118,13 +117,29 @@ public class CoreModule {
 	}
 	
 	@At("/question/?/watch")
-	public void watch(int questionId, @Attr("me") User me) {
+	public void watch(String questionId, @Attr("me") User me) {
 		dao.update(Question.class, new BasicDBObject("_id", questionId), new BasicDBObject("$addToSet", new BasicDBObject("watchers", new DBRef(null, "user", me.getId()))));
 	}
 	
 	@At("/question/?/unwatch")
-	public void unwatch(int questionId, @Attr("me") User me) {
+	public void unwatch(String questionId, @Attr("me") User me) {
 		dao.update(Question.class, new BasicDBObject("_id", questionId), new BasicDBObject("$pop", new BasicDBObject("watchers", new DBRef(null, "user", me.getId()))));
+	}
+	
+	@At("/question/?/update")
+	public Object update(String questionId, @Param("..")Question question, @Attr("me")User me) {
+		Question q = dao.findById(Question.class, questionId);
+		if (q == null)
+			return Ajax.fail().setMsg("Question not found");
+		if (!me.getId().equals(q.getUser().getId()))
+			return Ajax.fail().setMsg("You don't own this question");
+		if (question == null)
+			return Ajax.fail().setMsg("No data");
+		if (Lang.length(question.getTitle()) >= 5 || Lang.length(question.getTitle()) <= 100)
+			dao.update(Question.class, new BasicDBObject("_id", questionId), Moo.SET("title", question.getTitle()));
+		if (Lang.length(question.getContent()) >= 5 || Lang.length(question.getContent()) <= 100)
+			dao.update(Question.class, new BasicDBObject("_id", questionId), Moo.SET("content", question.getContent()));
+		return Ajax.ok();
 	}
 	
 	@Inject("java:$commons.coll('question')")

@@ -14,6 +14,9 @@ import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.ngqa.bean.User;
+import org.nutz.web.ajax.Ajax;
+
+import com.mongodb.BasicDBObject;
 
 @IocBean
 @InjectName
@@ -28,11 +31,16 @@ public class UserCenterModule {
 	
 	@At("/me/update")
 	@AdaptBy(type=JsonAdaptor.class)
-	public void update(@Param("..")User user, @Attr("me") User me) {
+	public Object update(@Param("..")User user, @Attr("me") User me) {
 		if (user == null)
-			return;
+			return Ajax.fail().setMsg("Not data");
+		if (!Strings.isBlank(user.getNickName()))
+			if (0 != dao.count(User.class, new BasicDBObject("nickName", user.getNickName())))
+				return Ajax.fail().setMsg("Dup nickName");
+			dao.updateById(User.class, me.getId(), Moo.SET("nickName", user.getEmail()));
 		if (!Strings.isBlank(user.getEmail()) && Strings.isEmail(user.getEmail()))
 			dao.updateById(User.class, me.getId(), Moo.SET("email", user.getEmail()));
+		return Ajax.ok();
 	}
 	
 	@Inject("java:$commons.dao()")

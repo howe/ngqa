@@ -15,11 +15,15 @@ public class User {
 	@CoId
 	private String id;
 	@CoField
+	private String nickName;
+	@CoField
 	private String validatedId;
 	@CoField
 	private String email;
 	@CoField
 	private String provider;
+	@CoField
+	private String createAt;
 	@CoField
 	private Date lastLoginDate;
 	
@@ -85,6 +89,22 @@ public class User {
 
 	public void setAuthedApps(App[] authedApps) {
 		this.authedApps = authedApps;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(String createAt) {
+		this.createAt = createAt;
 	}
 	
 	

@@ -5,15 +5,14 @@ import java.util.Date;
 import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
-import org.nutz.mongo.annotation.CoIdType;
 import org.nutz.mongo.annotation.CoIndexes;
 
 @Co("question")
 @CoIndexes("!:+title")
 public class Question implements Freshable {
 
-	@CoId(CoIdType.AUTO_INC)
-	private Integer id;
+	@CoId
+	private String id;
 	@CoField(ref=true)
 	private User user;
 	@CoField
@@ -30,12 +29,7 @@ public class Question implements Freshable {
 	private Date updatedAt;
 	@CoField(ref=true)
 	private Answer[] answers;
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+
 	public User getUser() {
 		return user;
 	}
@@ -83,6 +77,12 @@ public class Question implements Freshable {
 	}
 	public void setAnswers(Answer[] answers) {
 		this.answers = answers;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	
