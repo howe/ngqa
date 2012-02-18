@@ -28,7 +28,7 @@ public class QQAuthProvider extends AbstractOAuthProvider {
 		authenticationStrategy.setPermission(scope);
 		authenticationStrategy.setScope(getScope());
 
-		PROFILE_URL = "https://graph.qq.com/user/get_info";
+		PROFILE_URL = "https://graph.qq.com/user/get_user_info";
 	}
 
 	protected Profile authLogin() throws Exception {
@@ -42,7 +42,7 @@ public class QQAuthProvider extends AbstractOAuthProvider {
 					+ PROFILE_URL, e);
 		}
 		try {
-			//System.out.println("User Profile : " + presp);
+			System.out.println("User Profile : " + presp);
 			QQUser qqUser = Json.fromJson(QQUser.class, presp);
 			if (qqUser.getRet() != 0)
 				throw new SocialAuthException("QQ Error: " + qqUser.getMsg());
