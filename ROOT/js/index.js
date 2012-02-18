@@ -4,7 +4,7 @@ $(function() {
     var questionTagsStr = '<p></p>';
     var html = '';
 
-    $.get('./question/query/list', function(data) {
+    $.get('./question/query/list.json', function(data) {
         if (data['ok']) {
             $.each(data['data']['data'], function (index, value) {
                 html = String.format(questionInfoStr, value['user']['id'], value['createdAt']);

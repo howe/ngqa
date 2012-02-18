@@ -13,13 +13,14 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
-@IocBean(name="commons", args={"refer:connector","ngqa"})
+@IocBean(name="commons", args={"refer:connector","ngqa"}) //看清楚,这个是有args的,因为这个类的构造方法需要参数
 public class CommonMongoService extends AbstractMongoService {
 
 	public CommonMongoService(MongoConnector conn, String dbname) {
 		super(conn, dbname);
 	}
 
+	/**生成序列号,这是mongo中实现自增的方法之一*/
 	public int seq(final String seqName) {
 		final Object[] objs = new Object[1];
 		dao.run(new Callback<DB>() {

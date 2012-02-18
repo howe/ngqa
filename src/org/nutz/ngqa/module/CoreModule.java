@@ -35,14 +35,14 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBRef;
 
-@IocBean(create="init")
+@IocBean(create="init") //创建本对象时,执行init方法
 @InjectName
 @Filters({@By(type=AjaxCheckSession.class,args={"me"})})
 public class CoreModule {
 	
 	/*question的title是必须的,其他都是可选*/
 	@At("/ask")
-	@AdaptBy(type=JsonAdaptor.class)
+	@AdaptBy(type=JsonAdaptor.class) //将输入流以Json格式读取,生成参数表
 	public AjaxReturn createQuestion(final @Param("..")Question question, @Attr("me") User user) {
 		if (question == null || Lang.length(question.getTitle()) < 5 || Lang.length(question.getTitle()) > 100)
 			return Ajax.fail().setMsg("Not OK");
@@ -51,7 +51,7 @@ public class CoreModule {
 		question.setUpdatedAt(new Date());
 		question.setTags(new String[0]);
 		question.setAnswers(new Answer[0]);
-		dao.runNoError(new Callback<DB>() {
+		dao.runNoError(new Callback<DB>() { //以安全方式执行,其实就是执行完毕后,执行getError来确保顺利完成
 			public void invoke(DB arg0) {
 				dao.save(question);
 			}
@@ -60,8 +60,8 @@ public class CoreModule {
 	}
 	
 	/*获取具体的question*/
-	@At("/question/?")
-	@Filters()
+	@At("/question/?") //最后面一个问号,代表一个路径参数,将设置为questionId的值
+	@Filters() //查询无需任何权限
 	@Ok("smart:/question/one")
 	public Object fetch(String questionId) {
 		Question question = dao.findById(Question.class, questionId);
@@ -70,14 +70,15 @@ public class CoreModule {
 		return question;
 	}
 	
+	/**通用查询入口,复杂查询都走这个入口*/
 	@At("/question/query")
-	public Object query(QuestionQuery query) {
+	public Object query(@Param("..")QuestionQuery query) { //@Param("..")的意思是,参数abc对应这个类的abc属性,从而构建一个完整的对象
 		return questionMS.query(query);
 	}
 	
-	@At("/question/?/answer/add")
+	@At("/question/?/answer/add") //问号放在中间也是可以的,数量不限
 	@AdaptBy(type=JsonAdaptor.class)
-	public AjaxReturn addAnswer(final String questionId, final @Param("..")Answer answer, @Attr("me")User user) {
+	public AjaxReturn addAnswer(final String questionId, final @Param("..")Answer answer, @Attr("me")User user) { //@Attr的意思是取req.getAttr或者session.getAttr
 		if (answer == null || Lang.length(answer.getContent()) < 5)
 			return Ajax.fail().setMsg("Not OK");
 		Question question = dao.findById(Question.class, questionId);
@@ -99,8 +100,9 @@ public class CoreModule {
 		return Ajax.ok();
 	}
 	
-	@At("/question/?/tag/add/?")
-	public AjaxReturn addTag(String questionId,String tag, @Attr("me")User user) {
+	/**为一个问题设置一个标签*/
+	@At("/question/?/tag/add/?") //多个问好的情况,很方便,对吧?
+	public AjaxReturn addTag(String questionId,String tag, @Attr("me")User user) { 
 		if (tag == null || Strings.isBlank(tag) || tag.trim().length() < 3 || tag.trim().length() > 12)
 			return Ajax.fail().setMsg("Not OK");
 		tag = tag.trim().intern();
@@ -111,6 +113,7 @@ public class CoreModule {
 		return Ajax.ok();
 	}
 	
+	/**为一个问题移除一个标签*/
 	@At("/question/?/tag/remove/?")
 	public AjaxReturn removeTag(String questionId,String tag, @Attr("me")User user) {
 		BasicDBObject update = new BasicDBObject();
@@ -120,16 +123,19 @@ public class CoreModule {
 		return Ajax.ok();
 	}
 	
+	/**监视一个问题,问题被修改的时候(添加删除答案等),发出提醒*/
 	@At("/question/?/watch")
 	public void watch(String questionId, @Attr("me") User me) {
 		dao.update(Question.class, new BasicDBObject("_id", new ObjectId(questionId)), new BasicDBObject("$addToSet", new BasicDBObject("watchers", new DBRef(null, "user", new ObjectId(me.getId())))));
 	}
 	
+	/**不再监视一个问题*/
 	@At("/question/?/unwatch")
 	public void unwatch(String questionId, @Attr("me") User me) {
 		dao.update(Question.class, new BasicDBObject("_id", new ObjectId(questionId)), new BasicDBObject("$pop", new BasicDBObject("watchers", new DBRef(null, "user", new ObjectId(me.getId())))));
 	}
 	
+	/**更新问题的某些属性*/
 	@At("/question/?/update")
 	public Object update(String questionId, @Param("..")Question question, @Attr("me")User me) {
 		Question q = dao.findById(Question.class, questionId);

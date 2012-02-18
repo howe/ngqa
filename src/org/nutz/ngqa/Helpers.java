@@ -7,6 +7,7 @@ import org.nutz.ngqa.bean.Question;
 
 public class Helpers {
 
+	/**生成Question详情页的完整URL*/
 	public static String makeQuestionURL(Question question) {
 		HttpServletRequest req = Mvcs.getReq();
 		String reqURL = req.getRequestURL().toString();

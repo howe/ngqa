@@ -19,6 +19,7 @@ import org.nutz.ngqa.mvc.Auth;
 
 import com.mongodb.BasicDBObject;
 
+/**管理模块,现在功能还很少*/
 @IocBean
 @InjectName
 @Ok("ajax")
@@ -28,9 +29,10 @@ public class AdminModule {
 	@Inject("java:$commons.dao()")
 	private MongoDao dao;
 
+	/**刷新权限数据*/
 	@At("/admin/role/refresh")
 	@Filters({@By(type=ActionFilter.class, args={"ioc:authFilter"})})
-	@Auth("role.refresh")
+	@Auth("role.refresh") //当前方法的权限设置,与上面的ActionFilter所对应
 	public void refreshRoleCache(){
 		Map<String, Role> roles = new HashMap<String, Role>();
 		for(Role role : dao.find(Role.class, new BasicDBObject(), null)) {

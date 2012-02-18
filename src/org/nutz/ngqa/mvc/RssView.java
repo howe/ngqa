@@ -10,6 +10,7 @@ import org.nutz.ngqa.bean.Question;
 
 import com.rsslibj.elements.Channel;
 
+/**生成RSS全文输出*/
 public class RssView implements View {
 
 	@SuppressWarnings("unchecked")

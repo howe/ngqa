@@ -28,12 +28,12 @@
 	<filter-mapping>
 		<filter-name>nutz</filter-name>
 		<url-pattern>/*</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>REQUEST</dispatcher> <!-- 这基本上是标准配置了,否则forward视图不会通过这个拦截器, J2EE的知识 -->
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 
 	<listener>
-		<listener-class>org.nutz.mvc.NutSessionListener</listener-class>
+		<listener-class>org.nutz.mvc.NutSessionListener</listener-class> <!-- 监视scope=session的IocBean的生命管理,不建议使用 -->
 	</listener>
 
 	<error-page>

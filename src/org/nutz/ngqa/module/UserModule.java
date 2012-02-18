@@ -60,7 +60,7 @@ public class UserModule {
 			}
 			returnTo = sb.toString();
 		}
-		SocialAuthManager manager = new SocialAuthManager();
+		SocialAuthManager manager = new SocialAuthManager(); //每次都要新建哦
 		manager.setSocialAuthConfig(config);
 		session.setAttribute("openid.manager", manager);
 		String url = manager.getAuthenticationUrl(provider, returnTo);
@@ -72,7 +72,7 @@ public class UserModule {
 	@At("/logout")
 	@Ok("void")
 	public void logout(HttpSession session) {
-		session.invalidate();
+		session.invalidate(); //销毁会话,啥都米有了
 	}
 	
 	/*无需做链接,这是OpenID的回调地址*/
@@ -114,9 +114,9 @@ public class UserModule {
 	
 	public void init() throws Exception {
 		SocialAuthConfig config = new SocialAuthConfig();
-		File devConfig = Files.findFile("oauth_consumer.properties_dev");
+		File devConfig = Files.findFile("oauth_consumer.properties_dev"); //开发期所使用的配置文件
 		if (devConfig == null)
-			devConfig = Files.findFile("oauth_consumer.properties");
+			devConfig = Files.findFile("oauth_consumer.properties"); //真实环境所使用的配置文件
 		if (devConfig == null)
 			config.load(new NullInputStream());
 		else

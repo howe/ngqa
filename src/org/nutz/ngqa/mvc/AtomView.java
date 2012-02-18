@@ -5,14 +5,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.nutz.mvc.View;
 
-import com.colorfulsoftware.atom.FeedDoc;
-
+/**生成Atom1.0格式的全文输出*/
 public class AtomView implements View {
 
 	@Override
 	public void render(HttpServletRequest req, HttpServletResponse resp,
 			Object obj) throws Throwable {
-		FeedDoc doc = new FeedDoc();
+//		FeedDoc doc = new FeedDoc();
 		
 	}
 

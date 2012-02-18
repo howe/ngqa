@@ -16,6 +16,7 @@ import org.nutz.ngqa.service.CommonMongoService;
 
 import com.mongodb.BasicDBObject;
 
+/**增强型UrlMappingImpl,获取更多入口方法的信息*/
 public class EnhanceUrlMapping extends UrlMappingImpl {
 
 	private static final Log log = Logs.get();
@@ -24,13 +25,16 @@ public class EnhanceUrlMapping extends UrlMappingImpl {
 	
 	@SuppressWarnings("unchecked")
 	public void add(ActionChainMaker maker, ActionInfo ai, NutConfig config) {
-		super.add(maker, ai, config);
+		super.add(maker, ai, config); //先把该做的做好,然后再来做特殊的逻辑
+		
 		if (dao == null)
 			dao = config.getIoc().get(CommonMongoService.class, "commons").dao();
+		
 		Method method = ai.getMethod();
 		Auth auth = method.getAnnotation(Auth.class);
 		if (auth == null)
-			return;
+			return; //没标注@Auth,恩,路过....
+		
 		String[] roleNames = auth.value();
 		if (roleNames == null || roleNames.length == 0)
 			return;

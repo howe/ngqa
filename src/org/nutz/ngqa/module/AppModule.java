@@ -32,18 +32,19 @@ import com.mongodb.DBCollection;
 
 @IocBean
 @InjectName
-@Filters()
+@Filters() //覆盖主模块的Filters设置,因为本模块的操作,均自行校验权限
 public class AppModule {
 
-	@Inject
+	@Inject//注入一个bean,是@Inject("refer:commons")的简写
 	private CommonMongoService commons;
 
-	@Inject("java:$commons.coll('systemconfig')")
+	@Inject("java:$commons.coll('systemconfig')") //可以调用方法来获取需要注入的内容的
 	private DBCollection systemconfigColl;
 
 	@Inject("java:$commons.dao()")
 	private MongoDao dao;
 
+	//这个是整个系统的最高权限,root用户,的登录入口
 	@At("/user/login/root")
 	@Ok(">>:/index.jsp")
 	public Object loginAsRoot(@Param("key") String key, HttpSession session) {
@@ -58,13 +59,17 @@ public class AppModule {
 			return new HttpStatusView(403);
 	}
 
+	// app的登录入口.设计这个,是因为服务器端不单单面向Web,同时是个OpenAPI,允许通过其他方式访问该系统
+	// app无法通过OAuth授权来登录,因为不是浏览器,所以做这个入口,供app登录,然后再切换到其他用户.app如果要切换到某个用户,那么,这个用户必须授权给app(通过检查authedApp属性).
 	@At("/user/login/app")
 	@Ok("ajax")
 	public Object appLogin(@Param("appId") String appId, HttpSession session)
 			throws Exception {
 		if (appId != null) {
-			App app = dao.findOne(App.class, new BasicDBObject("_id", appId));
+			App app = dao.findById(App.class, appId);
 			if (app != null) {
+				if (!app.isActive())
+					return Ajax.fail().setData("app isn't active!");
 				String value = UUID.randomUUID().toString() + "_"
 						+ Math.random();
 				session.setAttribute("app.token", value);
@@ -80,6 +85,7 @@ public class AppModule {
 		return Ajax.fail();
 	}
 
+	//为了避免app直接发送自己的密钥,所以需要这个回调,要求app回传login刚刚所提供的字符的加密后的内容进行比对
 	@At("/user/login/app/callback")
 	public Object appLoginCallback(@Param("token") String token,
 			HttpSession session) {
@@ -96,6 +102,7 @@ public class AppModule {
 		return Ajax.fail();
 	}
 
+	//创建app,并生成密钥
 	@At("/app/create/?")
 	@Filters({@By(type=ActionFilter.class, args={"ioc:authFilter"})})
 	@Auth("app.create")
@@ -119,6 +126,7 @@ public class AppModule {
 		return Ajax.ok().setData(dao.findOne(App.class, new BasicDBObject("name", name)));
 	}
 	
+	//新创建的app是未激活状态,这个方法会激活app
 	@At("/app/active/?")
 	@Filters({@By(type=ActionFilter.class, args={"ioc:authFilter"})})
 	@Auth("app.active")
@@ -129,6 +137,7 @@ public class AppModule {
 		return Ajax.ok();
 	}
 	
+	//停用app,使其回到未激活状态
 	@At("/app/deactive/?")
 	@Filters({@By(type=ActionFilter.class, args={"ioc:authFilter"})})
 	@Auth("app.deactive")

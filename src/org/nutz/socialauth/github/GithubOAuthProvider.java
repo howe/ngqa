@@ -51,11 +51,13 @@ public class GithubOAuthProvider extends AbstractOAuthProvider {
 			if (userProfile == null)
 				userProfile = new Profile();
 			userProfile.setValidatedId(data.get("id").toString());
-			System.out.println(Json.toJson(data));
+			//System.out.println(Json.toJson(data));
 			if (data.get("email") != null)
 				userProfile.setValidatedId(data.get("email").toString());
 			if (data.get("avatar_url") != null)
 				userProfile.setProfileImageURL(data.get("avatar_url").toString());
+			if (data.get("name") != null)
+				userProfile.setFullName(data.get("name").toString());
 			return userProfile;
 
 		} catch (Exception ex) {

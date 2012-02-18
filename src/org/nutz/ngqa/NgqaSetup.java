@@ -19,6 +19,7 @@ import com.mongodb.DBObject;
 
 public class NgqaSetup implements Setup {
 
+	/**NutzMvc正常启动后就会执行这个方法,你可以认为所有东西都已经准备好了,你可以做一些额外的逻辑,例如启动某些后台线程*/
 	public void init(NutConfig config) {
 		CommonMongoService commons = config.getIoc().get(CommonMongoService.class, "commons");
 		MongoDao dao = commons.dao();
@@ -58,7 +59,8 @@ public class NgqaSetup implements Setup {
 		}
 	}
 	
+	/**项目关闭时执行的逻辑*/
 	public void destroy(NutConfig config) {
-		
+		//暂时无任何操作
 	}
 }

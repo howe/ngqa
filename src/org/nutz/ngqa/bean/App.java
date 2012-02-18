@@ -2,6 +2,7 @@ package org.nutz.ngqa.bean;
 
 import java.util.Date;
 
+import org.nutz.json.JsonField;
 import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
@@ -16,7 +17,8 @@ public class App  implements Freshable{
 	@CoField
 	private String name;
 	@CoField
-	private String key;
+	@JsonField(ignore=true) //不允许直接传出去
+	private transient String key;
 	@CoField
 	private boolean active;
 	@CoField

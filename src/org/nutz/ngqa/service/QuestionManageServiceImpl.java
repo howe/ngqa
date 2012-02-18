@@ -12,10 +12,10 @@ import org.nutz.ngqa.bean.Answer;
 import org.nutz.ngqa.bean.Question;
 import org.nutz.ngqa.bean.User;
 
-@IocBean(name="questionMS")
+@IocBean(name="questionMS") //名字有点长,所以没用默认的名字,自己起一个
 public class QuestionManageServiceImpl implements QuestionManageService {
 
-	@Override
+	/**核心查询方法,通用查询*/
 	public Pager<Question> query(QuestionQuery query) {
 		if (query == null)
 			query = new QuestionQuery();
@@ -35,7 +35,7 @@ public class QuestionManageServiceImpl implements QuestionManageService {
 
 	@Override
 	public Question create(Question question) {
-		throw Lang.noImplement();
+		throw Lang.noImplement(); //未实现的方法,这语句最方便了
 	}
 
 	@Override

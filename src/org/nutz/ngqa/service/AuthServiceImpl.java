@@ -8,9 +8,11 @@ import org.nutz.ngqa.api.meta.AuthContext;
 import org.nutz.ngqa.bean.Role;
 import org.nutz.ngqa.bean.User;
 
+/**鉴权服务*/
 @IocBean(name="authService")
 public class AuthServiceImpl implements AuthService {
 
+	//检查特定上下文所对应的授权是否合法
 	public boolean isAuth(AuthContext authContext) {
 		String[] needRoles = authContext.getAuth().value();
 		Role[] hasRoles = authContext.getUser().getRoles();
