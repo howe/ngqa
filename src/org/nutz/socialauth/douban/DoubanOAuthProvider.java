@@ -20,13 +20,16 @@ public class DoubanOAuthProvider extends AbstractOAuthProvider {
 		authenticationStrategy.setPermission(scope);
 		authenticationStrategy.setScope(getScope());
 
-		PROFILE_URL = "http://api.douban.com/people/@me";
+		PROFILE_URL = "http://api.douban.com/people/%40me";
+		
 	}
 
 	@Override
 	protected Profile authLogin() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Profile p = new Profile();
+		p.setValidatedId(accessGrant.getAttribute("douban_user_id").toString());
+		userProfile = p;
+		return p;
 	}
 
 }
