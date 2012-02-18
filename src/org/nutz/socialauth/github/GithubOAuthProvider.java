@@ -57,7 +57,7 @@ public class GithubOAuthProvider extends AbstractOAuthProvider {
 			if (data.get("avatar_url") != null)
 				userProfile.setProfileImageURL(data.get("avatar_url").toString());
 			if (data.get("name") != null)
-				userProfile.setFullName(data.get("name").toString());
+				userProfile.setDisplayName(data.get("name").toString());
 			return userProfile;
 
 		} catch (Exception ex) {

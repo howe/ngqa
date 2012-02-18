@@ -92,6 +92,10 @@ public class UserModule {
         	user.setEmail(p.getEmail());
         	user.setProvider(providerId);
         	user.setValidatedId(p.getValidatedId());
+        	if (p.getDisplayName() != null)
+        		user.setNickName(providerId + "_" + p.getDisplayName());
+        	else 
+        		user.setNickName(providerId + "_" + p.getValidatedId());
         	final User _u = user;
         	dao.runNoError(new Callback<DB>() {
     			public void invoke(DB arg0) {

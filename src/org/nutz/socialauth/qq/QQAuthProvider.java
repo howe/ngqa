@@ -1,5 +1,6 @@
 package org.nutz.socialauth.qq;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.brickred.socialauth.Profile;
@@ -48,6 +49,30 @@ public class QQAuthProvider extends AbstractOAuthProvider {
 						p.setValidatedId(map.get("openid")); // QQ定义的
 						p.setProviderId(getProviderId());
 						userProfile = p;
+						
+						try {
+							Map<String, String> params = new HashMap<String, String>();
+							params.put("format", "json");
+							params.put("openid", map.get("openid"));
+							params.put("oauth_consumer_key", config.get_consumerKey());
+							response = authenticationStrategy.executeFeed("https://graph.qq.com/user/get_user_info", "GET", params, null, null);
+							presp = response.getResponseBodyAsString(Constants.ENCODING);
+							Map<String, Object> user_info = (Map<String, Object>) Json.fromJson(presp);
+							if ((Integer)user_info.get("ret") == 0 ) { //获取成功
+								if (user_info.get("nickname") != null)
+									p.setDisplayName(user_info.get("nickname").toString());
+								if (user_info.get("figureurl") != null)
+									p.setProfileImageURL(user_info.get("figureurl").toString());
+								if (user_info.get("gender") != null)
+									p.setGender(user_info.get("gender").toString());
+							}
+							
+							//TODO 尝试获取Email等详细信息
+							
+						} catch (Throwable e) {
+							e.printStackTrace();
+						}
+						
 						return p;
 					}
 				}
