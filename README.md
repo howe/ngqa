@@ -31,5 +31,6 @@ PS:
 		* 使用org.nutz.ngqa.ServerLauncher类作为main类来启动项目
 	
   ## 依赖 ##
+  
 	* mongodb 2.0以上,下载地址 http://www.mongodb.org/downloads 项目启动前,请确保mongod已经运行
 	* 其他所有必须的jar,都已经存放在ROOT/WEB-INF/lib下,无需其他jar
