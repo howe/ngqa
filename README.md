@@ -7,35 +7,27 @@ PS:
 本项目主要 贡献者 @wendal (兽) @ywjno (温泉)  
 本人只是个监工而已
 
-TODO List:
+### 编译说明 ###
 
-* 页面:
- 1. 问题创建
- 2. 问题查询
- 3. 用户个人信息管理
- 4. 管理控制台--权限管理
- 5. 管理控制台--系统配置
- 6. App管理
-
-* OpenAPI(服务端Http接口)
- 1. 通用查询接口--Question
- 2. 权限管理
- 3. 升级机制
- 4. Question全文索引
- 5. 回答问题/关注/取消关注/评论
- 6. 系统配置管理
- 7. 用户登录 -- OAuth1/OAuth2
- 8. App鉴权及管理
- 9. 邮件提醒
- 10. 访问统计
-
-* SDK-Java
- 1. 实现OpenAPI
- 2. App基础框架
-
-* RSS
- 1. 实现RSS输出
-
-* 其他SDK
-
-* 调查所用的第三方jar、js、css的license
+  ## 文件夹说明 ##
+	* src 源文件夹
+	* conf 配置文件存放文件夹,需要加入build path作为源文件夹
+	* sdk SDK实现,尚未完成
+	* test 测试用例
+	* build 以普通Java项目启动时所需要的jar(jetty及其jsp支持)
+	* ROOT 网站根文件夹,创建JavaEE项目时,请指向这个文件夹,而非默认的WebContent文件夹
+	
+  ## 建立工程 ##
+	# JavaWeb项目 #
+		* 建立一个JavaEE工程,网站根目录指向ROOT,而非WebContent,并且不要自动生成web.xml
+		* 发布到tomcat并启动之
+		
+	# 普通Java项目 #
+		* 建立工程,把conf文件夹也设置为源文件夹, classes文件输出路径是ROOT/WEB-INF/classes
+		* 将build文件夹中的全部jar,加入Build Path
+		* 将ROOT/WEB-INF/lib下面的全部jar,除log4j之外, 加入Build Path
+		* 使用org.nutz.ngqa.ServerLauncher类作为main类来启动项目
+	
+  ## 依赖 ##
+	* mongodb 2.0以上,下载地址 http://www.mongodb.org/downloads 项目启动前,请确保mongod已经运行
+	* 其他所有必须的jar,都已经存放在ROOT/WEB-INF/lib下,无需其他jar
