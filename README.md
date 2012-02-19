@@ -10,6 +10,7 @@ PS:
 ### 编译说明 ###
 
   ## 文件夹说明 ##
+  
 	* src 源文件夹
 	* conf 配置文件存放文件夹,需要加入build path作为源文件夹
 	* sdk SDK实现,尚未完成
@@ -18,6 +19,7 @@ PS:
 	* ROOT 网站根文件夹,创建JavaEE项目时,请指向这个文件夹,而非默认的WebContent文件夹
 	
   ## 建立工程 ##
+  
 	# JavaWeb项目 #
 		* 建立一个JavaEE工程,网站根目录指向ROOT,而非WebContent,并且不要自动生成web.xml
 		* 发布到tomcat并启动之
