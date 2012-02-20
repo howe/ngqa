@@ -33,31 +33,17 @@ public class TaobaoAuthProvider extends AbstractOAuthProvider {
 		PROFILE_URL = "http://gw.api.taobao.com/router/rest?method=taobao.user.get&fields=user_id&format=json";
 	}
 
-	@SuppressWarnings("unchecked")
 	protected Profile authLogin() throws Exception {
-		String presp;
-		System.out.println(accessGrant.getAttributes());
-		try {
-			Response response = authenticationStrategy.executeFeed(PROFILE_URL);
-			presp = response.getResponseBodyAsString(Constants.ENCODING);
-		} catch (Exception e) {
-			throw new SocialAuthException("Error while getting profile from "
-					+ PROFILE_URL, e);
-		}
-		try {
-			Map<String, Object> data = Json.fromJson(Map.class, presp);
-			if (!data.containsKey("uid"))
-				throw new SocialAuthException("Error: " + presp);
-			if (userProfile == null)
-				userProfile = new Profile();
-			userProfile.setValidatedId(data.get("uid").toString());
-			userProfile.setProviderId(getProviderId());
-			return userProfile;
-
-		} catch (Exception ex) {
-			throw new ServerDataException(
-					"Failed to parse the user profile json : " + presp, ex);
-		}
+		Profile profile = new Profile();
+		profile.setValidatedId(accessGrant.getAttribute("taobao_user_id").toString());
+		profile.setDisplayName(accessGrant.getAttribute("taobao_user_nick").toString());
+		profile.setProviderId(getProviderId());
+		userProfile = profile;
+		return profile;
 	}
 
+	@Override
+	protected String verifyResponseMethod() {
+		return "POST";
+	}
 }
