@@ -72,7 +72,7 @@ public class Answer implements Freshable {
 	}
 
 	public String getFormatContent() {
-		return Helpers.formartContent(content, format);
+		return Helpers.formatContent(content, format);
 	}
 
 }
