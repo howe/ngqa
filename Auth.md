@@ -18,9 +18,11 @@
 	腾讯微博(qqweibo)
 	搜狐(sohu)
 	淘宝(taobao)
+	LinkedIn(linkedin)
 
 ###等待完成的登录方式 ###
 
-	网易(net163)
+	网易(net163) -- 
 	盛大(sdo) -- 成功过,然后又挂了
+	MySpace(myspace)
 	
