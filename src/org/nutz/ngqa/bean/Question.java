@@ -6,6 +6,7 @@ import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
 import org.nutz.mongo.annotation.CoIndexes;
+import org.nutz.ngqa.Helpers;
 
 @Co("question")
 @CoIndexes("!:+title")
@@ -100,6 +101,10 @@ public class Question implements Freshable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getFormatContent() {
+		return Helpers.formartContent(content, format);
 	}
 
 }

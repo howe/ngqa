@@ -38,7 +38,7 @@
                         </tr>
                     </table>
                     <hr />
-                    <div id="question-content">${obj.content}</div>
+                    <div id="question-content">${obj.formatContent}</div>
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn">Edit</button>
@@ -57,7 +57,7 @@
                                 <div class="answer-info">
                                     <span class="answerer-name">${answer.user.id}</span><span class="answer-time">Answer at&nbsp;${answer.createdAt}</span>
                                 </div>
-                                <div class="answer-content">${answer.content}</div>
+                                <div class="answer-content">${answer.formatContent}</div>
                         </td>
                     </tr>
                 </table>

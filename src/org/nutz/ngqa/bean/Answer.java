@@ -5,6 +5,7 @@ import java.util.Date;
 import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
+import org.nutz.ngqa.Helpers;
 
 @Co("answer")
 public class Answer implements Freshable {
@@ -68,6 +69,10 @@ public class Answer implements Freshable {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public String getFormatContent() {
+		return Helpers.formartContent(content, format);
 	}
 
 }
