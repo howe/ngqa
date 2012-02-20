@@ -12,32 +12,10 @@
 <link rel="stylesheet" type="text/css" media="screen" href="${base}/css/login.css" />
 <script type="text/javascript" src="${base}/js/include/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="${base}/js/include/jquery.json-2.3.min.js"></script>
-<script type="text/javascript" src="${base}/js/include/showdown.js"></script>
 <script type="text/javascript" src="${base}/js/include/highlight.pack.js"></script>
-<script type="text/javascript" src="${base}/js/application.js"></script>
 <script type="text/javascript" src="${base}/js/include/form2js.js"></script>
-<script type="text/javascript">
-$(function() {
-	$("#add-answer").click(function() {
-        $.ajax({
-        		type : 'POST',
-        		url  : '${base}/question/${obj.id}/answer/add',
-        		data :  $.toJSON(form2js("answer-form")), 
-        		dataType : 'json',
-        		success: function( data ) {
-    						if (console && console.log){
-      							console.log( 'Sample of data:', $.toJSON(data) );
-    						}
-    						if (data['ok']) { //添加成功
-    							window.location.reload();
-    						} else {
-    							alert('Fail ' + data['msg']);
-    						}
-  						}
-        	});
-    });
-});
-</script>
+<script type="text/javascript" src="${base}/js/application.js"></script>
+<script type="text/javascript" src="${base}/js/question.js"></script>
 <title>Question</title>
 </head>
 <body>
