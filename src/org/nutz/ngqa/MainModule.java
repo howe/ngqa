@@ -1,5 +1,6 @@
 package org.nutz.ngqa;
 
+import org.nutz.mvc.annotation.ChainBy;
 import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.IocBy;
 import org.nutz.mvc.annotation.Modules;
@@ -7,6 +8,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.SetupBy;
 import org.nutz.mvc.annotation.UrlMappingBy;
 import org.nutz.mvc.annotation.Views;
+import org.nutz.mvc.impl.NutActionChainMaker;
 import org.nutz.mvc.ioc.provider.ComboIocProvider;
 import org.nutz.ngqa.mvc.EnhanceUrlMapping;
 import org.nutz.ngqa.mvc.SmartViewMaker;
@@ -23,4 +25,5 @@ import org.nutz.web.ajax.AjaxViewMaker;
 @Views({AjaxViewMaker.class,SmartViewMaker.class}) //注册私有的ViewMaker,这里注册的是支持ajax和smart的两个ViewMaker
 @SetupBy(NgqaSetup.class) //提供一个Setup接口的实现,在项目启动/关闭时执行一些逻辑
 @UrlMappingBy(value=EnhanceUrlMapping.class) //UrlMapping能拿到很多Action映射方面的信息,所以,继承默认实现,获取自己需要的逻辑(主要Auth管理)
+@ChainBy(type=NutActionChainMaker.class, args={"mvc-chains.js"})
 public class MainModule {}
