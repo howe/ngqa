@@ -40,7 +40,7 @@ public class Helpers {
 			return "";
 		}
 		StringBuilder showHtml = new StringBuilder();
-		String[] lines = content.split(System.getProperty("line.separator"));
+		String[] lines = content.split("\n");
 		List<String> pTags = new LinkedList<String>();
 		final String pTagsTamplate = "<p>%s</p>";
 
