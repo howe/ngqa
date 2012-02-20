@@ -6,8 +6,6 @@ import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
 
-import com.petebevin.markdown.MarkdownProcessor;
-
 @Co("answer")
 public class Answer implements Freshable {
 
@@ -41,9 +39,6 @@ public class Answer implements Freshable {
 	}
 
 	public String getContent() {
-		if ("markdown".equals(format)) {
-			return new MarkdownProcessor().markdown(content);
-		}
 		return content;
 	}
 

@@ -7,8 +7,6 @@ import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
 import org.nutz.mongo.annotation.CoIndexes;
 
-import com.petebevin.markdown.MarkdownProcessor;
-
 @Co("question")
 @CoIndexes("!:+title")
 public class Question implements Freshable {
@@ -49,9 +47,6 @@ public class Question implements Freshable {
 	}
 
 	public String getContent() {
-		if ("markdown".equals(format)) {
-			return new MarkdownProcessor().markdown(content);
-		}
 		return content;
 	}
 
