@@ -22,7 +22,8 @@
 
 ###等待完成的登录方式 ###
 
-	网易(net163) -- 
+	网易(net163) -- 神经病机制,竟然要求自行返回原网站输入Code
 	盛大(sdo) -- 成功过,然后又挂了
-	MySpace(myspace)
+	MySpace(myspace) -- 没key
+	AOL(aol) -- 没key
 	
