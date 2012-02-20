@@ -1,19 +1,15 @@
 package org.nutz.ngqa;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.nutz.lang.Files;
-import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.Mvcs;
 import org.nutz.ngqa.bean.Question;
-import org.nutz.resource.NutResource;
-import org.nutz.resource.Scans;
 
 import com.petebevin.markdown.MarkdownProcessor;
 
@@ -37,14 +33,12 @@ public class Helpers {
 		return splitContent(content);
 	}
 
-	public static String getInfosHtml() throws IOException {
+	public static String getInfosHtml() {
 		StringBuilder infosHtml = new StringBuilder();
 		String boxTamplate = "<div class=\"box\">%s</div>";
-		List<NutResource> infosPath = Scans.me().scan("infos/");
 
-		for (NutResource file : infosPath) {
-			String content = Lang.readAll(new InputStreamReader(file.getInputStream()));
-			String html = formatContent(content, Files.getSuffixName(file.getName()));
+		for (File file : Files.findFile("infos/").listFiles()) {
+			String html = formatContent(Files.read(file), Files.getSuffixName(file));
 			infosHtml.append(String.format(boxTamplate, html));
 			boxTamplate = "<div class=\"box sep21\">%s</div>";
 		}
