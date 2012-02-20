@@ -5,11 +5,14 @@ import java.util.Map;
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.exception.ServerDataException;
 import org.brickred.socialauth.exception.SocialAuthException;
+import org.brickred.socialauth.exception.UserDeniedPermissionException;
 import org.brickred.socialauth.oauthstrategy.OAuth1;
 import org.brickred.socialauth.util.Constants;
 import org.brickred.socialauth.util.OAuthConfig;
 import org.brickred.socialauth.util.Response;
 import org.nutz.json.Json;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
 /**
@@ -19,6 +22,8 @@ import org.nutz.socialauth.AbstractOAuthProvider;
  */
 @SuppressWarnings("serial")
 public class QQWeiboAuthProvider extends AbstractOAuthProvider {
+	
+	private static final Log log = Logs.get();
 
 	public QQWeiboAuthProvider(final OAuthConfig providerConfig) {
 		super(providerConfig);
@@ -34,6 +39,33 @@ public class QQWeiboAuthProvider extends AbstractOAuthProvider {
 		PROFILE_URL = "http://open.t.qq.com/api/user/info?format=json";
 	}
 
+	protected Profile doVerifyResponse(final Map<String, String> requestParams)
+			throws Exception {
+        log.info("Retrieving Access Token in verify response function");
+        if (requestParams.get("error_reason") != null
+                        && "user_denied".equals(requestParams.get("error_reason"))) {
+                throw new UserDeniedPermissionException();
+        }
+        accessGrant = authenticationStrategy.verifyResponse(requestParams, verifyResponseMethod());
+
+        if (accessGrant != null) {
+                log.debug("Obtaining user profile");
+                try {
+                	String presp = authenticationStrategy.executeFeed(PROFILE_URL).getResponseBodyAsString("utf8");
+                	System.out.println(Json.toJson(Json.fromJson(presp)));
+                } catch (Throwable e) {
+					e.printStackTrace();
+				}
+                Profile p = new Profile();
+                p.setValidatedId(requestParams.get("openid"));
+                p.setProviderId(getProviderId());
+                userProfile = p;
+                return p;
+        } else {
+                throw new SocialAuthException("Access token not found");
+        }
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected Profile authLogin() throws Exception {
 		String presp;
