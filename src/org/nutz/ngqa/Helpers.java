@@ -30,15 +30,11 @@ public class Helpers {
 
 	/** 根据format返回格式化后的内容 */
 	public static String formatContent(String content, String format) {
-		if (format == null)
-			return content;
 		if ("markdown".equals(format.toLowerCase()) || "md".equals(format.toLowerCase())) {
 			return new MarkdownProcessor().markdown(content);
 		}
-		if ("txt".equals(format)) {
-			return splitContent(content);
-		}
-		return content;
+
+		return splitContent(content);
 	}
 
 	public static String getInfosHtml() throws IOException {
