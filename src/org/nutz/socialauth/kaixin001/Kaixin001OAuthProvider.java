@@ -52,6 +52,7 @@ public class Kaixin001OAuthProvider extends AbstractOAuthProvider {
 			if (userProfile == null)
 				userProfile = new Profile();
 			userProfile.setValidatedId(data.get("uid").toString());
+			userProfile.setProviderId(getProviderId());
 			//userProfile.setFullName(data.get("name").toString());
 			return userProfile;
 

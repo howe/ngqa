@@ -28,6 +28,7 @@ public class DoubanOAuthProvider extends AbstractOAuthProvider {
 	protected Profile authLogin() throws Exception {
 		Profile p = new Profile();
 		p.setValidatedId(accessGrant.getAttribute("douban_user_id").toString());
+		p.setProviderId(getProviderId());
 		userProfile = p;
 		return p;
 	}

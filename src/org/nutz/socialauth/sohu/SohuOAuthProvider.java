@@ -54,6 +54,7 @@ public class SohuOAuthProvider extends AbstractOAuthProvider {
 			if (userProfile == null)
 				userProfile = new Profile();
 			userProfile.setValidatedId(data.get("id").toString());
+			userProfile.setProviderId(getProviderId());
 			return userProfile;
 
 		} catch (Exception ex) {

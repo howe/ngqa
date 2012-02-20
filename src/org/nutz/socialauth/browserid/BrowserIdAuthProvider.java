@@ -85,6 +85,7 @@ public class BrowserIdAuthProvider implements AuthProvider {
 			Profile profile = new Profile();
 			profile.setValidatedId(result.get("email").toString());
 			profile.setEmail(result.get("email").toString());
+			profile.setProviderId(getProviderId());
 			this.profile = profile;
 			return profile;
 		}

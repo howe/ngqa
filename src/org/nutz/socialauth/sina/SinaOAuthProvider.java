@@ -51,6 +51,7 @@ public class SinaOAuthProvider extends AbstractOAuthProvider {
 			if (userProfile == null)
 				userProfile = new Profile();
 			userProfile.setValidatedId(data.get("uid").toString());
+			userProfile.setProviderId(getProviderId());
 			return userProfile;
 
 		} catch (Exception ex) {

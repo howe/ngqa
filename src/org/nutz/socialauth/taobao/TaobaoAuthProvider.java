@@ -36,7 +36,7 @@ public class TaobaoAuthProvider extends AbstractOAuthProvider {
 	@SuppressWarnings("unchecked")
 	protected Profile authLogin() throws Exception {
 		String presp;
-
+		System.out.println(accessGrant.getAttributes());
 		try {
 			Response response = authenticationStrategy.executeFeed(PROFILE_URL);
 			presp = response.getResponseBodyAsString(Constants.ENCODING);
@@ -51,6 +51,7 @@ public class TaobaoAuthProvider extends AbstractOAuthProvider {
 			if (userProfile == null)
 				userProfile = new Profile();
 			userProfile.setValidatedId(data.get("uid").toString());
+			userProfile.setProviderId(getProviderId());
 			return userProfile;
 
 		} catch (Exception ex) {

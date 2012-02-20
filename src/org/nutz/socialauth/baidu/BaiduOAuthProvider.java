@@ -51,6 +51,7 @@ public class BaiduOAuthProvider extends AbstractOAuthProvider {
 				throw new SocialAuthException("Error: " + presp);
 			Profile p = new Profile();
 			p.setValidatedId(data.get("uid").toString());
+			p.setProviderId(getProviderId());
 			userProfile = p;
 			return p;
 
