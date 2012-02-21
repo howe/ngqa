@@ -26,6 +26,12 @@ import com.mongodb.BasicDBObject;
 @Filters()
 public class QuestionQueryModule {
 	
+	@At("/")
+	@Ok("smart:/index")
+	public Object index() {
+		return query(1, 10);
+	}
+	
 	/*只支持简单分页*/
 	@At({"/question/query/list/?","/question/query/list"})
 	@Ok("smart")
