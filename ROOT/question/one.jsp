@@ -15,7 +15,34 @@
 <script type="text/javascript" src="${base}/js/include/highlight.pack.js"></script>
 <script type="text/javascript" src="${base}/js/include/form2js.js"></script>
 <script type="text/javascript" src="${base}/js/application.js"></script>
-<script type="text/javascript" src="${base}/js/question.js"></script>
+<script type="text/javascript">
+$(function() {
+    //代码高亮
+    hljs.tabReplace = '    ';
+    hljs.initHighlightingOnLoad();
+
+    $("#add-answer").click(function() {
+        $.ajax({
+            type : 'POST',
+            url  : '${base}/question/${obj.id}/answer/add',
+            data :  $.toJSON(form2js("answer-form")),
+            dataType : 'json',
+            success: function( data ) {
+                if (console && console.log){
+                      console.log( 'Sample of data:', $.toJSON(data) );
+                }
+                if (data['ok']) { //添加成功
+                    $("#content").val("");
+                    $("#format").val("txt");
+                    window.location.reload();
+                } else {
+                    alert('Fail ' + data['msg']);
+                }
+            }
+        });
+    });
+});
+</script>
 <title>Question</title>
 </head>
 <body>
@@ -51,7 +78,7 @@
                 <table class="table" id="answers">
                     <tr>
                         <td>
-                            <img class="answerer-img" src="${base}/img/img.jpeg" alt="${answer.content}">
+                            <img class="answerer-img" src="${base}/img/img.jpeg" alt="${answer.user.id}">
                         </td>
                         <td>
                                 <div class="answer-info">
