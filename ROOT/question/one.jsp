@@ -72,25 +72,26 @@ $(function() {
                 </div>
             </div>
         </div>
-        <c:forEach items="${obj.answers}" var="answer">
         <div class="row-fluid">
             <div class="span8 box sep21">
-                <table class="table" id="answers">
-                    <tr>
-                        <td>
+                <c:forEach items="${obj.answers}" var="answer">
+                    <div class="row">
+                        <div class="span1">
                             <img class="answerer-img" src="${base}/img/img.jpeg" alt="${answer.user.id}">
-                        </td>
-                        <td>
-                                <div class="answer-info">
-                                    <span class="answerer-name">${answer.user.id}</span><span class="answer-time">Answer at&nbsp;${answer.createdAt}</span>
-                                </div>
-                                <div class="answer-content">${answer.formatContent}</div>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                        <div class="span10">
+                            <div class="answer-info">
+                                <span class="answerer-name">${answer.user.id}</span><span class="answer-time">Answer at&nbsp;${answer.createdAt}</span>
+                            </div>
+                            <div class="answer-content">
+                                ${answer.formatContent}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sep21"><hr /></div>
+                </c:forEach>
             </div>
         </div>
-        </c:forEach>
         <div class="row-fluid">
             <div class="span8 box sep21">
                 <form class="well" id="answer-form" >
