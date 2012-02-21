@@ -1,7 +1,3 @@
-function getContentHTML(converter, content, format) {
-    return format == 'markdown' ? converter.makeHtml(content) : content;
-}
-
 $(function() {
     //代码高亮
     hljs.tabReplace = '    ';
