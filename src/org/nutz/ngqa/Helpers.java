@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.nutz.lang.Files;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.Mvcs;
 import org.nutz.ngqa.bean.Question;
@@ -40,6 +41,19 @@ public class Helpers {
 		final String formatStr = "yyyy-MM-dd HH:mm";
 		SimpleDateFormat format = new SimpleDateFormat(formatStr);
 		return format.format(data);
+	}
+
+	/** 返回页面表示用的Tags的Html */
+	public static String getTagsHtml(String[] tags) {
+		if (tags.length == 0) {
+			return "&nbsp;||&nbsp;Not tags now";
+		}
+		final String tagTamplate = "<a href=\"./tags/%s\">%s</a>";
+		for (int i = 0; i < tags.length; i++) {
+			String html = Strings.escapeHtml(tags[i]);
+			tags[i] = String.format(tagTamplate, html, html);
+		}
+		return "&nbsp;||&nbsp;Question it in " + join(Lang.list(tags), ",&nbsp;");
 	}
 
 	public static String getInfosHtml() {

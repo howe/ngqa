@@ -25,13 +25,14 @@ pre {
 }
 
 .questioner-img {
-    border-top: none;
-}
-
-.questioner-img img {
     width:64px;
     height:64px;
     max-width: none;
+}
+
+.info {
+    height: 20px;
+    padding-bottom: 7px;
 }
 
 .answer-info {
