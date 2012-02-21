@@ -54,7 +54,7 @@ $(function() {
                     <table class="table">
                         <tr>
                             <td style="width:100%;">
-                                <h3 id="question-title">${obj.title}</h3>
+                                <h3 id="question-title">${obj.showTitle}</h3>
                                 <div class="question-mate sep21">
                                     <p><span id="questionse-name">${obj.user.id}</span>&nbsp;||&nbsp;Question it in <span id="question-time"></span>. &nbsp;||&nbsp;<span id="question-tags"></span></p>
                                 </div>
@@ -65,7 +65,7 @@ $(function() {
                         </tr>
                     </table>
                     <hr />
-                    <div id="question-content">${obj.formatContent}</div>
+                    <div id="question-content">${obj.showContent}</div>
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn">Edit</button>
@@ -81,10 +81,10 @@ $(function() {
                         </div>
                         <div class="span10">
                             <div class="answer-info">
-                                <span class="answerer-name">${answer.user.id}</span><span class="answer-time">Answer at&nbsp;${answer.createdAt}</span>
+                                <span class="answerer-name">${answer.user.id}</span><span class="answer-time">Answer at&nbsp;${answer.showCreatedAt}</span>
                             </div>
                             <div class="answer-content">
-                                ${answer.formatContent}
+                                ${answer.showContent}
                             </div>
                         </div>
                     </div>

@@ -2,6 +2,7 @@ package org.nutz.ngqa.bean;
 
 import java.util.Date;
 
+import org.nutz.lang.Strings;
 import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
@@ -103,8 +104,16 @@ public class Question implements Freshable {
 		this.id = id;
 	}
 
-	public String getFormatContent() {
+	public String getShowTitle() {
+		return Strings.trim(Strings.escapeHtml(title));
+	}
+
+	public String getShowContent() {
 		return Helpers.formatContent(content, format);
+	}
+
+	public String getShowCreatedAt() {
+		return Helpers.getFormatData(createdAt);
 	}
 
 }

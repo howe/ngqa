@@ -1,6 +1,8 @@
 package org.nutz.ngqa;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +33,13 @@ public class Helpers {
 		}
 
 		return splitContent(content);
+	}
+
+	/** 返回格式化后的日期 */
+	public static String getFormatData(Date data) {
+		final String formatStr = "yyyy-MM-dd HH:mm";
+		SimpleDateFormat format = new SimpleDateFormat(formatStr);
+		return format.format(data);
 	}
 
 	public static String getInfosHtml() {

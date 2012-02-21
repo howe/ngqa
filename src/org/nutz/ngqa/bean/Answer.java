@@ -71,8 +71,12 @@ public class Answer implements Freshable {
 		this.updatedAt = updatedAt;
 	}
 
-	public String getFormatContent() {
+	public String getShowContent() {
 		return Helpers.formatContent(content, format);
+	}
+
+	public String getShowCreatedAt() {
+		return Helpers.getFormatData(createdAt);
 	}
 
 }
