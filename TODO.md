@@ -7,7 +7,6 @@ TODO List:
  4. 管理控制台--权限管理
  5. 管理控制台--系统配置
  6. App管理
-
 * OpenAPI(服务端Http接口)
  1. 通用查询接口--Question
  2. 权限管理
@@ -19,14 +18,10 @@ TODO List:
  8. App鉴权及管理
  9. 邮件提醒
  10. 访问统计
-
 * SDK-Java
  1. 实现OpenAPI
  2. App基础框架
-
 * RSS
  1. 实现RSS输出
-
 * 其他SDK
-
 * 调查所用的第三方jar、js、css的license
