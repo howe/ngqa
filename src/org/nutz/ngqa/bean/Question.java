@@ -104,6 +104,10 @@ public class Question implements Freshable {
 		this.id = id;
 	}
 
+	public String getShowTags() {
+		return Helpers.getTagsHtml(tags);
+	}
+
 	public String getShowTitle() {
 		return Strings.trim(Strings.escapeHtml(title));
 	}
