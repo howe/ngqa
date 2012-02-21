@@ -6,9 +6,9 @@
  * /question/_id
  * /page/_page
  * /tags/_tag
- * /ask
+ * /question/new
 * POST
- * /ask
+ * /question
  * /question/_id/answer
 * DELETE
  * /question/_id
