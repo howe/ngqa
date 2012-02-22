@@ -10,13 +10,17 @@ String.format = function() {
     return str;
 };
 
+String.prototype.escapeHTML = function () {
+    return this.replace(/&/g,'&amp;').replace(/>/g,'&gt;').replace(/</g,'&lt;').replace(/'/g,'&#x27;').replace(/"/g,'&quot;');
+};
+
 function getTagsHTML(tags) {
     if (tags.length == 0) {
         return "Not tags now";
     }
     var questionTags = [];
     $.each(tags, function(index, value) {
-        value = $.trim(value);
+        value = $.trim(value.escapeHTML());
         questionTags.push(String.format('<a href="/tags/{0}">{1}</a>', value, value));
     });
     return String.format("Question at {0}", questionTags.join(',&nbsp;'));

@@ -18,7 +18,7 @@ $(function() {
                     questioner_name : value['user']['id'],
                     time : value['createdAt'],
                     id : value['id'],
-                    title : value['title'],
+                    title : value['title'].escapeHTML(),
                     tags : getTagsHTML(value['tags'])
                 };
 

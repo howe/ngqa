@@ -11,16 +11,15 @@
 <link rel="stylesheet" type="text/css" media="screen" href="${base}/css/application.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="${base}/css/login.css" />
 <script type="text/javascript" src="${base}/js/include/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="${base}/js/include/ICanHaz.min.js"></script>
 <script type="text/javascript" src="${base}/js/include/jquery.json-2.3.min.js"></script>
+<script type="text/javascript" src="${base}/js/include/showdown.js"></script>
 <script type="text/javascript" src="${base}/js/include/highlight.pack.js"></script>
 <script type="text/javascript" src="${base}/js/include/form2js.js"></script>
 <script type="text/javascript" src="${base}/js/application.js"></script>
+<script type="text/javascript" src="${base}/js/question.js"></script>
 <script type="text/javascript">
 $(function() {
-    //代码高亮
-    hljs.tabReplace = '    ';
-    hljs.initHighlightingOnLoad();
-
     $("#add-answer").click(function() {
         $.ajax({
             type : 'POST',
@@ -50,48 +49,12 @@ $(function() {
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span8 box">
-                <div class="question" id="question_${obj.id}">
-                    <div class="row">
-                        <div class="span10">
-                            <h3>${obj.showTitle}</h3>
-                            <div class="question-info info sep21">
-                                <span class="questioner-name">${obj.user.id}</span>&nbsp;||&nbsp;Question at ${obj.showCreatedAt}${obj.showTags}
-                            </div>
-                        </div>
-                        <div class="span1">
-                            <img class="questioner-img" src="${base}/img/img.jpeg" alt="${obj.user.id}">
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="question-content">${obj.showContent}</div>
-                </div>
+                <div id="question"></div>
                 <div class="form-actions">
                     <button type="submit" class="btn">Edit</button>
                 </div>
             </div>
         </div>
-        <c:if test="${! empty obj.answers}">
-        <div class="row-fluid">
-            <div class="span8 box sep21">
-                <c:forEach items="${obj.answers}" var="answer">
-                    <div class="row" id="answer_${answer.id}">
-                        <div class="span1">
-                            <img class="answerer-img" src="${base}/img/img.jpeg" alt="${answer.user.id}">
-                        </div>
-                        <div class="span10">
-                            <div class="answer-info info">
-                                <span class="answerer-name">${answer.user.id}</span><span class="answer-time">Answer at ${answer.showCreatedAt}</span>
-                            </div>
-                            <div class="answer-content">
-                                ${answer.showContent}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sep21"><hr /></div>
-                </c:forEach>
-            </div>
-        </div>
-        </c:if>
         <div class="row-fluid">
             <div class="span8 box sep21">
                 <form class="well" id="answer-form" >
