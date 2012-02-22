@@ -5,7 +5,7 @@ import java.util.Map;
 import org.brickred.socialauth.Profile;
 import org.brickred.socialauth.exception.ServerDataException;
 import org.brickred.socialauth.exception.SocialAuthException;
-import org.brickred.socialauth.oauthstrategy.OAuth2;
+import org.brickred.socialauth.oauthstrategy.OAuth1;
 import org.brickred.socialauth.util.Constants;
 import org.brickred.socialauth.util.OAuthConfig;
 import org.brickred.socialauth.util.Response;
@@ -13,7 +13,7 @@ import org.nutz.json.Json;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
 /**
- * 实现开心001帐号登录,OAuth2
+ * 实现开心001帐号登录,OAuth1
  * 
  * @author wendal
  */
@@ -22,11 +22,12 @@ public class Kaixin001OAuthProvider extends AbstractOAuthProvider {
 
 	public Kaixin001OAuthProvider(OAuthConfig providerConfig) {
 		super(providerConfig);
-		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"http://api.kaixin001.com/oauth2/authorize");
-		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL,"https://api.kaixin001.com/oauth2/access_token");
-		AllPerms = new String[] {"basic"};
-		AuthPerms = new String[] {"basic"};
-		authenticationStrategy = new OAuth2(config, ENDPOINTS);
+		ENDPOINTS.put(Constants.OAUTH_REQUEST_TOKEN_URL,"http://api.kaixin001.com/oauth/request_token");
+		ENDPOINTS.put(Constants.OAUTH_AUTHORIZATION_URL,"http://api.kaixin001.com/oauth/authorize");
+		ENDPOINTS.put(Constants.OAUTH_ACCESS_TOKEN_URL, "http://api.kaixin001.com/oauth/access_token");
+		AllPerms = new String[] {};
+		AuthPerms = new String[] {};
+		authenticationStrategy = new OAuth1(config, ENDPOINTS);
 		authenticationStrategy.setPermission(scope);
 		authenticationStrategy.setScope(getScope());
 
@@ -37,7 +38,7 @@ public class Kaixin001OAuthProvider extends AbstractOAuthProvider {
 	@Override
 	protected Profile authLogin() throws Exception {
 		String presp;
-
+		System.out.println(accessGrant.getAttributes());
 		try {
 			Response response = authenticationStrategy.executeFeed(PROFILE_URL);
 			presp = response.getResponseBodyAsString(Constants.ENCODING);
