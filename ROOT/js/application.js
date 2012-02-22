@@ -12,7 +12,7 @@ String.format = function() {
 
 function getTagsHTML(tags) {
     if (tags.length == 0) {
-        return "";
+        return "Not tags now";
     }
     var questionTags = [];
     $.each(tags, function(index, value) {
