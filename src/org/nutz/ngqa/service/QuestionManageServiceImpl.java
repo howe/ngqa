@@ -20,11 +20,14 @@ public class QuestionManageServiceImpl implements QuestionManageService {
 		if (query == null)
 			query = new QuestionQuery();
 		MCur cur = MCur.DESC("updatedAt");
-		cur.skip(query.skip()).limit(query.limit());
 		Pager<Question> pager = new Pager<Question>();
 		pager.setCount(dao.count(Question.class, query.q));
 		pager.setPage(query.page);
 		pager.setPageSize(query.pageSize);
+		if (query.skip() > 0)
+			cur.skip(query.skip());
+		if (query.limit() > 0)	
+			cur.limit(query.limit());
 		pager.setData(dao.find(Question.class, query.q, cur));
 		return pager;
 	}
