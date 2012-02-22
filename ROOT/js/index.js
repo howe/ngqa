@@ -6,30 +6,23 @@ $(function() {
         <img src="./img/img.jpeg" alt="{{ questioner_name }}">\
     </td>\
     <td>\
-        <p>{{ questioner_name }}&nbsp;(Question at&nbsp;{{ question_time }})</p>\
-        <p><a href="./question/{{ question_id }}">{{ question_title }}</a></p>\
+        <p>{{ questioner_name }}&nbsp;(Question at&nbsp;{{ time }})</p>\
+        <p><a href="./question/{{ id }}">{{ title }}</a></p>\
         <p>{{{ tags }}}</p>\
     </td>\
 </tr>';
             ich.addTemplate("question", questionTemplate);
-            var question_info, question;
+            var question_info;
             $.each(data['data']['data'], function (index, value) {
                 question_info = {
                     questioner_name : value['user']['id'],
-                    question_time : value['createdAt'],
-                    question_id : value['id'],
-                    question_title : value['title'],
-                    tags : ''
+                    time : value['createdAt'],
+                    id : value['id'],
+                    title : value['title'],
+                    tags : getTagsHTML(value['tags'])
                 };
-                if (value['tags'].length == 0) {
-                    question_info.tags = "Not tags now";
-                } else {
-                    question_info.tags = getTagsHTML(value['tags']);
-                }
 
-                question = ich.question(question_info);
-
-                $("#questions").append(question);
+                $("#questions").append(ich.question(question_info));
             });
         }
     }, "json");
