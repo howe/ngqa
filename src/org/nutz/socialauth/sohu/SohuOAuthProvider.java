@@ -41,7 +41,7 @@ public class SohuOAuthProvider extends AbstractOAuthProvider {
 		try {
 			Response response = authenticationStrategy.executeFeed(PROFILE_URL);
 			presp = response.getResponseBodyAsString(Constants.ENCODING);
-			System.out.println(response.getStatus());
+			//System.out.println(response.getStatus());
 		} catch (Exception e) {
 			throw new SocialAuthException("Error while getting profile from "
 					+ PROFILE_URL, e);
