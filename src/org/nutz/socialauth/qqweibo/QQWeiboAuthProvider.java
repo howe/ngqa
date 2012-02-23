@@ -50,12 +50,12 @@ public class QQWeiboAuthProvider extends AbstractOAuthProvider {
 
         if (accessGrant != null) {
                 log.debug("Obtaining user profile");
-                try {
-                	String presp = authenticationStrategy.executeFeed(PROFILE_URL).getResponseBodyAsString("utf8");
-                	System.out.println(Json.toJson(Json.fromJson(presp)));
-                } catch (Throwable e) {
-					e.printStackTrace();
-				}
+                //try {
+                //	String presp = authenticationStrategy.executeFeed(PROFILE_URL).getResponseBodyAsString("utf8");
+                	//System.out.println(Json.toJson(Json.fromJson(presp)));
+               // } catch (Throwable e) {
+				//	e.printStackTrace();
+				//}
                 Profile p = new Profile();
                 p.setValidatedId(requestParams.get("openid"));
                 p.setProviderId(getProviderId());

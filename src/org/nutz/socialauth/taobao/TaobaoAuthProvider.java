@@ -1,15 +1,9 @@
 package org.nutz.socialauth.taobao;
 
-import java.util.Map;
-
 import org.brickred.socialauth.Profile;
-import org.brickred.socialauth.exception.ServerDataException;
-import org.brickred.socialauth.exception.SocialAuthException;
 import org.brickred.socialauth.oauthstrategy.OAuth2;
 import org.brickred.socialauth.util.Constants;
 import org.brickred.socialauth.util.OAuthConfig;
-import org.brickred.socialauth.util.Response;
-import org.nutz.json.Json;
 import org.nutz.socialauth.AbstractOAuthProvider;
 
 /**

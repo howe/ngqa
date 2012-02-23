@@ -23,8 +23,8 @@ public class AlipayAuthProvider extends AbstractOAuthProvider {
 		super(providerConfig);
 		AlipayConfig.partner = providerConfig.get_consumerKey();
 		AlipayConfig.key = providerConfig.get_consumerSecret();
-		System.out.println(AlipayConfig.partner);
-		System.out.println(AlipayConfig.key);
+		//System.out.println(AlipayConfig.partner);
+		//System.out.println(AlipayConfig.key);
 	}
 	
 	@Override
