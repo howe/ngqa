@@ -5,11 +5,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" media="screen" href="./css/include/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="./css/login.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="./css/application.css" />
 <script type="text/javascript" src="./js/include/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="./js/include/ICanHaz.min.js"></script>
 <script type="text/javascript" src="./js/include/jquery.json-2.3.min.js"></script>
 <script type="text/javascript" src="./js/include/form2js.js"></script>
 <script type="text/javascript" src="./js/include/jquery.pjax.js"></script>
+<script type="text/javascript" src="./js/application.js"></script>
 <script type="text/javascript">
 $(function() {
     $("#ask").click(function() {
@@ -36,7 +39,7 @@ $(function() {
 <title>Ask</title>
 </head>
 <body>
-    <jsp:include page="_include_navbar.jsp" />
+    <div id="navbar"></div>
     <div class="container-fluid">
     <div class="row-fluid">
         <div class="span8 box">
@@ -83,7 +86,7 @@ $(function() {
           <%= Helpers.getInfosHtml() %>
         </div>
     </div>
-    <jsp:include page="_include_footer.jsp" />
+    <div id="footer" class="footer"></div>
     </div>
 </body>
 </html>
