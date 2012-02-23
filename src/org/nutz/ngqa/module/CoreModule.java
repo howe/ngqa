@@ -152,6 +152,19 @@ public class CoreModule {
 		return Ajax.ok();
 	}
 	
+	/**统计全体Tag的数量*/
+	@At("/tags")
+	@Ok("smart:/tag")
+	public Object tags() {
+		final Object[] objs = new Object[1];
+		dao.run(new Callback<DB>() {
+			public void invoke(DB db) {
+				objs[0] = db.eval("tags()");
+			}
+		});
+		return objs[0];
+	}
+	
 	@Inject("java:$commons.coll('question')")
 	private DBCollection questionColl;
 	

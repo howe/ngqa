@@ -26,4 +26,5 @@
 	盛大(sdo) -- 成功过,然后又挂了
 	MySpace(myspace) -- 没key
 	AOL(aol) -- 没key
+	BrowserID -- 需要页面配置一下
 	
