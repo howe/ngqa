@@ -16,23 +16,27 @@
 <script type="text/javascript">
 $(function() {
     $("#ask").click(function() {
-        $.ajax({
-        		type : 'POST',
-        		url  : './ask',
-        		data :  $.toJSON(form2js("ask-form")),
-        		dataType : 'json',
-        		success: function( data ) {
-    						if (console && console.log){
-      							console.log( 'Sample of data:', $.toJSON(data) );
-    						}
-    						if (data['ok']) { //添加成功
-    							var nextURL = "./question/" + data['data']['id'];
-    							window.location = nextURL;
-    						} else {
-    							alert('Fail ' + data['msg']);
-    						}
-  						}
-        	});
+        var formData = form2js("ask-form");
+        var tags = [];
+        $.each(formData.tags.split(','), function (index, value) {
+            value = $.trim(value);
+            if (value) {
+                tags.push(value);
+            }
+        });
+        formData.tags = tags;
+
+        $.post('./ask', $.toJSON(formData), function (data) {
+            if (console && console.log){
+                console.log( 'Sample of data:', $.toJSON(data) );
+            }
+            if (data['ok']) { //添加成功
+                var nextURL = "./question/" + data['data']['id'];
+                window.location = nextURL;
+            } else {
+                alert('Fail ' + data['msg']);
+            }
+        }, 'json');
     });
 });
 </script>
