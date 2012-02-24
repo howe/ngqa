@@ -58,12 +58,12 @@ public class Helpers {
 
 	public static String getInfosHtml() {
 		StringBuilder infosHtml = new StringBuilder();
-		String boxTamplate = "<div class=\"box\">%s</div>";
+		String boxTamplate = "<div class=\"box sep21\">%s</div>";
 
 		for (File file : Files.findFile("infos/").listFiles()) {
 			String html = formatContent(Files.read(file), Files.getSuffixName(file));
 			infosHtml.append(String.format(boxTamplate, html));
-			boxTamplate = "<div class=\"box sep21\">%s</div>";
+//			boxTamplate = "<div class=\"box sep21\">%s</div>";
 		}
 
 		return infosHtml.toString();

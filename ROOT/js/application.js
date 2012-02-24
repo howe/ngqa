@@ -28,6 +28,7 @@ function getTagsHTML(tags) {
 
 $(function() {
     loginHTML();
+    tagsInfoHTML();
     footer();
 
     $(".log-width").hide();
@@ -118,4 +119,28 @@ function footer() {
     ich.addTemplate("footer", footerTemplate);
     $("#footer").append(ich.footer({url: encodeURIComponent(window.location.href)}));
     return;
+}
+
+function tagsInfoHTML() {
+    $.get('./tags.json', function(data) {
+        if (data['ok']) {
+            if (data['data']) {
+                $("#infos").prepend($('<div class="box"><ul class="unstyled"><li><b>Not tags info now</b></li></ul></div>'));
+            } else {
+                var tagsTemplate = '<div class="box">\
+                        <ul>\
+                        {{#tags}}\
+                            <li><a href="./tags/{{ name }}">{{ name }}</a>({{ count }})</li>\
+                        {{/tags}}\
+                        </ul>\
+                    </div>';
+                    ich.addTemplate("tags", tagsTemplate);
+                    var tags = [];
+                    $.each(data['data'], function (key, value) {
+                        tags.push({name : key, count : value});
+                    });
+                    $("#infos").prepend(ich.tags({tags: tags}));
+            }
+        }
+    }, "json");
 }
