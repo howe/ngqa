@@ -130,7 +130,7 @@ function tagsInfoHTML() {
                 var tagsTemplate = '<div class="box">\
                         <ul>\
                         {{#tags}}\
-                            <li><a href="./tags/{{ name }}">{{ name }}</a>({{ count }})</li>\
+                            <li><a href="./tag/{{ name }}">{{ name }}</a>({{ count }})</li>\
                         {{/tags}}\
                         </ul>\
                     </div>';
