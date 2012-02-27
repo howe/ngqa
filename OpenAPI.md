@@ -60,6 +60,9 @@ Question管理核心API
 	
 	* /tags 列出所有的Tag
 		* 无参数
+		
+	* /question/search      全文搜索
+		* 参数key(必选) -- Question所包含的字符
 
 用户信息API
 ----------
