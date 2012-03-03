@@ -72,10 +72,9 @@ public class BrowserIdAuthProvider implements AuthProvider {
 	@Override
 	public void updateStatus(String arg0) throws Exception {}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Profile verifyResponse(HttpServletRequest req) throws Exception {
-		return verifyResponse(req.getParameterMap());
+		return verifyResponse(req);
 	}
 
 	@Override
