@@ -74,7 +74,7 @@ public class BrowserIdAuthProvider implements AuthProvider {
 
 	@Override
 	public Profile verifyResponse(HttpServletRequest req) throws Exception {
-		return verifyResponse(req.getParameterMap());
+		return verifyResponse(req);
 	}
 
 	@SuppressWarnings("rawtypes")
