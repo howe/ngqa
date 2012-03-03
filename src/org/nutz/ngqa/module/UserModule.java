@@ -62,10 +62,10 @@ public class UserModule {
 		}
 		SocialAuthManager manager = new SocialAuthManager(); //每次都要新建哦
 		manager.setSocialAuthConfig(config);
-		session.setAttribute("openid.manager", manager);
 		String url = manager.getAuthenticationUrl(provider, returnTo);
 		Mvcs.getResp().setHeader("Location", url);
 		Mvcs.getResp().setStatus(302);
+		session.setAttribute("openid_manager", manager);
 	}
 	
 	/*登出*/
@@ -78,10 +78,10 @@ public class UserModule {
 	/*无需做链接,这是OpenID的回调地址*/
 	@At("/login/?/callback")
 	public View returnPoint(String providerId, HttpServletRequest request, HttpSession session) throws Exception {
-		SocialAuthManager manager = (SocialAuthManager) session.getAttribute("openid.manager");
+		SocialAuthManager manager = (SocialAuthManager) session.getAttribute("openid_manager");
 		if (manager == null)
 			throw new SocialAuthException("Not manager found!");
-		session.removeAttribute("openid.manager"); //防止重复登录的可能性
+		session.removeAttribute("openid_manager"); //防止重复登录的可能性
 		Map<String, String> paramsMap = SocialAuthUtil.getRequestParametersMap(request); 
 		AuthProvider provider = manager.connect(paramsMap);
 		Profile p = provider.getUserProfile();
@@ -106,7 +106,7 @@ public class UserModule {
         Moo moo = Moo.SET("lastLoginDate", new Date()).set("email", p.getEmail());
         dao.update(User.class, new BasicDBObject("_id", user.getId()), moo);
         
-        request.getSession().setAttribute("me", user);
+        session.setAttribute("me", user);
         return new ServerRedirectView("/index.jsp");
 	}
 	

@@ -12,9 +12,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.nutz.lang.Strings;
+import org.nutz.mvc.Mvcs;
 
 public class MongoSessionFilter implements Filter {
 
@@ -46,9 +46,11 @@ public class MongoSessionFilter implements Filter {
 						}
 					}
 				}
-				if (flag)
-					((HttpServletResponse) resp).addCookie(new Cookie(
-							"MongoSessionKey", session.getId()));
+				if (flag) {
+					Cookie cookie = new Cookie("MongoSessionKey", session.getId());
+					cookie.setMaxAge(30 * 24 * 60 * 60);
+					Mvcs.getResp().addCookie(cookie);
+				}
 			}
 		}
 		doFilter(req, resp, chain);

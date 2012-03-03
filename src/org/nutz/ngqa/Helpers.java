@@ -22,7 +22,7 @@ public class Helpers {
 	public static String makeQuestionURL(Question question) {
 		HttpServletRequest req = Mvcs.getReq();
 		String reqURL = req.getRequestURL().toString();
-		String contextPath = req.getSession().getServletContext().getContextPath() + "/";
+		String contextPath = Mvcs.getServletContext().getContextPath() + "/";
 		String hostRoot = reqURL.substring(0, reqURL.indexOf("/", 8)) + contextPath;
 		return hostRoot + "question/" + question.getId();
 	}

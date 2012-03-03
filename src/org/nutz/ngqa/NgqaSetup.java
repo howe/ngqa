@@ -8,6 +8,8 @@ import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
 import org.nutz.lang.util.Callback;
 import org.nutz.mongo.MongoDao;
+import org.nutz.mongo.session.MongoSessionManager;
+import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.Setup;
 import org.nutz.ngqa.api.Ngqa;
@@ -79,6 +81,9 @@ public class NgqaSetup implements Setup {
 				});
 			}
 		}
+		
+		//载入MongoSession,实现分布式Session机制
+		Mvcs.sessionProvider = new MongoSessionManager(dao);
 	}
 	
 	/**项目关闭时执行的逻辑*/

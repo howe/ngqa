@@ -24,6 +24,7 @@ public class MongoSessionManager implements SessionProvider {
 
 	private MongoDao dao;
 	private DBCollection sessions;
+	private SessionValueAdpter provider;
 
 	public MongoSessionManager(final MongoDao dao) {
 		this(dao, "http.session");
@@ -36,6 +37,11 @@ public class MongoSessionManager implements SessionProvider {
 				sessions = obj.getCollection(colName);
 			}
 		});
+		provider = new SessionValueAdpter();
+	}
+
+	public void setProvider(SessionValueAdpter provider) {
+		this.provider = provider;
 	}
 
 	public MongoSession getSession(String key) {
@@ -43,7 +49,8 @@ public class MongoSessionManager implements SessionProvider {
 				key)), new BasicDBObject("_id", 1));
 		if (dbo == null || dbo.get("_id") == null)
 			return null;
-		return new MongoSession(sessions, (ObjectId) dbo.get("_id"));
+		return new MongoSession(sessions, (ObjectId) dbo.get("_id"), provider,
+				dao);
 	}
 
 	public MongoSession getSession(HttpServletRequest req) {
@@ -71,7 +78,9 @@ public class MongoSessionManager implements SessionProvider {
 		Map<String, String> info = new HashMap<String, String>();
 		info.put("remoteAddr", req.getRemoteAddr());
 		info.put("userAgent", req.getHeader("User-Agent"));
-		return MongoSession.create(sessions, info);
+		session = MongoSession.create(sessions, info, provider, dao);
+		session.setNewCreate(true);
+		return session;
 	}
 
 	public MongoHttpSession getHttpSession(HttpServletRequest req,
@@ -79,19 +88,38 @@ public class MongoSessionManager implements SessionProvider {
 		MongoSession session = getSession(req, createNew);
 		if (session != null) {
 			MongoHttpSession httpSession = new MongoHttpSession(sessions,
-					new ObjectId(session.getId()));
+					new ObjectId(session.getId()), provider, dao);
 			if (servletContext == null)
 				servletContext = req.getSession().getServletContext();
 			httpSession.setServletContext(servletContext);
+			httpSession.setNewCreate(session.isNew());
+			return httpSession;
 		}
 		return null;
 	}
-	
+
 	public HttpSession getHttpSession(HttpServletRequest req) {
-		return getHttpSession(req, Mvcs.getServletContext(), true);
+		return getHttpSession(req, true);
 	}
-	
+
 	public HttpSession getHttpSession(HttpServletRequest req, boolean createNew) {
-		return getHttpSession(req, Mvcs.getServletContext(), createNew);
+		MongoHttpSession session = getHttpSession(req,Mvcs.getServletContext(), createNew);
+		if (session != null && session.isNew()) {
+			boolean flag = true;
+			for (Cookie cookie : ((HttpServletRequest) req).getCookies()) {
+				if ("MongoSessionKey".equalsIgnoreCase(cookie.getName())) {
+					if (session.getId().equals(cookie.getValue())) {
+						flag = false;
+						break;
+					}
+				}
+			}
+			if (flag) {
+				Cookie cookie = new Cookie("MongoSessionKey", session.getId());
+				cookie.setMaxAge(30 * 24 * 60 * 60);
+				Mvcs.getResp().addCookie(cookie);
+			}
+		}
+		return session;
 	}
 }
