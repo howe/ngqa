@@ -16,7 +16,7 @@ import org.brickred.socialauth.util.Response;
 import org.nutz.json.Json;
 
 /**
- * 实现百度帐号登录,OAuth2
+ * 实现BrowserId登录,OAuth2
  * 
  * @author wendal
  */
@@ -72,15 +72,15 @@ public class BrowserIdAuthProvider implements AuthProvider {
 	@Override
 	public void updateStatus(String arg0) throws Exception {}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Profile verifyResponse(HttpServletRequest req) throws Exception {
 		return verifyResponse(req.getParameterMap());
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Profile verifyResponse(Map<String, String> params) throws Exception {
-		Map<String, Object> result = BrowserId.verify(params.get("audience"), params.get("assertion"));
+	public Profile verifyResponse(Map params) throws Exception {
+		Map<String, Object> result = BrowserId.verify((String)params.get("audience"), (String)params.get("assertion"));
 		if (result != null && "okay".equals(result.get("status"))) {
 			Profile profile = new Profile();
 			profile.setValidatedId(result.get("email").toString());
