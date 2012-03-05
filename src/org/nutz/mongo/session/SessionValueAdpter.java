@@ -7,14 +7,25 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.Set;
 
+import org.bson.types.BSONTimestamp;
 import org.bson.types.Binary;
+import org.bson.types.Code;
+import org.bson.types.CodeWScope;
+import org.bson.types.MaxKey;
+import org.bson.types.MinKey;
+import org.bson.types.ObjectId;
+import org.bson.types.Symbol;
+import org.nutz.castor.Castors;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Each;
@@ -26,6 +37,7 @@ import org.nutz.mongo.annotation.Co;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.DBRefBase;
 
 /**
  * 
@@ -56,8 +68,22 @@ class SessionValue {
 		}
 		info = obj.getClass().getName();
 		Mirror mirror = Mirror.me(obj);
+		//判断是否为原生支持类型
 		if (mirror.isNumber() || mirror.isBoolean() || mirror.isChar()
-				|| mirror.isStringLike()) {
+				|| mirror.isStringLike()
+				|| obj instanceof Pattern
+				|| obj instanceof Date
+				|| obj instanceof byte[]
+				|| obj instanceof BSONTimestamp
+				|| obj instanceof Code
+				|| obj instanceof CodeWScope
+				|| obj instanceof ObjectId
+				|| obj instanceof Binary
+				|| obj instanceof UUID
+				|| obj instanceof Symbol
+				|| obj instanceof DBRefBase
+				|| obj instanceof MinKey
+				|| obj instanceof MaxKey) {
 			type = "simple";
 			data = obj;
 			return;
@@ -147,7 +173,7 @@ class SessionValue {
 		if ("null".equals(type))
 			return null;
 		if ("simple".equals(type))
-			return data;
+			return Castors.me().castTo(data, Class.forName(info));
 		if ("dbo".equals(type)) {
 			if (data instanceof DBObject)
 				return data;
