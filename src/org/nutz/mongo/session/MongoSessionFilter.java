@@ -1,7 +1,9 @@
 package org.nutz.mongo.session;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,50 +12,48 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.nutz.lang.Strings;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 
+/**
+ * 替换原本的HttpServletRequest,改写其getSession方法为获取MongoSession
+ * @author wendal(wendal1985@gmail.com)
+ *
+ */
 public class MongoSessionFilter implements Filter {
 
-	private MongoSessionManager manager;
 	private ServletContext servletContext;
-	private String sessionAttrName;
 	private String managerAttrName;
-	private boolean createNew;
-	private Pattern ingore;
+	private static final Log log = Logs.get();
 
-	public void doFilter(ServletRequest req, ServletResponse resp,
+	public void doFilter(final ServletRequest req, final ServletResponse resp,
 			FilterChain chain) throws IOException, ServletException {
-		if (ingore == null
-				|| !ingore.matcher(((HttpServletRequest) req).getRequestURI())
-						.find()) {
-			if (manager == null)
-				manager = (MongoSessionManager) servletContext
-						.getAttribute(managerAttrName);
-			MongoHttpSession session = manager.getHttpSession(
-					(HttpServletRequest) req, servletContext, createNew);
-			if (session != null) {
-				req.setAttribute(sessionAttrName, session);
-				boolean flag = true;
-				for (Cookie cookie : ((HttpServletRequest) req).getCookies()) {
-					if ("MongoSessionKey".equalsIgnoreCase(cookie.getName())) {
-						if (session.getId().equals(cookie.getValue())) {
-							flag = false;
-							break;
-						}
+		HttpServletRequest request = (HttpServletRequest) Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{HttpServletRequest.class}, new InvocationHandler() {
+			
+			public Object invoke(Object obj, Method method, Object[] args)
+					throws Throwable {
+				if ("getSession".equals(method.getName())) {
+					MongoSessionManager manager = (MongoSessionManager) servletContext.getAttribute(managerAttrName);
+					if (manager == null) {
+						if (log.isWarnEnabled())
+							log.warn("MongoSessionManager not found!! Failback to normal session!!");
+					} else {
+						if (args.length == 0)
+							return manager.getHttpSession((HttpServletRequest) req);
+						else
+							return manager.getHttpSession((HttpServletRequest)req, (Boolean)args[0]);
 					}
 				}
-				if (flag) {
-					Cookie cookie = new Cookie("MongoSessionKey", session.getId());
-					cookie.setMaxAge(30 * 24 * 60 * 60);
-					Mvcs.getResp().addCookie(cookie);
-				}
+				return method.invoke(req, args);
 			}
-		}
-		doFilter(req, resp, chain);
+		});
+		Mvcs.set(Mvcs.getName(), request, (HttpServletResponse) resp);
+		doFilter(request, resp, chain);
 	}
 
 	public void init(FilterConfig config) throws ServletException {
@@ -63,21 +63,8 @@ public class MongoSessionFilter implements Filter {
 			managerAttrName = "MongoSessionManager";
 		else
 			managerAttrName = config.getInitParameter("managerAttrName");
-
-		if (Strings.isBlank(config.getInitParameter("sessionAttrName")))
-			sessionAttrName = "session";
-		else
-			sessionAttrName = config.getInitParameter("sessionAttrName");
-		createNew = !"false".equals(config.getInitParameter("createNew"));
-		String ingorePatten = config.getInitParameter("ingorePatten");
-		if (Strings.isBlank(ingorePatten))
-			this.ingore = Pattern
-					.compile(".+[.](jpg|png|ico|git|html|swf|flv|mp4|zip|gz|rar|7z)$");
-		else if (!"false".equalsIgnoreCase(ingorePatten))
-			this.ingore = Pattern.compile(ingorePatten);
 	}
 
 	public void destroy() {
-		manager = null;
 	}
 }

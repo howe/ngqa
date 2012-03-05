@@ -20,6 +20,11 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
+/**
+ * MongoSession会话管理器,负责查询/生成MongoSession
+ * @author wendal(wendal1985@gmail.com)
+ *
+ */
 public class MongoSessionManager implements SessionProvider {
 
 	private MongoDao dao;

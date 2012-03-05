@@ -12,6 +12,11 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
+/**
+ * 基于Mongo的分布式会话
+ * @author wendal(wendal1985@gmail.com)
+ *
+ */
 @SuppressWarnings("unchecked")
 public class MongoSession {
 

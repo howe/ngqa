@@ -27,6 +27,11 @@ import org.nutz.mongo.annotation.Co;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
+/**
+ * 
+ * @author wendal(wendal1985@gmail.com)
+ *
+ */
 public class SessionValueAdpter {
 
 	public DBObject toValue(Object obj) throws Throwable {
