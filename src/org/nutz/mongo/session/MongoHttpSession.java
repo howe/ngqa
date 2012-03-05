@@ -7,10 +7,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
 import org.bson.types.ObjectId;
-import org.nutz.mongo.MongoDao;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 
 /**
@@ -20,9 +18,8 @@ import com.mongodb.DBCursor;
 @SuppressWarnings("deprecation")
 public class MongoHttpSession extends MongoSession implements HttpSession {
 
-	public MongoHttpSession(DBCollection sessions, ObjectId id,
-			SessionValueAdpter provider, MongoDao dao) {
-		super(sessions, id, provider, dao);
+	public MongoHttpSession(ManagerContext context, ObjectId id) {
+		super(context, id);
 	}
 
 	private ServletContext servletContext;
@@ -38,8 +35,7 @@ public class MongoHttpSession extends MongoSession implements HttpSession {
 		httpSessionContext = new HttpSessionContext() {
 
 			public HttpSession getSession(String id) {
-				MongoHttpSession session = new MongoHttpSession(sessions,
-						new ObjectId(id), provider, dao);
+				MongoHttpSession session = new MongoHttpSession(context, new ObjectId(id));
 				session.setServletContext(servletContext);
 				return session;
 			}

@@ -62,6 +62,11 @@ class SessionValue {
 			data = obj;
 			return;
 		}
+		if (obj instanceof DBObject ) {
+			type = "dbo";
+			data = obj;
+			return;
+		}
 		if (obj.getClass().getAnnotation(Co.class) != null) {
 			type = "nutz_mongo";
 			data = Mongos.entity(obj).toDBObject(obj).get("_id").toString();
@@ -137,12 +142,19 @@ class SessionValue {
 		data = dbo.get("data");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	Object obj(MongoDao dao) throws Throwable {
 		if ("null".equals(type))
 			return null;
 		if ("simple".equals(type))
 			return data;
+		if ("dbo".equals(type)) {
+			if (data instanceof DBObject)
+				return data;
+			DBObject dbo = (DBObject) Class.forName(info).newInstance();
+			dbo.putAll((Map)data);
+			return dbo;
+		}
 		if ("nutz_mongo".equals(type))
 			return dao.findById(Class.forName(info), (String) data);
 		if ("serializable".equals(type)) {

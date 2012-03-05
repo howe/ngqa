@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.nutz.lang.Lang;
-import org.nutz.mongo.MongoDao;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -24,16 +23,12 @@ public class MongoSession {
 	private ObjectId id;
 	private BasicDBObject queryKey;
 	private boolean newCreate;
-	protected SessionValueAdpter provider;
-	protected MongoDao dao;
+	protected ManagerContext context;
 
-	public MongoSession(DBCollection sessions, ObjectId id,
-			SessionValueAdpter provider, MongoDao dao) {
-		this.sessions = sessions;
+	public MongoSession(ManagerContext context, ObjectId id) {
+		this.context = context;
 		this.id = id;
 		queryKey = new BasicDBObject("_id", id);
-		this.provider = provider;
-		this.dao = dao;
 	}
 
 	public Object getAttribute(String key) {
@@ -41,7 +36,7 @@ public class MongoSession {
 		if (attr == null)
 			return null;
 		try {
-			return provider.fromValue((DBObject) attr, dao);
+			return context.getProvider().fromValue((DBObject) attr, context.getMongoDao());
 		} catch (Throwable e) {
 			throw Lang.wrapThrow(e);
 		}
@@ -50,7 +45,7 @@ public class MongoSession {
 	public void setAttribute(String key, Object obj) {
 		try {
 			sessions.update(queryKey, new BasicDBObject("$set",
-					new BasicDBObject("attr." + key, provider.toValue(obj))));
+					new BasicDBObject("attr." + key, context.getProvider().toValue(obj))));
 		} catch (Throwable e) {
 			throw Lang.wrapThrow(e);
 		}
@@ -110,7 +105,7 @@ public class MongoSession {
 	public void putValue(String key, Object obj) {
 		try {
 			sessions.update(queryKey, new BasicDBObject("$set",
-					new BasicDBObject("info." + key, provider.toValue(obj))));
+					new BasicDBObject("info." + key, context.getProvider().toValue(obj))));
 		} catch (Throwable e) {
 			throw Lang.wrapThrow(e);
 		}
@@ -134,9 +129,7 @@ public class MongoSession {
 		this.newCreate = newCreate;
 	}
 
-	public static final MongoSession create(DBCollection sessions,
-			Map<String, String> info, SessionValueAdpter provider,
-			MongoDao dao) {
+	public static final MongoSession create(ManagerContext context,Map<String, String> info) {
 		BasicDBObject dbo = new BasicDBObject();
 		dbo.put("_id", new ObjectId());
 		dbo.put("info", info != null ? info : Collections.EMPTY_MAP);
@@ -144,7 +137,7 @@ public class MongoSession {
 		dbo.put("lastAccessedTime", System.currentTimeMillis());
 		dbo.put("maxInactiveInterval", 30 * 60 * 1000); // 30min
 		dbo.put("attr", Collections.EMPTY_MAP);
-		sessions.insert(dbo);
-		return new MongoSession(sessions, dbo.getObjectId("_id"), provider, dao);
+		context.getSessions().insert(dbo);
+		return new MongoSession(context, dbo.getObjectId("_id"));
 	}
 }

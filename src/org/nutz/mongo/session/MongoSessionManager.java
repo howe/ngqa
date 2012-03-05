@@ -17,7 +17,6 @@ import org.nutz.mvc.SessionProvider;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
 /**
@@ -27,35 +26,33 @@ import com.mongodb.DBObject;
  */
 public class MongoSessionManager implements SessionProvider {
 
-	private MongoDao dao;
-	private DBCollection sessions;
-	private SessionValueAdpter provider;
+	private ManagerContext context;
 
 	public MongoSessionManager(final MongoDao dao) {
 		this(dao, "http.session");
 	}
 
 	public MongoSessionManager(final MongoDao dao, final String colName) {
-		this.dao = dao;
-		this.dao.run(new Callback<DB>() {
+		context = new ManagerContext();
+		context.setMongoDao(dao);
+		dao.run(new Callback<DB>() {
 			public void invoke(DB obj) {
-				sessions = obj.getCollection(colName);
+				context.setSessions(obj.getCollection(colName));
 			}
 		});
-		provider = new SessionValueAdpter();
+		context.setProvider(new SessionValueAdpter());
 	}
 
 	public void setProvider(SessionValueAdpter provider) {
-		this.provider = provider;
+		context.setProvider(provider);
 	}
 
 	public MongoSession getSession(String key) {
-		DBObject dbo = sessions.findOne(new BasicDBObject("_id", new ObjectId(
+		DBObject dbo = context.getSessions().findOne(new BasicDBObject("_id", new ObjectId(
 				key)), new BasicDBObject("_id", 1));
 		if (dbo == null || dbo.get("_id") == null)
 			return null;
-		return new MongoSession(sessions, (ObjectId) dbo.get("_id"), provider,
-				dao);
+		return new MongoSession(context, (ObjectId) dbo.get("_id"));
 	}
 
 	public MongoSession getSession(HttpServletRequest req) {
@@ -83,7 +80,7 @@ public class MongoSessionManager implements SessionProvider {
 		Map<String, String> info = new HashMap<String, String>();
 		info.put("remoteAddr", req.getRemoteAddr());
 		info.put("userAgent", req.getHeader("User-Agent"));
-		session = MongoSession.create(sessions, info, provider, dao);
+		session = MongoSession.create(context, info);
 		session.setNewCreate(true);
 		return session;
 	}
@@ -92,8 +89,7 @@ public class MongoSessionManager implements SessionProvider {
 			ServletContext servletContext, boolean createNew) {
 		MongoSession session = getSession(req, createNew);
 		if (session != null) {
-			MongoHttpSession httpSession = new MongoHttpSession(sessions,
-					new ObjectId(session.getId()), provider, dao);
+			MongoHttpSession httpSession = new MongoHttpSession(context,new ObjectId(session.getId()));
 			if (servletContext == null)
 				servletContext = req.getSession().getServletContext();
 			httpSession.setServletContext(servletContext);
