@@ -1,12 +1,7 @@
 package org.nutz.ngqa;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.bson.types.Code;
 import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
-import org.nutz.lang.util.Callback;
 import org.nutz.mongo.MongoDao;
 import org.nutz.mongo.session.MongoSessionManager;
 import org.nutz.mvc.Mvcs;
@@ -22,7 +17,6 @@ import org.nutz.ngqa.bean.User;
 import org.nutz.ngqa.service.CommonMongoService;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBObject;
 
 public class NgqaSetup implements Setup {
@@ -67,20 +61,7 @@ public class NgqaSetup implements Setup {
 		}
 		
 		//载入js脚本
-		Map<String, String> jses = MongoJsManager.load("mongo_js");
-		if (!jses.isEmpty()) {
-			for (final Entry<String, String> entry : jses.entrySet()) {
-				if (Strings.isBlank(entry.getValue()))
-					continue;
-				dao.run(new Callback<DB>() {
-					public void invoke(DB db) {
-						db.getCollection("system.js").update(new BasicDBObject("_id", entry.getKey()), 
-									new BasicDBObject("$set", new BasicDBObject("value", new Code(entry.getValue()))),
-									true, false);
-					}
-				});
-			}
-		}
+		MongoJsManager.load(dao.getDB(), "mongo_js");
 		
 		//载入MongoSession,实现分布式Session机制
 		Mvcs.sessionProvider = new MongoSessionManager(dao);

@@ -107,6 +107,7 @@ public class UserModule {
         dao.update(User.class, new BasicDBObject("_id", user.getId()), moo);
         
         session.setAttribute("me", user);
+        session.setMaxInactiveInterval(30 * 24 * 60 * 60);
         return new ServerRedirectView("/index.jsp");
 	}
 	

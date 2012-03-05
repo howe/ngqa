@@ -37,7 +37,7 @@ public class UserCenterModule {
 		if (!Strings.isBlank(user.getNickName()))
 			if (0 != dao.count(User.class, new BasicDBObject("nickName", user.getNickName())))
 				return Ajax.fail().setMsg("Dup nickName");
-			dao.updateById(User.class, me.getId(), Moo.SET("nickName", user.getEmail()));
+			dao.updateById(User.class, me.getId(), Moo.SET("nickName", user.getNickName()));
 		if (!Strings.isBlank(user.getEmail()) && Strings.isEmail(user.getEmail()))
 			dao.updateById(User.class, me.getId(), Moo.SET("email", user.getEmail()));
 		return Ajax.ok();
