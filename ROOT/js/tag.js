@@ -1,4 +1,8 @@
 $(function() {
+    var relativePath = '..';
+    loginHTML(relativePath);
+    tagsInfoHTML(relativePath);
+    signinHTML(relativePath);
     $.get(window.location + '.json', function(data) {
         if (data['ok']) {
             var questionTemplate = '<tr>\
@@ -15,7 +19,7 @@ $(function() {
             var question_info;
             $.each(data['data']['data'], function (index, value) {
                 question_info = {
-                    questioner_name : value['user']['id'],
+                    questioner_name : getShowUserName(value['user']),
                     time : value['createdAt'],
                     id : value['id'],
                     title : value['title'].escapeHTML(),

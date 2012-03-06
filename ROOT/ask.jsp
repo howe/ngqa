@@ -15,6 +15,9 @@
 <script type="text/javascript" src="./js/application.js"></script>
 <script type="text/javascript">
 $(function() {
+    var relativePath = '.';
+    loginHTML(relativePath);
+    signinHTML(relativePath);
     $("#ask").click(function() {
         var formData = form2js("ask-form");
         var tags = [];

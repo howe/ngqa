@@ -27,8 +27,6 @@ function getTagsHTML(tags) {
 }
 
 $(function() {
-    loginHTML();
-    tagsInfoHTML();
     footer();
 
     $(".log-width").hide();
@@ -44,37 +42,24 @@ $(function() {
     });
 });
 
-function loginHTML() {
+function loginHTML(relativePath) {
     var navbarTemplate = '<div class="navbar navbar-fixed-top">\
         <div class="navbar-inner">\
             <div class="container-fluid">\
-                <a class="brand" href="./">ngqa</a>\
+                <a class="brand" href="{{ relativePath }}/">ngqa</a>\
                 <div class="nav-collapse">\
                     <ul class="nav">\
-                        <li class="active"><a href="./">questions</a></li>\
+                        <li class="active"><a href="{{ relativePath }}/">questions</a></li>\
                         <li><a href="#">unanswered</a></li>\
-                        <li><a href="#">tags</a></li>\
-                        <li><a href="./ask.jsp">Ask!</a></li>\
+                        <li><a href="{{ relativePath }}/ask.jsp">Ask!</a></li>\
                     </ul>\
                     <ul class="nav pull-right" id="signin"></ul>\
                 </div>\
             </div>\
         </div>\
     </div>';
-    $("#navbar").append($(navbarTemplate));
-
-    $.get('./me', function (data) {
-        if (data['ok']) {
-            var showName = data['data']['nickName'];
-            if(!showName) {
-                showName = data['data']['id'];
-            }
-            var showHTML = '<p class="navbar-text pull-right">Welcome, {0} <a href="/user/logout" class="signin">Logout</a></p>';
-            $("#signin").append($(String.format(showHTML, showName)));
-        } else {
-            $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
-        }
-    }, 'json');
+    ich.addTemplate("navbar", navbarTemplate);
+    $("#navbar").append(ich.navbar({relativePath: relativePath}));
 
     var loginTemplate = '<div class="navbar-inner log-width pull-right">\
         {{#link}}\
@@ -120,7 +105,6 @@ function loginHTML() {
     return;
 }
 
-
 function footer() {
     var footerTemplate = '<p>Coded and designed by <b>Nutz Production Committee</b>.</p>\
     <p>Powered by <a href="https://github.com/nutzam/nutz">Nutz</a>.</p>\
@@ -132,21 +116,21 @@ function footer() {
     return;
 }
 
-function tagsInfoHTML() {
-    $.get('./tags.json', function(data) {
+function tagsInfoHTML(relativePath) {
+    $.get(relativePath + '/tags.json', function(data) {
         if (data['ok']) {
-            if (data['data']) {
+            if (data['data'] && Object.keys(data['data']).length > 0) {
                 var tagsTemplate = '<div class="box">\
                         <ul>\
                         {{#tags}}\
-                            <li><a href="./tag/{{ name }}">{{ name }}</a>({{ count }})</li>\
+                            <li><a href="{{ relativePath }}/tag/{{ tagName }}">{{ tagName }}</a>({{ count }})</li>\
                         {{/tags}}\
                         </ul>\
                     </div>';
                 ich.addTemplate("tags", tagsTemplate);
                 var tags = [];
                 $.each(data['data'], function (key, value) {
-                    tags.push({name : key, count : value});
+                    tags.push({tagName : key, count : value, relativePath: relativePath});
                 });
                 $("#infos").prepend(ich.tags({tags: tags}));
             } else {
@@ -154,4 +138,24 @@ function tagsInfoHTML() {
             }
         }
     }, "json");
+}
+
+function signinHTML(relativePath) {
+    $.get(relativePath + '/me', function (data) {
+        if (data['ok']) {
+            var signinTemplate = '<p class="navbar-text pull-right">Welcome, <a href="{{ relativePath }}/me" class="signin">{{ name }}</a>&nbsp;<a href="{{ relativePath }}/user/logout" class="signin">Logout</a></p>';
+            ich.addTemplate("signin", signinTemplate);
+            $("#signin").append(ich.signin({relativePath: relativePath, name: getShowUserName(data['data'])}));
+        } else {
+            $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
+        }
+    }, 'json');
+}
+
+function getShowUserName(data) {
+    var showName = data['nickName'];
+    if(!showName) {
+        showName = data['id'];
+    }
+    return showName;
 }

@@ -54,9 +54,6 @@
                     </fieldset>
                 </form>
             </div>
-            <div class="span3" id="infos">
-                <%= Helpers.getInfosHtml() %>
-            </div>
         </div>
         <div id="footer" class="footer"></div>
     </div>

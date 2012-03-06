@@ -45,7 +45,7 @@ $(function() {
 <title>Question</title>
 </head>
 <body>
-    <jsp:include page="../_include_navbar.jsp" />
+    <div id="navbar"></div>
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span8 box">
@@ -71,7 +71,7 @@ $(function() {
                 </form>
             </div>
         </div>
-        <jsp:include page="../_include_footer.jsp" />
+        <div id="footer" class="footer"></div>
     </div>
 </body>
 </html>

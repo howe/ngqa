@@ -28,6 +28,9 @@ function splitContent(content) {
 }
 
 $(function() {
+    var relativePath = '..';
+    loginHTML(relativePath);
+    signinHTML(relativePath);
     $.get(window.location + '.json', function (json) {
         if (json['ok']) {
             data = json['data'];
@@ -71,7 +74,7 @@ $(function() {
             ich.addTemplate("question", questionTamplate);
             ich.addTemplate("answer", answerTamplate);
             var question_info = {
-                questioner_name : data['user']['id'],
+                questioner_name : getShowUserName(data['user']),
                 time : data['createdAt'],
                 id : data['id'],
                 title : data['title'].escapeHTML(),
@@ -87,7 +90,7 @@ $(function() {
             var answer_info;
             $.each(data['answers'], function (index, value) {
                 answer_info = {
-                    answerer_name : value['user']['id'],
+                    answerer_name : getShowUserName(value['user']),
                     time : value['createdAt'],
                     id : value['id'],
                     content : value.format == 'markdown' ? converter.makeHtml(value.content) : splitContent(value.content)

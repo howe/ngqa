@@ -1,4 +1,7 @@
 $(function() {
+    var relativePath = '.';
+    loginHTML(relativePath);
+    signinHTML(relativePath);
     $.get('./me', function (json) {
         if (console && console.log){
             console.log( 'Sample of data:', $.toJSON(json) );
