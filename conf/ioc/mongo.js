@@ -14,5 +14,13 @@ var ioc = {
 	mongoService : { // 仅仅提供构造函数
 	args : [ { refer : 'connector' }, "ngqa" ]
 	// ~ End bean
+	},
+	/*
+	 * 分布式MongoSession
+	 */
+	sessionManager : {
+		type : "org.nutz.mongo.session.MongoSessionManager",
+		args : [ { refer : 'connector' }, "ngqa" ]
 	}
+	
 };

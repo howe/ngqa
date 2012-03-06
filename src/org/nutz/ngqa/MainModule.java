@@ -1,10 +1,12 @@
 package org.nutz.ngqa;
 
+import org.nutz.mvc.SessionProvider;
 import org.nutz.mvc.annotation.ChainBy;
 import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.IocBy;
 import org.nutz.mvc.annotation.Modules;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.SessionBy;
 import org.nutz.mvc.annotation.SetupBy;
 import org.nutz.mvc.annotation.UrlMappingBy;
 import org.nutz.mvc.annotation.Views;
@@ -26,4 +28,5 @@ import org.nutz.web.ajax.AjaxViewMaker;
 @SetupBy(NgqaSetup.class) //提供一个Setup接口的实现,在项目启动/关闭时执行一些逻辑
 @UrlMappingBy(value=EnhanceUrlMapping.class) //UrlMapping能拿到很多Action映射方面的信息,所以,继承默认实现,获取自己需要的逻辑(主要Auth管理)
 @ChainBy(type=NutActionChainMaker.class, args={"mvc-chains.js"})
+@SessionBy(value=SessionProvider.class, args={"ioc:sessionManager"})
 public class MainModule {}
