@@ -56,14 +56,25 @@ function loginHTML() {
                         <li><a href="#">tags</a></li>\
                         <li><a href="./ask.jsp">Ask!</a></li>\
                     </ul>\
-                    <ul class="nav pull-right">\
-                        <li><a href="#signin" class="signin">signin</a></li>\
-                    </ul>\
+                    <ul class="nav pull-right" id="signin"></ul>\
                 </div>\
             </div>\
         </div>\
     </div>';
     $("#navbar").append($(navbarTemplate));
+
+    $.get('./me', function (data) {
+        if (data['ok']) {
+            var showName = data['data']['nickName'];
+            if(!showName) {
+                showName = data['data']['id'];
+            }
+            var showHTML = '<p class="navbar-text pull-right">Welcome, {0} <a href="/user/logout" class="signin">Logout</a></p>';
+            $("#signin").append($(String.format(showHTML, showName)));
+        } else {
+            $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
+        }
+    }, 'json');
 
     var loginTemplate = '<div class="navbar-inner log-width pull-right">\
         {{#link}}\
@@ -125,8 +136,6 @@ function tagsInfoHTML() {
     $.get('./tags.json', function(data) {
         if (data['ok']) {
             if (data['data']) {
-                $("#infos").prepend($('<div class="box"><ul class="unstyled"><li><b>Not tags info now</b></li></ul></div>'));
-            } else {
                 var tagsTemplate = '<div class="box">\
                         <ul>\
                         {{#tags}}\
@@ -134,12 +143,14 @@ function tagsInfoHTML() {
                         {{/tags}}\
                         </ul>\
                     </div>';
-                    ich.addTemplate("tags", tagsTemplate);
-                    var tags = [];
-                    $.each(data['data'], function (key, value) {
-                        tags.push({name : key, count : value});
-                    });
-                    $("#infos").prepend(ich.tags({tags: tags}));
+                ich.addTemplate("tags", tagsTemplate);
+                var tags = [];
+                $.each(data['data'], function (key, value) {
+                    tags.push({name : key, count : value});
+                });
+                $("#infos").prepend(ich.tags({tags: tags}));
+            } else {
+                $("#infos").prepend($('<div class="box"><ul class="unstyled"><li><b>Not tags info now</b></li></ul></div>'));
             }
         }
     }, "json");
