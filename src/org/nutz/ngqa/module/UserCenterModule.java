@@ -3,6 +3,7 @@ package org.nutz.ngqa.module;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.mongo.MongoDao;
 import org.nutz.mongo.util.Moo;
@@ -26,7 +27,9 @@ public class UserCenterModule {
 
 	@At("/me")
 	public User me(@Attr("me") User me) {
-		return me;
+		if	(me != null)
+			return me;
+		throw Lang.makeThrow("Not login yet!");
 	}
 	
 	@At("/me/update")
