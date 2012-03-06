@@ -79,7 +79,7 @@ $(function() {
                 id : data['id'],
                 title : data['title'].escapeHTML(),
                 content : data.format == 'markdown' ? converter.makeHtml(data.content) : splitContent(data.content),
-                tags : getTagsHTML(data['tags'])
+                tags : getTagsHTML(relativePath, data['tags'])
             };
             $("#question").append(ich.question(question_info));
 

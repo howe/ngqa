@@ -14,14 +14,14 @@ String.prototype.escapeHTML = function () {
     return this.replace(/&/g,'&amp;').replace(/>/g,'&gt;').replace(/</g,'&lt;').replace(/'/g,'&#x27;').replace(/"/g,'&quot;');
 };
 
-function getTagsHTML(tags) {
+function getTagsHTML(relativePath, tags) {
     if (tags.length == 0) {
         return "Not tags now";
     }
     var questionTags = [];
     $.each(tags, function(index, value) {
         value = $.trim(value.escapeHTML());
-        questionTags.push(String.format('<a href="./tag/{0}">{1}</a>', value, value));
+        questionTags.push(String.format('<a href="{0}/tag/{1}">{2}</a>', relativePath, value, value));
     });
     return String.format("Question at {0}", questionTags.join(',&nbsp;'));
 }
@@ -143,9 +143,8 @@ function tagsInfoHTML(relativePath) {
 function signinHTML(relativePath) {
     $.get(relativePath + '/me', function (data) {
         if (data['ok']) {
-            var signinTemplate = '<p class="navbar-text pull-right">Welcome, <a href="{{ relativePath }}/me" class="signin">{{ name }}</a>&nbsp;<a href="{{ relativePath }}/user/logout" class="signin">Logout</a></p>';
-            ich.addTemplate("signin", signinTemplate);
-            $("#signin").append(ich.signin({relativePath: relativePath, name: getShowUserName(data['data'])}));
+            var template = '<p class="navbar-text pull-right">Welcome, <a href="{0}/me" class="signin">{1}</a>&nbsp;<a href="{2}/user/logout" class="signin">Logout</a></p>';
+            $("#signin").append($(String.format(template, relativePath, getShowUserName(data['data']), relativePath)));
         } else {
             $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
         }
@@ -158,4 +157,31 @@ function getShowUserName(data) {
         showName = data['id'];
     }
     return showName;
+}
+
+function getQuestions(relativePath, data) {
+    var questionTemplate = '<tr>\
+        <td class="questioner-img">\
+        <img src="{{ relativePath }}/img/img.jpeg" alt="{{ questioner_name }}">\
+        </td>\
+        <td>\
+        <p>{{ questioner_name }}&nbsp;(Question at&nbsp;{{ time }})</p>\
+        <p><a href="{{ relativePath }}/question/{{ id }}">{{ title }}</a></p>\
+        <p>{{{ tags }}}</p>\
+        </td>\
+        </tr>';
+    ich.addTemplate("question", questionTemplate);
+    var questionInfo;
+    $.each(data, function (index, value) {
+        questionInfo = {
+            questioner_name : getShowUserName(value['user']),
+            time: value['createdAt'],
+            id: value['id'],
+            title: value['title'].escapeHTML(),
+            tags: getTagsHTML(relativePath, value['tags']),
+            relativePath: relativePath
+        };
+
+        $("#questions").append(ich.question(questionInfo));
+    });
 }
