@@ -71,8 +71,9 @@ public class UserModule {
 	/*登出*/
 	@At("/logout")
 	@Ok("void")
-	public void logout(HttpSession session) {
+	public View logout(HttpSession session) {
 		session.invalidate(); //销毁会话,啥都米有了
+		return new ServerRedirectView("/index.jsp");
 	}
 	
 	/*无需做链接,这是OpenID的回调地址*/
