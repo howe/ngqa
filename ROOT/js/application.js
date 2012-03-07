@@ -159,35 +159,30 @@ function getShowUserName(data) {
     return showName;
 }
 
-var gravatarUrl = "http://gravatar.com/avatar/{0}.png?s=48&d={1}";
+var gravatarUrl = "http://gravatar.com/avatar/{0}.png?s=48&d=http://www.nutzam.com/wiki/img/logo.png";
 function getQuestions(relativePath, data) {
     var questionTemplate = '<tr>\
         <td class="questioner-img">\
         <img style="width:48px;height:48px;" src="{{ imgUrl }}" alt="{{ questionerName }}">\
         </td>\
         <td>\
-        <p>{{ questioner_name }}&nbsp;(Question at&nbsp;{{ time }})</p>\
+        <p>{{ questionerName }}&nbsp;(Question at&nbsp;{{ time }})</p>\
         <p><a href="{{ relativePath }}/question/{{ id }}">{{ title }}</a></p>\
         <p>{{{ tags }}}</p>\
         </td>\
         </tr>';
     ich.addTemplate("question", questionTemplate);
     var questionInfo;
-    var imgUrl;
     $.each(data, function (index, value) {
         questionInfo = {
-            questionerName : getShowUserName(value['user']),
+            questionerName: getShowUserName(value['user']),
             time: value['createdAt'],
             id: value['id'],
             title: value['title'].escapeHTML(),
-            tags: getTagsHTML(relativePath, value['tags'])
+            tags: getTagsHTML(relativePath, value['tags']),
+            relativePath: relativePath,
+            imgUrl: String.format(gravatarUrl, value['user']['email'])
         };
-        // if (value['user']['email']) {
-            imgUrl = String.format(gravatarUrl, value['user']['email'], relativePath + "/img/img.jpeg");
-        // } else {
-            // imgUrl = relativePath + "/img/img.jpeg";
-        // }
-        questionInfo['imgUrl'] = imgUrl;
         $("#questions").append(ich.question(questionInfo));
     });
 }

@@ -44,11 +44,11 @@ $(function() {
                         <div class="span10">\
                             <h3>{{ title }}</h3>\
                             <div class="question-info info sep21">\
-                                <span class="questioner-name">{{ questioner_name }}</span>&nbsp;||&nbsp;Question at {{ time }}&nbsp;||&nbsp;{{{ tags }}}\
+                                <span class="questioner-name">{{ questionerName }}</span>&nbsp;||&nbsp;Question at {{ time }}&nbsp;||&nbsp;{{{ tags }}}\
                             </div>\
                         </div>\
                         <div class="span1">\
-                            <img class="questioner-img" src="../img/img.jpeg" alt="{{ questioner_name }}">\
+                            <img class="questioner-img" src="{{ imgUrl }}" alt="{{ questionerName }}">\
                         </div>\
                     </div>\
                     <hr />\
@@ -57,11 +57,11 @@ $(function() {
             var answerTamplate = '<div id="answer">\
                 <div class="row" id="{{ id }}">\
                     <div class="span1">\
-                        <img class="answerer-img" src="../img/img.jpeg" alt="{{ answerer_name }}">\
+                        <img class="answerer-img" src="{{ imgUrl }}" alt="{{ answererName }}">\
                     </div>\
                     <div class="span10">\
                         <div class="answer-info info">\
-                            <span class="answerer-name">{{ answerer_name }}</span><span class="answer-time">Answer at {{ time }}</span>\
+                            <span class="answerer-name">{{ answererName }}</span><span class="answer-time">Answer at {{ time }}</span>\
                         </div>\
                         <div class="answer-content">\
                             {{{ content }}}\
@@ -73,29 +73,31 @@ $(function() {
 
             ich.addTemplate("question", questionTamplate);
             ich.addTemplate("answer", answerTamplate);
-            var question_info = {
-                questioner_name : getShowUserName(data['user']),
-                time : data['createdAt'],
-                id : data['id'],
-                title : data['title'].escapeHTML(),
-                content : data.format == 'markdown' ? converter.makeHtml(data.content) : splitContent(data.content),
-                tags : getTagsHTML(relativePath, data['tags'])
+            var questionInfo = {
+                questionerName: getShowUserName(data['user']),
+                time: data['createdAt'],
+                id: data['id'],
+                title: data['title'].escapeHTML(),
+                content: data.format == 'markdown' ? converter.makeHtml(data.content) : splitContent(data.content),
+                tags: getTagsHTML(relativePath, data['tags']),
+                imgUrl: String.format(gravatarUrl, data['user']['email'])
             };
-            $("#question").append(ich.question(question_info));
+            $("#question").append(ich.question(questionInfo));
 
             if (data['answers'].length != 0) {
                 var answersTamplate = '<div class="row-fluid"><div class="span8 box sep21" id="answers"></div></div>';
                 $(".row-fluid").first().append($(answersTamplate));
             }
-            var answer_info;
+            var answerInfo;
             $.each(data['answers'], function (index, value) {
-                answer_info = {
-                    answerer_name : getShowUserName(value['user']),
-                    time : value['createdAt'],
-                    id : value['id'],
-                    content : value.format == 'markdown' ? converter.makeHtml(value.content) : splitContent(value.content)
+                answerInfo = {
+                    answererName: getShowUserName(value['user']),
+                    time: value['createdAt'],
+                    id: value['id'],
+                    content: value.format == 'markdown' ? converter.makeHtml(value.content) : splitContent(value.content),
+                    imgUrl: String.format(gravatarUrl, value['user']['email'])
                 };
-                $("#answers").append(ich.answer(answer_info));
+                $("#answers").append(ich.answer(answerInfo));
             });
         }
     }, 'json');
