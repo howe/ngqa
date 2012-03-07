@@ -1,8 +1,7 @@
 $(function() {
     var relativePath = '.';
     loginHTML(relativePath);
-    signinHTML(relativePath);
-    $.get('./me', function (json) {
+    $.get('./me.json', function (json) {
         if (console && console.log){
             console.log( 'Sample of data:', $.toJSON(json) );
         }
@@ -12,8 +11,11 @@ $(function() {
             $("#provider").val(data['provider']);
             $("#nickName").val(data['nickName']);
             $("#email").val(data['email']);
+            var template = '<p class="navbar-text pull-right">Welcome, <a href="{0}/me" class="signin">{1}</a>&nbsp;<a href="{2}/user/logout" class="signin">Logout</a></p>';
+            $("#signin").append($(String.format(template, relativePath, getShowUserName(data), relativePath)));
         } else {
             alert('Fail ' + data['msg']);
+            $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
         }
     }, 'json');
 

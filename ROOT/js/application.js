@@ -141,7 +141,7 @@ function tagsInfoHTML(relativePath) {
 }
 
 function signinHTML(relativePath) {
-    $.get(relativePath + '/me', function (data) {
+    $.get(relativePath + '/me.json', function (data) {
         if (data['ok']) {
             var template = '<p class="navbar-text pull-right">Welcome, <a href="{0}/me" class="signin">{1}</a>&nbsp;<a href="{2}/user/logout" class="signin">Logout</a></p>';
             $("#signin").append($(String.format(template, relativePath, getShowUserName(data['data']), relativePath)));
@@ -159,10 +159,11 @@ function getShowUserName(data) {
     return showName;
 }
 
+var gravatarUrl = "http://gravatar.com/avatar/{0}.png?s=48&d={1}";
 function getQuestions(relativePath, data) {
     var questionTemplate = '<tr>\
         <td class="questioner-img">\
-        <img src="{{ relativePath }}/img/img.jpeg" alt="{{ questioner_name }}">\
+        <img style="width:48px;height:48px;" src="{{ imgUrl }}" alt="{{ questionerName }}">\
         </td>\
         <td>\
         <p>{{ questioner_name }}&nbsp;(Question at&nbsp;{{ time }})</p>\
@@ -172,16 +173,21 @@ function getQuestions(relativePath, data) {
         </tr>';
     ich.addTemplate("question", questionTemplate);
     var questionInfo;
+    var imgUrl;
     $.each(data, function (index, value) {
         questionInfo = {
-            questioner_name : getShowUserName(value['user']),
+            questionerName : getShowUserName(value['user']),
             time: value['createdAt'],
             id: value['id'],
             title: value['title'].escapeHTML(),
-            tags: getTagsHTML(relativePath, value['tags']),
-            relativePath: relativePath
+            tags: getTagsHTML(relativePath, value['tags'])
         };
-
+        // if (value['user']['email']) {
+            imgUrl = String.format(gravatarUrl, value['user']['email'], relativePath + "/img/img.jpeg");
+        // } else {
+            // imgUrl = relativePath + "/img/img.jpeg";
+        // }
+        questionInfo['imgUrl'] = imgUrl;
         $("#questions").append(ich.question(questionInfo));
     });
 }
