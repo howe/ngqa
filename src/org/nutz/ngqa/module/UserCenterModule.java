@@ -36,6 +36,8 @@ public class UserCenterModule {
 	@At("/me/update")
 	@AdaptBy(type=JsonAdaptor.class)
 	public Object update(@Param("..")User user, @Attr("me") User me) {
+		if ("anonymous".equals(me.getProvider()))
+			return Ajax.fail().setMsg("anonymous can't change !!");
 		if (user == null)
 			return Ajax.fail().setMsg("Not data");
 		if (!Strings.isBlank(user.getNickName())) {
