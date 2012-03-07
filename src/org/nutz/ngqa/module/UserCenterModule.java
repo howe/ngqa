@@ -26,6 +26,7 @@ import com.mongodb.BasicDBObject;
 public class UserCenterModule {
 
 	@At("/me")
+	@Ok("smart:/me")
 	public User me(@Attr("me") User me) {
 		if	(me != null)
 			return me;
@@ -35,12 +36,15 @@ public class UserCenterModule {
 	@At("/me/update")
 	@AdaptBy(type=JsonAdaptor.class)
 	public Object update(@Param("..")User user, @Attr("me") User me) {
+		if ("anonymous".equals(me.getProvider()))
+			return Ajax.fail().setMsg("anonymous can't change !!");
 		if (user == null)
 			return Ajax.fail().setMsg("Not data");
-		if (!Strings.isBlank(user.getNickName()))
+		if (!Strings.isBlank(user.getNickName())) {
 			if (0 != dao.count(User.class, new BasicDBObject("nickName", user.getNickName())))
 				return Ajax.fail().setMsg("Dup nickName");
 			dao.updateById(User.class, me.getId(), Moo.SET("nickName", user.getNickName()));
+		}
 		if (!Strings.isBlank(user.getEmail()) && Strings.isEmail(user.getEmail()))
 			dao.updateById(User.class, me.getId(), Moo.SET("email", user.getEmail()));
 		return Ajax.ok();
