@@ -18,6 +18,7 @@ public class User {
 	@CoField
 	private String nickName;
 	@CoField
+	@JsonField(ignore=true)
 	private String validatedId;
 	@CoField
 	@JsonField(getBy="emailMD5")
