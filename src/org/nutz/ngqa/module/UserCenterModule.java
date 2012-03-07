@@ -21,7 +21,7 @@ import com.mongodb.BasicDBObject;
 
 @IocBean
 @InjectName
-@Ok("ajax")
+@Ok("smart")
 @Fail("ajax")
 public class UserCenterModule {
 

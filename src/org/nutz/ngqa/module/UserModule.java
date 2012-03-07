@@ -77,7 +77,8 @@ public class UserModule {
 	
 	/*无需做链接,这是OpenID的回调地址*/
 	@At("/login/?/callback")
-	public View returnPoint(String providerId, HttpServletRequest request, HttpSession session) throws Exception {
+	@Ok(">>:${obj.nickName == null ? '/me' ? '/'}")
+	public User returnPoint(String providerId, HttpServletRequest request, HttpSession session) throws Exception {
 		SocialAuthManager manager = (SocialAuthManager) session.getAttribute("openid_manager");
 		if (manager == null)
 			throw new SocialAuthException("Not manager found!");
@@ -92,10 +93,6 @@ public class UserModule {
         	user.setEmail(p.getEmail());
         	user.setProvider(providerId);
         	user.setValidatedId(p.getValidatedId());
-        	if (p.getDisplayName() != null)
-        		user.setNickName(providerId + "_" + p.getDisplayName());
-        	else 
-        		user.setNickName(providerId + "_" + p.getValidatedId());
         	final User _u = user;
         	dao.runNoError(new Callback<DB>() {
     			public void invoke(DB arg0) {
@@ -108,7 +105,7 @@ public class UserModule {
         
         session.setAttribute("me", user);
         session.setMaxInactiveInterval(30 * 24 * 60 * 60);
-        return new ServerRedirectView("/index.jsp");
+        return user;
 	}
 	
 
