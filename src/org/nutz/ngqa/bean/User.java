@@ -3,6 +3,7 @@ package org.nutz.ngqa.bean;
 import java.util.Date;
 
 import org.nutz.json.JsonField;
+import org.nutz.lang.Lang;
 import org.nutz.mongo.annotation.Co;
 import org.nutz.mongo.annotation.CoField;
 import org.nutz.mongo.annotation.CoId;
@@ -19,6 +20,7 @@ public class User {
 	@CoField
 	private String validatedId;
 	@CoField
+	@JsonField(getBy="emailMD5")
 	private String email;
 	@CoField
 	private String provider;
@@ -107,5 +109,7 @@ public class User {
 		this.createAt = createAt;
 	}
 	
-	
+	public String emailMD5() {
+		return Lang.md5(email);
+	}
 }
