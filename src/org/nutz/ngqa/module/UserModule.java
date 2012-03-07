@@ -77,7 +77,7 @@ public class UserModule {
 	
 	/*无需做链接,这是OpenID的回调地址*/
 	@At("/login/?/callback")
-	@Ok(">>:${obj.nickName == null ? '/me' ? '/'}")
+	@Ok(">>:${obj.nickName == null ? '/me' : '/'}")
 	public User returnPoint(String providerId, HttpServletRequest request, HttpSession session) throws Exception {
 		SocialAuthManager manager = (SocialAuthManager) session.getAttribute("openid_manager");
 		if (manager == null)
