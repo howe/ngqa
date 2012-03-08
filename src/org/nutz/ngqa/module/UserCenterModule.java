@@ -1,9 +1,11 @@
 package org.nutz.ngqa.module;
 
+import java.util.Map;
+
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.Lang;
+import org.nutz.json.Json;
 import org.nutz.lang.Strings;
 import org.nutz.mongo.MongoDao;
 import org.nutz.mongo.util.Moo;
@@ -27,15 +29,20 @@ public class UserCenterModule {
 
 	@At("/me")
 	@Ok("smart:/me")
-	public User me(@Attr("me") User me) {
-		if	(me != null)
-			return me;
-		throw Lang.makeThrow("Not login yet!");
+	public Object me(@Attr("me") User me) {
+		if	(me != null) {
+			Map<String, Object> map = (Map<String, Object>) Json.fromJson(Json.toJson(me));
+			map.put("email", me.getEmail());
+			return map;
+		}
+		return Ajax.expired();
 	}
 	
 	@At("/me/update")
 	@AdaptBy(type=JsonAdaptor.class)
 	public Object update(@Param("..")User user, @Attr("me") User me) {
+		if (me == null)
+			return Ajax.expired();
 		if ("anonymous".equals(me.getProvider()))
 			return Ajax.fail().setMsg("anonymous can't change !!");
 		if (user == null)

@@ -26,6 +26,7 @@
             </div>
         </div>
         <div id="footer" class="footer"></div>
+        <p><a href="http://www.miibeian.gov.cn/" title="ICP备案号">苏ICP备10226088号-17 </a></p>
     </div>
 </body>
 </html>
