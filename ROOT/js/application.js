@@ -30,11 +30,6 @@ $(function() {
     footer();
 
     $(".log-width").hide();
-    $(".signin").click(function(e) {
-        e.preventDefault();
-        $(".log-width").toggle();
-        $(document.body).css("padding-top", "105px");
-    });
 
     $(document).mouseup(function() {
         $(document.body).css("padding-top","60px");
@@ -148,6 +143,11 @@ function signinHTML(relativePath) {
         } else {
             $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
         }
+        $(".signin").click(function(e) {
+            e.preventDefault();
+            $(".log-width").toggle();
+            $(document.body).css("padding-top", "105px");
+        });
     }, 'json');
 }
 
