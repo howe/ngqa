@@ -58,41 +58,41 @@ function loginHTML(relativePath) {
 
     var loginTemplate = '<div class="navbar-inner log-width pull-right">\
         {{#link}}\
-        <a href="./user/login/{{ name }}" class="{{ class }}" title="{{ title }}"></a>\
+        <a href="{{ relativePath }}/user/login/{{ name }}" class="{{ class }}" title="{{ title }}"></a>\
         {{/link}}\
     </div>';
 
     var login = {
-        link : [
-            {name:'#', class: 'go163', title: '与网易微博链接'},
-            {name:'#' ,class: 'go360', title: '用360帐号登录'},
-            {name:'#', class: 'go10000', title: '用天翼帐号登录'},
-            {name:'#', class: 'go10010', title: '用联通帐号登录'},
-            {name:'douban', class: 'douban', title: '用豆瓣帐号登录'},
-            {name:'kaixin001', class: 'kaixin', title: '用开心网帐号登录'},
-            {name:'renren', class: 'renren', title: '用人人网帐号登录'},
-            {name:'sdo', class: 'sdo', title: '用盛大通行证登录'},
-            {name:'#', class: 'openid', title: '用OpenID登录'},
-            {name:'#', class: 'sohu', title: '与搜狐微博链接'},
-            {name:'#', class: 'tianya', title: '用天涯帐号登录'},
-            {name:'#', class: 'taobao', title: '用淘宝帐号登录'},
-            {name:'#', class: 'twitter', title: '与twitter链接'},
-            {name:'#', class: 'tencent', title: '与腾讯微博链接'},
-            {name:'#', class: 'aol', title: '用AOL帐号登录'},
-            {name:'#', class: 'browserid', title: '用Mozilla BrowserID登录'},
-            {name:'#', class: 'foursquare', title: '用Foursquare帐号登录'},
-            {name:'#', class: 'linkedin', title: '用Linkedin帐号登录'},
-            {name:'#', class: 'myspace', title: '用Myspace帐号登录'},
-            {name:'#', class: 'yammer', title: '用Yammer帐号登录'},
-            {name:'qq', class: 'qq', title: '用QQ帐号登录'},
-            {name:'yahoo', class: 'yahoo', title: '与Yahoo!连接'},
-            {name:'alipay', class: 'alipay', title: '支付宝快捷登录'},
-            {name:'baidu', class: 'baidu', title: '用baidu帐号登录'},
-            {name:'msn', class: 'msn', title: '用Windows Live帐号登录'},
-            {name:'google', class: 'google', title: '与Google连接'},
-            {name:'facebook', class: 'facebook', title: '用FaceBook帐号登录'},
-            {name:'sina', class: 'weibo', title: '与新浪微博链接'},
-            {name:'github', class: 'github', title: '专业程序员用Github帐号登录'}
+        link: [
+            {relativePath: relativePath, name: '#', class: 'go163', title: '与网易微博链接'},
+            {relativePath: relativePath, name: '#' ,class: 'go360', title: '用360帐号登录'},
+            {relativePath: relativePath, name: '#', class: 'go10000', title: '用天翼帐号登录'},
+            {relativePath: relativePath, name: '#', class: 'go10010', title: '用联通帐号登录'},
+            {relativePath: relativePath, name: 'douban', class: 'douban', title: '用豆瓣帐号登录'},
+            {relativePath: relativePath, name: 'kaixin001', class: 'kaixin', title: '用开心网帐号登录'},
+            {relativePath: relativePath, name: 'renren', class: 'renren', title: '用人人网帐号登录'},
+            {relativePath: relativePath, name: 'sdo', class: 'sdo', title: '用盛大通行证登录'},
+            {relativePath: relativePath, name: '#', class: 'openid', title: '用OpenID登录'},
+            {relativePath: relativePath, name: '#', class: 'sohu', title: '与搜狐微博链接'},
+            {relativePath: relativePath, name: '#', class: 'tianya', title: '用天涯帐号登录'},
+            {relativePath: relativePath, name: '#', class: 'taobao', title: '用淘宝帐号登录'},
+            {relativePath: relativePath, name: '#', class: 'twitter', title: '与twitter链接'},
+            {relativePath: relativePath, name: '#', class: 'tencent', title: '与腾讯微博链接'},
+            {relativePath: relativePath, name: '#', class: 'aol', title: '用AOL帐号登录'},
+            {relativePath: relativePath, name: '#', class: 'browserid', title: '用Mozilla BrowserID登录'},
+            {relativePath: relativePath, name: '#', class: 'foursquare', title: '用Foursquare帐号登录'},
+            {relativePath: relativePath, name: '#', class: 'linkedin', title: '用Linkedin帐号登录'},
+            {relativePath: relativePath, name: '#', class: 'myspace', title: '用Myspace帐号登录'},
+            {relativePath: relativePath, name: '#', class: 'yammer', title: '用Yammer帐号登录'},
+            {relativePath: relativePath, name: 'qq', class: 'qq', title: '用QQ帐号登录'},
+            {relativePath: relativePath, name: 'yahoo', class: 'yahoo', title: '与Yahoo!连接'},
+            {relativePath: relativePath, name: 'alipay', class: 'alipay', title: '支付宝快捷登录'},
+            {relativePath: relativePath, name: 'baidu', class: 'baidu', title: '用baidu帐号登录'},
+            {relativePath: relativePath, name: 'msn', class: 'msn', title: '用Windows Live帐号登录'},
+            {relativePath: relativePath, name: 'google', class: 'google', title: '与Google连接'},
+            {relativePath: relativePath, name: 'facebook', class: 'facebook', title: '用FaceBook帐号登录'},
+            {relativePath: relativePath, name: 'sina', class: 'weibo', title: '与新浪微博链接'},
+            {relativePath: relativePath, name: 'github', class: 'github', title: '专业程序员用Github帐号登录'}
         ]
     };
     ich.addTemplate("login", loginTemplate);
@@ -104,7 +104,8 @@ function footer() {
     var footerTemplate = '<p>Coded and designed by <b>Nutz Production Committee</b>.</p>\
     <p>Powered by <a href="https://github.com/nutzam/nutz">Nutz</a>.</p>\
     <p>Design adapted from <a href="http://twitter.github.com/bootstrap/index.html">Bootstrap</a>.</p>\
-    <p><img width="140px" height="140px" src="https://chart.googleapis.com/chart?chs=140x140&cht=qr&choe=UTF-8&chl={{ url }}" /></p>';
+    <p><img width="140px" height="140px" src="https://chart.googleapis.com/chart?chs=140x140&cht=qr&choe=UTF-8&chl={{ url }}" /></p>\
+    <p><a href="http://www.miibeian.gov.cn/" title="ICP备案号">苏ICP备10226088号-17 </a></p>';
 
     ich.addTemplate("footer", footerTemplate);
     $("#footer").append(ich.footer({url: encodeURIComponent(window.location.href)}));

@@ -15,6 +15,7 @@
 <script type="text/javascript" src="./js/application.js"></script>
 <script type="text/javascript">
 $(function() {
+    $("#infos div:first-child").attr('class', 'box');
     var relativePath = '.';
     loginHTML(relativePath);
     signinHTML(relativePath);
