@@ -48,11 +48,11 @@ public class SinaOAuthProvider extends AbstractOAuthProvider {
 		}
 		try {
 			Map<String, Object> data = Json.fromJson(Map.class, presp);
-			if (!data.containsKey("uid"))
+			if (!data.containsKey("id"))
 				throw new SocialAuthException("Error: " + presp);
 			if (userProfile == null)
 				userProfile = new Profile();
-			userProfile.setValidatedId(data.get("uid").toString());
+			userProfile.setValidatedId(data.get("id").toString());
 			userProfile.setProviderId(getProviderId());
 			if(data.containsKey("screen_name")){
 			    userProfile.setDisplayName(data.get("screen_name").toString());
