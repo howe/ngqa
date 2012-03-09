@@ -30,7 +30,8 @@ public class SinaOAuthProvider extends AbstractOAuthProvider {
 		authenticationStrategy.setPermission(scope);
 		authenticationStrategy.setScope(getScope());
 
-		PROFILE_URL = "https://api.weibo.com/2/account/get_uid.json"; //只是取uid,其他啥都拿不到
+//		PROFILE_URL = "https://api.weibo.com/2/account/get_uid.json"; //只是取uid,其他啥都拿不到
+		PROFILE_URL = "https://api.weibo.com/2/users/show.json?uid=${uid}"; //只是取uid,其他啥都拿不到
 	}
 
 	@SuppressWarnings("unchecked")
@@ -38,7 +39,8 @@ public class SinaOAuthProvider extends AbstractOAuthProvider {
 		String presp;
 
 		try {
-			Response response = authenticationStrategy.executeFeed(PROFILE_URL);
+		    String uid = this.accessGrant.getAttribute("uid").toString(); 
+			Response response = authenticationStrategy.executeFeed(PROFILE_URL.replace("${uid}", uid));
 			presp = response.getResponseBodyAsString(Constants.ENCODING);
 		} catch (Exception e) {
 			throw new SocialAuthException("Error while getting profile from "
@@ -52,6 +54,15 @@ public class SinaOAuthProvider extends AbstractOAuthProvider {
 				userProfile = new Profile();
 			userProfile.setValidatedId(data.get("uid").toString());
 			userProfile.setProviderId(getProviderId());
+			if(data.containsKey("screen_name")){
+			    userProfile.setDisplayName(data.get("screen_name").toString());
+			}
+			if(data.containsKey("profile_image_url")){
+			    userProfile.setProfileImageURL(data.get("profile_image_url").toString());
+			}
+			if(data.containsKey("gender")){
+			    userProfile.setGender(data.get("gender").toString());
+			}
 			return userProfile;
 
 		} catch (Exception ex) {
