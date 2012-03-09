@@ -112,4 +112,7 @@ public class Helpers {
 		return sb.toString();
 	}
 	
+	public static NgqaRuntimeException.JustFailViewException toFailView(Object data) {
+		return new NgqaRuntimeException.JustFailViewException(data);
+	}
 }

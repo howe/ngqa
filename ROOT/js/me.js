@@ -14,7 +14,7 @@ $(function() {
             var template = '<p class="navbar-text pull-right">Welcome, <a href="{0}/me" class="signin">{1}</a>&nbsp;<a href="{2}/user/logout" class="signin">Logout</a></p>';
             $("#signin").append($(String.format(template, relativePath, getShowUserName(data), relativePath)));
         } else {
-            alert('Fail ' + data['msg']);
+            alert('Fail ' + json['msg']);
             $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
         }
     }, 'json');
