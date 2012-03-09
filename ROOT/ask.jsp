@@ -22,13 +22,15 @@ $(function() {
     $("#ask").click(function() {
         var formData = form2js("ask-form");
         var tags = [];
-        $.each(formData.tags.split(','), function (index, value) {
-            value = $.trim(value);
-            if (value) {
-                tags.push(value);
-            }
-        });
-        formData.tags = tags;
+        if (formData.tags) {
+            $.each(formData.tags.split(','), function (index, value) {
+                value = $.trim(value);
+                if (value) {
+                    tags.push(value);
+                }
+            });
+            formData.tags = tags;
+        }
 
         $.post('./ask', $.toJSON(formData), function (data) {
             if (console && console.log){
