@@ -29,6 +29,8 @@ public class SmartView implements View {
 			}
 			new AjaxView().render(req, resp, obj);
 		}
+		else if (uri.endsWith(".jsonp"))
+			new JsonpView("jsoncallback").render(req, resp, obj);
 		else if (uri.endsWith(".rss"))
 			new RssView().render(req, resp, obj);
 		else
