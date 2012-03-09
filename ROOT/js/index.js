@@ -1,5 +1,6 @@
 $(function() {
     var relativePath = '.';
+    init(relativePath);
     loginHTML(relativePath);
     tagsInfoHTML(relativePath);
     signinHTML(relativePath);

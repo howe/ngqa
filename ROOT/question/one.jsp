@@ -50,9 +50,6 @@ $(function() {
         <div class="row-fluid">
             <div class="span8 box">
                 <div id="question"></div>
-                <div class="form-actions">
-                    <button type="submit" class="btn">Edit</button>
-                </div>
             </div>
         </div>
         <div class="row-fluid">

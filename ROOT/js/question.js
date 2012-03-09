@@ -29,6 +29,7 @@ function splitContent(content) {
 
 $(function() {
     var relativePath = '..';
+    init(relativePath);
     loginHTML(relativePath);
     signinHTML(relativePath);
     $.get(window.location + '.json', function (json) {
@@ -82,6 +83,9 @@ $(function() {
                 tags: getTagsHTML(relativePath, data['tags']),
                 imgUrl: String.format(gravatarUrl, data['user']['email'])
             };
+            if (user && data['user']['id'] == user['id']) {
+                $("#question").after($('<div class="form-actions" id="edit-question"><button type="submit" class="btn" id="add-answer">Edit</button></div>'));
+            }
             $("#question").append(ich.question(questionInfo));
 
             if (data['answers'].length != 0) {

@@ -26,8 +26,18 @@ function getTagsHTML(relativePath, tags) {
     return String.format("Question at {0}", questionTags.join(',&nbsp;'));
 }
 
-$(function() {
-    footer();
+var user;
+function init(relativePath) {
+    $.ajax({
+        url: relativePath + '/me.json',
+        async: false,
+        success: function(data) {
+            if (data['ok']) {
+                user = data['data'];
+            }
+        },
+        dataType: 'json'
+    });
 
     $(".log-width").hide();
 
@@ -35,7 +45,9 @@ $(function() {
         $(document.body).css("padding-top","60px");
         $(".log-width").hide();
     });
-});
+
+    footer();
+}
 
 function loginHTML(relativePath) {
     var navbarTemplate = '<div class="navbar navbar-fixed-top">\
@@ -46,7 +58,7 @@ function loginHTML(relativePath) {
                     <ul class="nav">\
                         <li class="active"><a href="{{ relativePath }}/">questions</a></li>\
                         <li><a href="#">unanswered</a></li>\
-                        <li><a href="{{ relativePath }}/ask.jsp">Ask!</a></li>\
+                        <li id="nav_ask"><a href="{{ relativePath }}/ask.jsp">Ask!</a></li>\
                     </ul>\
                     <ul class="nav pull-right" id="signin"></ul>\
                 </div>\
@@ -137,19 +149,18 @@ function tagsInfoHTML(relativePath) {
 }
 
 function signinHTML(relativePath) {
-    $.get(relativePath + '/me.json', function (data) {
-        if (data['ok']) {
-            var template = '<p class="navbar-text pull-right">Welcome, <a href="{0}/me" class="signin">{1}</a>&nbsp;<a href="{2}/user/logout" class="signin">Logout</a></p>';
-            $("#signin").append($(String.format(template, relativePath, getShowUserName(data['data']), relativePath)));
-        } else {
-            $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
-        }
-        $(".signin").click(function(e) {
-            e.preventDefault();
-            $(".log-width").toggle();
-            $(document.body).css("padding-top", "105px");
-        });
-    }, 'json');
+    if (user) {
+        var template = '<p class="navbar-text pull-right">Welcome, <a href="{0}/me" class="signin1">{1}</a>&nbsp;<a href="{2}/user/logout" class="signin1">Logout</a></p>';
+        $("#signin").append($(String.format(template, relativePath, getShowUserName(user), relativePath)));
+    } else {
+        $("#nav_ask").remove();
+        $("#signin").append($('<p class="navbar-text pull-right"><a href="#signin" class="signin">signin</a></p>'));
+    }
+    $(".signin").click(function(e) {
+        e.preventDefault();
+        $(".log-width").toggle();
+        $(document.body).css("padding-top", "105px");
+    });
 }
 
 function getShowUserName(data) {
