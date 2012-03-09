@@ -27,6 +27,8 @@ public class JsonpView implements View {
 
 		PrintWriter writer = resp.getWriter();
 		String callback = req.getParameter("jsoncallback");
+		if (Strings.isBlank(callback))
+			callback = req.getParameter("jsonp");
 		if ("?".equals(callback))
 			callback = "";
 		else if (Strings.isBlank(callback))
