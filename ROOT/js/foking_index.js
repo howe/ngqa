@@ -32,6 +32,15 @@
 					$("#e"+this.id.slice(2)).show();
 				});
 				
+				$.getJSON("http://www.nutz.cn/me.jsonp?jsoncallback=?", function(result){
+					if(typeof(result.nickName)!="undefined") {
+						$("#login").hide();
+						$("#nav-username").text(result.nickName);
+						$("#logout").show();
+						$("#li-user").show();
+					}
+				});
+				
 				$.getJSON("http://www.nutz.cn/tags.jsonp?jsoncallback=?", function(result){
 					renderTags(result);
 				});
