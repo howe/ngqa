@@ -45,9 +45,36 @@
 					renderTags(result);
 				});
 				
-				$.getJSON("http://www.nutz.cn/question/query/list.jsonp?jsoncallback=?", function(result){
+				//初始化获取第1页数据
+				$.getJSON("http://www.nutz.cn/question/query/list/1.jsonp?jsoncallback=?", function(result){
 					renderList(result);
+					pagination(result);
 				});
+				
+				//分页
+				function pagination(result){
+					$("#Pagination").pagination(result.count, {
+						items_per_page : result.pageSize,
+						//...两侧显示数目
+						num_edge_entries: 1,
+						//连续分页主体部分显示的分页条目数
+						num_display_entries: 5,
+						//回调方法
+						callback: pageselectCallback
+					});
+				}
+				
+				function pageselectCallback(page_id,jq){
+					if(0!=page_id){
+						//清空原先页面的数据
+						$(".excerpt").empty();
+						//获取指定页面数据
+						$.getJSON("http://www.nutz.cn/question/query/list/"+ (page_id+1) +".jsonp?jsoncallback=?", function(pageResult){
+							//渲染页面
+							renderList(pageResult);	
+						});
+					}
+				}
 				
 				function renderTags(result){
 					var _temp = '';
@@ -72,8 +99,11 @@
 							  +  '</li>';
 							  
 					});
+
 					$(".excerpt").append(_temp);
 					
-					$(".excerpt-num").preloader();
+					//回家了发现IE9有问题
+					if(!$.browser.msie)
+						$(".excerpt-num").preloader();
 				}
 	});

@@ -8,11 +8,13 @@
 		<link rel="stylesheet" href="./css/foking_modify.css"/>
 		<link rel="stylesheet" href="./css/foking_login.css"/>
 		<link rel="stylesheet" href="./css/foking_beta.css"/>
+		<link rel="stylesheet" href="./css/pagination.css"/>
 		<link rel="alternate" type="application/rss+xml" title="ngqa" href="http://www.nutz.cn/feed" />
 		<script type"text/javascript" src="./js/jquery-1.3.2.min.js"></script>
 		<script type"text/javascript" src="./js/foking_util.js"></script>
 		<script type"text/javascript" src="./js/foking_index.js"></script>
 		<script type"text/javascript" src="./js/jquery.preloader.js"></script>		
+		<script type"text/javascript" src="./js/jquery.pagination.js"></script>	
 	</head>
 	<body>
 		<div id="header" class="header">
@@ -94,12 +96,12 @@
 								</p>
 								<p class="excerpt-desc" id="d_001" style="display:none">
 									首页还没完成。<br/>
-									1.分页样式    <br/>
+									1.分页样式    ---done!<br/>
 									2.动态生成多个tag  <br/>
 									3.当前页面问题下面直接回答问题 <br/>
-									4.邮箱antuoComplete <br/>
+									4.邮箱antuoComplete ---会影响回车直接提交，放弃---<br/>
 									5.页面生成方式重构<br/>
-									6.图片延迟加载
+									6.图片预加载-----done!
 								</p>
 								<div class="excerpt-tag-index"> 
 									<a rel="tag" href="#">tag1</a>
@@ -112,8 +114,9 @@
 							</li>
 						</ul>
 		
-						<div class="fontnav">
-						</div>
+						
+						<div id="Pagination" class="pagination"></div>
+						
 					</div>
 				</div>
 				<div class="sidebar">
