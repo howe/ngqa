@@ -10,6 +10,6 @@
 		      "org.nutz.mvc.impl.processor.MethodInvokeProcessor",
 		      "org.nutz.mvc.impl.processor.ViewProcessor"
 		      ],
-		"error" : 'org.nutz.mvc.impl.processor.FailProcessor'
+		"error" : 'org.nutz.ngqa.mvc.SmartFailProcessor'
 	}
 }
