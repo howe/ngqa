@@ -23,10 +23,14 @@ public class QuestionQuery {
 	public QuestionQuery page(int page, int pageSize) {
 		if (page < 1)
 			this.page = 1;
+		else
+			this.page = page;
 		if (pageSize < 10)
 			this.pageSize = 10;
 		else if (pageSize > 100)
 			this.pageSize = 100;
+		else
+			this.pageSize = pageSize;
 		return this;
 	}
 	

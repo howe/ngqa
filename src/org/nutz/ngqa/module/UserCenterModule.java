@@ -60,6 +60,12 @@ public class UserCenterModule {
 		return Ajax.ok();
 	}
 	
+	@At
+	public void XXX(String abc, String ccc) {
+		System.out.println("abc = " + abc);
+		System.out.println("ccc = " + ccc);
+	}
+	
 	@Inject("java:$commons.dao()")
 	private MongoDao dao;
 }
