@@ -73,5 +73,7 @@
 							  
 					});
 					$(".excerpt").append(_temp);
+					
+					$(".excerpt-num").preloader();
 				}
 	});
