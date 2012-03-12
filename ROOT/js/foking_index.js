@@ -65,7 +65,6 @@
 				}
 				
 				function pageselectCallback(page_id,jq){
-					if(0!=page_id){
 						//清空原先页面的数据
 						$(".excerpt").empty();
 						//获取指定页面数据
@@ -73,7 +72,6 @@
 							//渲染页面
 							renderList(pageResult);	
 						});
-					}
 				}
 				
 				function renderTags(result){
@@ -102,7 +100,6 @@
 
 					$(".excerpt").append(_temp);
 					
-					//回家了发现IE9有问题
 					if(!$.browser.msie)
 						$(".excerpt-num").preloader();
 				}

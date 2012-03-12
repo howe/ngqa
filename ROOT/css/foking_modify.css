@@ -336,7 +336,8 @@ padding:5px 10px;
 .excerpt-tit{font-size:15px;line-height:14px;margin-bottom:10px}
 .excerpt-tit a:hover{color:#f00}
 .excerpt-time{color:#777;position:absolute;right:0;top:15px}
-.excerpt-desc{color:#555;margin:0 20px 8px 0;line-height:18px}
+/****************************强制指定min-width:680px;****************************************/
+.excerpt-desc{color:#555;margin:0 20px 8px 0;line-height:18px;min-width:680px;}
 
 .excerpt-tag-index a{background-color:#E0EAF1;border-bottom:1px solid #7F9FB6;border-right:1px solid #97b1c4;color:#3A55AA;padding:2px 5px;margin-right:4px;display:inline-block;border-radius:2px}
 .excerpt-tag-index a:hover{background-color:#4982aa;color:#fff;border-bottom-color:#325975;border-right-color:#477291}
