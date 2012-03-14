@@ -61,6 +61,8 @@ public class NgqaSetup implements Setup {
 		//载入js脚本
 		MongoJsManager.load(dao.getDB(), "mongo_js");
 		
+		//清理非法的Tag
+		dao.getDB().eval("cleanTags()");
 	}
 	
 	/**项目关闭时执行的逻辑*/

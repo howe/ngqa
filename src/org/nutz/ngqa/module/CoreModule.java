@@ -20,6 +20,7 @@ import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.view.HttpStatusView;
+import org.nutz.ngqa.Helpers;
 import org.nutz.ngqa.api.QuestionManageService;
 import org.nutz.ngqa.api.meta.QuestionQuery;
 import org.nutz.ngqa.bean.Answer;
@@ -45,12 +46,18 @@ public class CoreModule {
 	@AdaptBy(type=JsonAdaptor.class) //将输入流以Json格式读取,生成参数表
 	public AjaxReturn createQuestion(final @Param("..")Question question, @Attr("me") User user) {
 		if (question == null || Lang.length(question.getTitle()) < 5 || Lang.length(question.getTitle()) > 100)
-			return Ajax.fail().setMsg("Not OK");
+			return Ajax.fail().setMsg("ERROR(title.length): 100 >= title >= 5 , not match!");
+		if (question.getTitle().contains("<") || question.getTitle().contains("/")) //还需要过滤敏感词
+			return Ajax.fail().setMsg("ERROR(title.context): Bad Title!!");
+		if (dao.count(Question.class, Moo.NEW("title", question.getTitle())) != 0)
+			return Ajax.fail().setMsg("ERROR(title.duplicate): Duplicate Title!!");
 		question.setUser(user);
 		question.setCreatedAt(new Date());
 		question.setUpdatedAt(new Date());
 		if (question.getTags() == null)
 			question.setTags(new String[0]);
+		else
+			question.setTags(Helpers.cleanTags(question.getTags()));
 		question.setAnswers(new Answer[0]);
 		dao.runNoError(new Callback<DB>() { //以安全方式执行,其实就是执行完毕后,执行getError来确保顺利完成
 			public void invoke(DB arg0) {
@@ -107,6 +114,8 @@ public class CoreModule {
 		if (tag == null || Strings.isBlank(tag) || tag.trim().length() < 3 || tag.trim().length() > 12)
 			return Ajax.fail().setMsg("Not OK");
 		tag = tag.trim().intern();
+		if (!Helpers.checkTag(tag))
+			return Ajax.fail().setMsg("Not allow!");
 		BasicDBObject update = new BasicDBObject();
 		update.append("$addToSet", new BasicDBObject("tags",tag));
 		questionColl.update(new BasicDBObject("_id", questionId), update);
@@ -117,6 +126,8 @@ public class CoreModule {
 	/**为一个问题移除一个标签*/
 	@At("/question/?/tag/remove/?")
 	public AjaxReturn removeTag(String questionId,String tag, @Attr("me")User user) {
+		if (!Helpers.checkTag(tag))
+			return Ajax.fail().setMsg("Not allow!");
 		BasicDBObject update = new BasicDBObject();
 		update.append("$pull", new BasicDBObject("tags",tag));
 		questionColl.update(new BasicDBObject("_id", new ObjectId(questionId)), update);

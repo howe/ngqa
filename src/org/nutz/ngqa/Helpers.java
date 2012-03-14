@@ -2,9 +2,15 @@ package org.nutz.ngqa;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -114,5 +120,19 @@ public class Helpers {
 	
 	public static NgqaRuntimeException.JustFailViewException toFailView(Object data) {
 		return new NgqaRuntimeException.JustFailViewException(data);
+	}
+	
+	static Pattern tagPattern = Pattern.compile("[\\:\\^\\%\\&\\'\\,\\;\\=\\?]+");
+	public static boolean checkTag(String tag) {
+		return !tagPattern.matcher(tag).find();
+	}
+	public static String[] cleanTags(String[] tags) {
+		Set<String> set = new HashSet<String>();
+		for (String tag : tags) {
+			if (tag == null || !checkTag(tag))
+				continue;
+			set.add(tag);
+		}
+		return set.toArray(new String[0]);
 	}
 }
