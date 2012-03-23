@@ -1,0 +1,99 @@
+#Modify to your key and secret, and rename this file to oauth_consumer.properties
+
+#google
+www.google.com.consumer_key = www.nutz.cn
+www.google.com.consumer_secret = AAA
+
+#yahoo 
+api.login.yahoo.com.consumer_key = AA
+api.login.yahoo.com.consumer_secret = AA
+
+#twitter
+twitter.com.consumer_key = VV
+twitter.com.consumer_secret = VV
+
+#facebook
+graph.facebook.com.consumer_key =       AA
+graph.facebook.com.consumer_secret = AA
+
+#hotmail
+consent.live.com.consumer_key = AA
+consent.live.com.consumer_secret = AA
+
+#QQ
+socialauth.qq = org.nutz.socialauth.qq.QQAuthProvider
+qq.consumer_key = A
+qq.consumer_secret = A
+
+#sine weibo
+socialauth.sina = org.nutz.socialauth.sina.SinaOAuthProvider
+sina.consumer_key = A
+sina.consumer_secret = A
+
+#kaixin001
+socialauth.kaixin001 = org.nutz.socialauth.kaixin001.Kaixin001OAuthProvider
+kaixin001.consumer_key = A
+kaixin001.consumer_secret = A
+
+#qqweibo
+
+socialauth.qqweibo = org.nutz.socialauth.qqweibo.QQWeiboAuthProvider
+qqweibo.consumer_key = A
+qqweibo.consumer_secret = A
+
+#github
+socialauth.github = org.nutz.socialauth.github.GithubOAuthProvider
+github.consumer_key = A
+github.consumer_secret = A
+
+#sohu
+socialauth.sohu = org.nutz.socialauth.sohu.SohuOAuthProvider
+sohu.consumer_key = A
+sohu.consumer_secret = A
+
+#taobao
+socialauth.taobao = org.nutz.socialauth.taobao.TaobaoAuthProvider
+taobao.consumer_key = A
+taobao.consumer_secret = A
+
+#douban
+socialauth.douban = org.nutz.socialauth.douban.DoubanOAuthProvider
+douban.consumer_key = A
+douban.consumer_secret = A
+
+#baidu
+socialauth.baidu = org.nutz.socialauth.baidu.BaiduOAuthProvider
+baidu.consumer_key = A
+baidu.consumer_secret = A
+
+#alipay
+socialauth.alipay = org.nutz.socialauth.alipay.AlipayAuthProvider
+alipay.consumer_key = A
+alipay.consumer_secret = A
+
+#sdo
+socialauth.sdo = org.nutz.socialauth.sdo.SdoAuthProvider
+sdo.consumer_key = A
+sdo.consumer_secret = A
+
+#renren
+socialauth.renren = org.nutz.socialauth.renren.RenrenOAuthProvider
+renren.consumer_key = A
+renren.consumer_secret = A
+
+#Foursquare
+foursquare.consumer_key = A
+foursquare.consumer_secret = A
+
+#Yammer
+yammer.consumer_key = A
+yammer.consumer_secret = A
+
+#net163
+socialauth.net163 = org.nutz.socialauth.net163.Net163OAuthProvider
+net163.consumer_key = A
+net163.consumer_secret = A
+
+#linkedin
+api.linkedin.com.consumer_key = A
+api.linkedin.com.consumer_secret = A
