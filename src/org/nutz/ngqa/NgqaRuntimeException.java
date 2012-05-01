@@ -1,5 +1,6 @@
 package org.nutz.ngqa;
 
+@SuppressWarnings("serial")
 public class NgqaRuntimeException extends RuntimeException {
 
 	public NgqaRuntimeException() {

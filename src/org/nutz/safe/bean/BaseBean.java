@@ -11,6 +11,10 @@ import org.nutz.dao.entity.annotation.Readonly;
 
 public abstract class BaseBean implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5184112478135565698L;
 	@Column
 	@Prev(els={@EL("$me.now()")})
 	@Readonly

@@ -17,7 +17,7 @@ import org.nutz.ngqa.mvc.SmartViewMaker;
 import org.nutz.web.ajax.AjaxViewMaker;
 
 /**主模块,主要功能就是项目的整体配置*/
-@Modules(scanPackage=true) //扫描当前类所在的package及子package中所有包含@At方法的类,作为模块类
+@Modules(scanPackage=true, packages={"org.nutz.safe"}) //扫描当前类所在的package及子package中所有包含@At方法的类,作为模块类
 @IocBy(args = {	//配置Ioc容器
 		"*org.nutz.ioc.loader.json.JsonLoader","ioc/", //扫描ioc文件夹中的js文件,作为JsonLoader的配置文件
 		"*org.nutz.ioc.loader.annotation.AnnotationIocLoader","org.nutz.ngqa"}, 

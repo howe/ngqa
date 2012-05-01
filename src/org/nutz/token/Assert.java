@@ -1,4 +1,4 @@
-package org.nutz.safe;
+package org.nutz.token;
 
 import org.nutz.lang.Lang;
 

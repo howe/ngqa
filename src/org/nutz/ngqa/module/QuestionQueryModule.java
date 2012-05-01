@@ -52,7 +52,7 @@ public class QuestionQueryModule {
 		return questionMS.query(query);
 	}
 	
-	@At({"/question/query/noauswer/?", "/question/query/noauswer"})
+	@At({"/question/query/noanswer/?", "/question/query/noanswer"})
 	public Object noAuswer(@Param("page")int page, @Param("pageSize") int pageSize) {
 		QuestionQuery query = QuestionQuery.Page(page, pageSize);
 		query.q.append("answers", new BasicDBObject("$size", 0));

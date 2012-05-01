@@ -1,4 +1,4 @@
-package org.nutz.safe;
+package org.nutz.token;
 
 import java.security.MessageDigest;
 import java.security.PrivateKey;
@@ -8,6 +8,7 @@ import javax.crypto.Cipher;
 
 import org.nutz.lang.Encoding;
 import org.nutz.lang.Lang;
+import org.nutz.repo.Base64;
 
 /**
  * 加密解密帮助函数
@@ -30,9 +31,11 @@ public class Enc {
 	}
 	
 	public String enc(String source, String...encs) {
-		if (source == null)
-			return "";
-		byte[] dest = source.getBytes(Encoding.CHARSET_UTF8);
+		byte[] dest = source == null ? new byte[0] : source.getBytes(Encoding.CHARSET_UTF8);
+		return new String(enc(dest, encs), Encoding.CHARSET_UTF8);
+	}
+	
+	public byte[] enc(byte[] dest, String...encs) {
 		try {
 			for (String enc : encs) {
 				if ("rsa".equals(enc)) {
@@ -50,10 +53,10 @@ public class Enc {
 					dest = md5.digest(dest);
 				} 
 				else if ("base64".equals(enc)) {
-					//
+					dest = Base64.encodeToByte(dest, false);
 				} 
 				else if ("base64-de".equals(enc)) {
-					//
+					dest = Base64.decode(dest);
 				} 
 				else if ("sha1".equals(enc)) {
 					//
@@ -62,7 +65,7 @@ public class Enc {
 		} catch (Exception e) {
 			throw Lang.wrapThrow(e);
 		}
-		return new String(dest, Encoding.CHARSET_UTF8);
+		return dest;
 	}
 	
 	public PublicKey getPublicKey() {

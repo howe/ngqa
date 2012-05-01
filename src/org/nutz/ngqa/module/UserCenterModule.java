@@ -5,7 +5,7 @@ import java.util.Map;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.json.Json;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.mongo.MongoDao;
 import org.nutz.mongo.util.Moo;
@@ -31,7 +31,7 @@ public class UserCenterModule {
 	@Ok("smart:/me")
 	public Object me(@Attr("me") User me) {
 		if	(me != null) {
-			Map<String, Object> map = (Map<String, Object>) Json.fromJson(Json.toJson(me));
+			Map<String, Object> map = Lang.obj2map(me);
 			map.put("email", me.getEmail());
 			return map;
 		}

@@ -1,4 +1,4 @@
-package org.nutz.safe.bean;
+package org.nutz.token;
 
 import org.nutz.dao.entity.annotation.Name;
 import org.nutz.dao.entity.annotation.Table;
