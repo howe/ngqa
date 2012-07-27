@@ -21,9 +21,9 @@ function getTagsHTML(relativePath, tags) {
     var questionTags = [];
     $.each(tags, function(index, value) {
         value = $.trim(value.escapeHTML());
-        questionTags.push(String.format('<a href="{0}/tag/{1}">{2}</a>', relativePath, value, value));
+        questionTags.push(String.format('<a class="node" href="{0}/tag/{1}">{2}</a>', relativePath, value, value));
     });
-    return String.format("Question at {0}", questionTags.join(',&nbsp;'));
+    return questionTags.join(',&nbsp;');
 }
 
 var user;
@@ -42,7 +42,7 @@ function init(relativePath) {
     $(".log-width").hide();
 
     $(document).mouseup(function() {
-        $(document.body).css("padding-top","60px");
+        //$(document.body).css("padding-top","60px");
         $(".log-width").hide();
     });
 
@@ -52,16 +52,14 @@ function init(relativePath) {
 function loginHTML(relativePath) {
     var navbarTemplate = '<div class="navbar navbar-fixed-top">\
         <div class="navbar-inner">\
-            <div class="container-fluid">\
+            <div class="container">\
                 <a class="brand" href="{{ relativePath }}/">ngqa</a>\
-                <div class="nav-collapse">\
                     <ul class="nav">\
                         <li class="active"><a href="{{ relativePath }}/">questions</a></li>\
                         <li><a href="#">unanswered</a></li>\
                         <li id="nav_ask"><a href="{{ relativePath }}/ask.jsp">Ask!</a></li>\
                     </ul>\
                     <ul class="nav pull-right" id="signin"></ul>\
-                </div>\
             </div>\
         </div>\
     </div>';
@@ -173,16 +171,26 @@ function getShowUserName(data) {
 
 var gravatarUrl = "http://gravatar.com/avatar/{0}.png?s=48&d=http://www.nutzam.com/wiki/img/logo.png";
 function getQuestions(relativePath, data) {
-    var questionTemplate = '<tr>\
-        <td class="questioner-img">\
-        <img style="width:48px;height:48px;" src="{{ imgUrl }}" alt="{{ questionerName }}">\
-        </td>\
-        <td>\
-        <p>{{ questionerName }}&nbsp;(Question at&nbsp;{{ time }})</p>\
-        <p><a href="{{ relativePath }}/question/{{ id }}">{{ title }}</a></p>\
-        <p>{{{ tags }}}</p>\
-        </td>\
-        </tr>';
+	var questionTemplate = '<div class="topic topic_line">\
+            <div class="pull-left avatar">\
+              <img alt="1031" class="{{ questionerName }}" src="{{ imgUrl }}" style="width:48px;height:48px;" />\
+            </div>\
+            <div class="right_info">\
+              <div class="pull-right replies">\
+                <a href="/topics/4511#reply30" class="count state_false">30</a>\
+              </div>\
+              <div class="infos">\
+                <div class="title">\
+                  <a href="{{ relativePath }}/question/{{ id }}" title="{{ title }}">{{ title }}</a>\
+                </div>\
+                <div class="info">\
+                  {{{ tags }}}\
+                  •\
+                  <a href="/#" data-name="{{ questionerName }}">{{ questionerName }}</a>\
+                </div>\
+              </div>\
+            </div>\
+          </div>';
     ich.addTemplate("question", questionTemplate);
     var questionInfo;
     $.each(data, function (index, value) {

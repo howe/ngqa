@@ -1,31 +1,56 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="org.nutz.ngqa.Helpers" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page import="org.nutz.ngqa.Helpers"%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" media="screen" href="./css/include/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="./css/login.css" />
-<link rel="stylesheet" type="text/css" media="screen" href="./css/application.css" />
+<title>Question&amp;Answer</title>
+<meta charset='utf-8' />
+<link href="./css/include/front.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="./css/include/topics.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="./css/login.css" media="screen" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="./js/include/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="./js/include/ICanHaz.min.js"></script>
+<script type="text/javascript" src="./js/include/backbone/backbone-min.js"></script>
+<script type="text/javascript" src="./js/include/backbone/underscore.js"></script>
+<script type="text/javascript" src="./js/include/backbone/json2.js"></script>
 <script type="text/javascript" src="./js/application.js"></script>
 <script type="text/javascript" src="./js/index.js"></script>
-<title>Question&amp;Answer</title>
 </head>
-<body>
-    <div id="navbar"></div>
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span8 box">
-                <table class="table" id="questions">
-                </table>
-            </div>
-            <div class="span3" id="infos">
-                <%= Helpers.getInfosHtml() %>
-            </div>
+<body data-offset="50">
+  <div id="navbar"></div>
+  <div class="container">
+    <div id="main" class="container-fluid">
+      <div class="content">
+        <div class="box box_gray">
+          <div class="topics" id="questions"></div>
+          <div class="pagination">
+            <ul>
+              <li class="prev previous_page disabled"><a href="#">&#8592;上一页</a></li>
+              <li class="active"><a rel="start" href="/topics?page=1">1</a></li>
+              <li><a rel="next" href="/topics?page=2">2</a></li>
+              <li><a href="/topics?page=3">3</a></li>
+              <li><a href="/topics?page=4">4</a></li>
+              <li><a href="/topics?page=5">5</a></li>
+              <li class="disabled"><a href="#"><span class="gap">&hellip;</span></a></li>
+              <li><a href="/topics?page=99">99</a></li>
+              <li><a href="/topics?page=100">100</a></li>
+              <li class="next next_page "><a rel="next" href="/topics?page=2">下一页 &#8594;</a></li>
+            </ul>
+          </div>
         </div>
-        <div id="footer" class="footer"></div>
+      </div>
+      <div class="sidebar">
+        <div class="box">
+          <%=Helpers.getInfosHtml()%>
+        </div>
+      </div>
     </div>
+  </div>
+  <a class="go_top" href="#"><i class="icon icons_go_top"></i></a>
+  <footer class="footer">
+    <div class="container">
+      <div id="footer"></div>
+    </div>
+  </footer>
 </body>
 </html>
