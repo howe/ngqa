@@ -1,5 +1,5 @@
 String.format = function() {
-    if( arguments.length == 0 )
+    if(arguments.length == 0)
         return null;
 
     var str = arguments[0];
@@ -167,42 +167,4 @@ function getShowUserName(data) {
         showName = data['id'];
     }
     return showName;
-}
-
-var gravatarUrl = "http://gravatar.com/avatar/{0}.png?s=48&d=http://www.nutzam.com/wiki/img/logo.png";
-function getQuestions(relativePath, data) {
-	var questionTemplate = '<div class="topic topic_line">\
-            <div class="pull-left avatar">\
-              <img alt="1031" class="{{ questionerName }}" src="{{ imgUrl }}" style="width:48px;height:48px;" />\
-            </div>\
-            <div class="right_info">\
-              <div class="pull-right replies">\
-                <a href="/topics/4511#reply30" class="count state_false">30</a>\
-              </div>\
-              <div class="infos">\
-                <div class="title">\
-                  <a href="{{ relativePath }}/question/{{ id }}" title="{{ title }}">{{ title }}</a>\
-                </div>\
-                <div class="info">\
-                  {{{ tags }}}\
-                  •\
-                  <a href="/#" data-name="{{ questionerName }}">{{ questionerName }}</a>\
-                </div>\
-              </div>\
-            </div>\
-          </div>';
-    ich.addTemplate("question", questionTemplate);
-    var questionInfo;
-    $.each(data, function (index, value) {
-        questionInfo = {
-            questionerName: getShowUserName(value['user']),
-            time: value['createdAt'],
-            id: value['id'],
-            title: value['title'].escapeHTML(),
-            tags: getTagsHTML(relativePath, value['tags']),
-            relativePath: relativePath,
-            imgUrl: String.format(gravatarUrl, value['user']['email'])
-        };
-        $("#questions").append(ich.question(questionInfo));
-    });
 }

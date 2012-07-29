@@ -10,9 +10,9 @@
 <link href="./css/login.css" media="screen" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="./js/include/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="./js/include/ICanHaz.min.js"></script>
-<script type="text/javascript" src="./js/include/backbone/backbone-min.js"></script>
 <script type="text/javascript" src="./js/include/backbone/underscore.js"></script>
 <script type="text/javascript" src="./js/include/backbone/json2.js"></script>
+<script type="text/javascript" src="./js/include/backbone/backbone-min.js"></script>
 <script type="text/javascript" src="./js/application.js"></script>
 <script type="text/javascript" src="./js/index.js"></script>
 </head>
